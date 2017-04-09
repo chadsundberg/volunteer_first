@@ -5,15 +5,15 @@ app.config(['$routeProvider', function($routeProvider) {
   //routes
   $routeProvider
   .when ('/login', {
-    templateUrl: '/views/templates/main.html',
+    templateUrl: '/views/login.html',
     controller: 'LoginController',
     controllerAs: 'lc'
   })
-  .when ('/home-view', {
-    templateUrl: '/views/home-view.html',
+  .when ('/home', {
+    templateUrl: '/views/home.html',
     controller: 'HomeController',
     controllerAs: 'hc'
-  })
+  });
   // .when ('/card-table/:placeType', {
   //   templateUrl: '/views/card-table.html',
   //   controller: 'CardTableController',
