@@ -28,6 +28,8 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
           }
         }).then(function(response){
           self.secretData = response.data;
+          console.log('secretData:', secretData);
+          
         });
       });
     } else {
