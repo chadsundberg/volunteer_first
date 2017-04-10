@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="sampleApp">
+<html ng-app="volunteerApp">
   <head>
     <meta charset="utf-8">
     <title>nodeFire with Authentication</title>
@@ -17,13 +17,14 @@
     <script src="/vendor/angularfire.js"></script>
     <script src="scripts/config.js"></script>
     <script src="scripts/client.js"></script>
+    <script type="text/javascript" src="/scripts/controllers/login.controller.js"></script>
   </head>
-  <body ng-controller="SampleCtrl as sc">
+  <body ng-controller="LoginController as lc">
     <h1>Hi! Log in to get some secret data from the server!</h1>
-    <button ng-click="sc.logIn()">Log In</button>
-    <button ng-click="sc.logOut()">Log Out</button>
-    <div ng-if="sc.secretData.length === 0">Log in to get some secret data.</div>
-    <table ng-if="sc.secretData.length > 0">
+    <button ng-click="lc.logIn()">Log In</button>
+    <button ng-click="lc.logOut()">Log Out</button>
+    <div ng-if="lc.secretData.length === 0">Log in to get some secret data.</div>
+    <table ng-if="lc.secretData.length > 0">
       <thead>
         <tr>
           <th>
@@ -35,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="secret in sc.secretData">
+        <tr ng-repeat="secret in lc.secretData">
           <td>
             {{secret.secrecy_level}}
           </td>
@@ -45,5 +46,7 @@
         </tr>
       </tbody>
     </table>
+
+<main ng-view></main>
   </body>
 </html>
