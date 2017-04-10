@@ -13,24 +13,25 @@
 
 				<div class="form-group col-lg-6">
 					<label>Email:</label>
-					<input class="form-control" type="email">
+					<input class="form-control" type="email" ng-model="lc.user.email">
 				
 
 				
 					<label>Password:</label>
-					<input class="form-control" type="password" name="password">
+					<input class="form-control" type="password" name="password" ng-model="lc.user.password">
 				
 
 				
 					<label>First Name:</label>
-					<input class="form-control" name="firstName">
+					<input class="form-control" name="firstName" ng-model="lc.user.firstName">
 				
 
 				
 					<label>Last Name:</label>
-					<input class="form-control" name="lastName">
-				
- 				<button ng-click="" class="btn btn-primary">Register</button>
+					<input class="form-control" name="lastName" ng-model="lc.user.lastName">
+
+				</div>
+ 				<button ng-click="lc.createUser()" class="btn btn-primary">Register</button>
 </div>
 
 	<div class="form-group col-lg-6">
