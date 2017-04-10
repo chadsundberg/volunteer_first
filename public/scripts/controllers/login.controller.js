@@ -4,13 +4,12 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
 
   // This code runs whenever the user logs in
   self.logIn = function(){
-    auth.$signInWithPopup("google").then(function(firebaseUser) {
+    auth.$signInWithEmailAndPassword(email, password).catch(function(error) {
       console.log("Firebase Authenticated as: ", firebaseUser.user.displayName);
-      $location.path('/home-view');
-    }).catch(function(error) {
-      console.log("Authentication failed: ", error);
+      $location.path('/home');
     });
   };
+
 
   // This code runs whenever the user changes authentication states
   // e.g. whevenever the user logs in or logs out
