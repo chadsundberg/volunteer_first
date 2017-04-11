@@ -1,26 +1,39 @@
-app.controller("LoginController", ["$location", "$firebaseAuth", "$http", function($location, $firebaseAuth, $http) {
+app.controller("LoginController", ["$location", "$firebaseAuth", "$http", function ($location, $firebaseAuth, $http) {
   var auth = $firebaseAuth();
   var self = this;
   self.user = {};
 
-  // This code runs whenever the user logs in
-  self.createUser = function(){
-    console.log('self.user:', self.user);
-    
-    auth.$createUserWithEmailAndPassword(self.user.email, self.user.password)
-    .then(function(firebaseUser) {
-      console.log('firebaseUser:', firebaseUser);
-      // todo: SQL add user with self.names
-      self.message = "User created with uid: " + firebaseUser.uid;
-            console.log("Firebase Authenticated as: ", firebaseUser.user.email);
-            $location.path('/views/home.html');
-        }).catch(function(error) {
-          self.error = error;
-        });
-        
-        
 
-    };
+  // This code runs whenever the user logs in
+  self.createUser = function () {
+    console.log('self.user:', self.user);
+
+    auth.$createUserWithEmailAndPassword(self.user.email, self.user.password)
+      .then(function (firebaseUser) {
+        console.log('firebaseUser:', firebaseUser);
+        // todo: SQL add user with self.names
+        self.message = "User created with uid: " + firebaseUser.uid;
+        console.log("Firebase Authenticated as: ", firebaseUser.user.email);
+        $location.path('/views/home.html');
+      }).catch(function (error) {
+        self.error = error;
+      });
+  };
+
+  self.signIn = function () {
+    console.log('self.user:', self.user);
+
+    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
+      .then(function (firebaseUser) {
+        console.log('firebaseUser:', firebaseUser);
+        // todo: SQL add user with self.names
+        self.message = "User created with uid: " + firebaseUser.uid;
+        console.log("Firebase Authenticated as: ", firebaseUser.user.email);
+        $location.path('/views/home.html');
+      }).catch(function (error) {
+        self.error = error;
+      });
+  };
 
 
   // This code runs whenever the user changes authentication states
@@ -41,7 +54,7 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
   //       }).then(function(response){
   //         self.secretData = response.data;
   //         console.log('secretData:', secretData);
-          
+
   //       });
   //     });
   //   } else {
@@ -49,11 +62,13 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
   //     self.secretData = [];
   //   }
 
+
   // });
 
+
   // This code runs when the user logs out
-  self.logOut = function(){
-    auth.$signOut().then(function(){
+  self.logOut = function () {
+    auth.$signOut().then(function () {
       console.log('Logging the user out!');
       $location.path('/');
     });
