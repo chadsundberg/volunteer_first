@@ -14,13 +14,13 @@
 			<div class="panel-body">
 				<form class="form-register">
 					<fieldset>
-						<input class="form-control" placeholder="Email Address" type="text">
+						<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="text">
 						<br>
-						<input class="form-control" placeholder="Password" type="password">
+						<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
 						<br>
-						<input class="form-control" placeholder="First Name" type="text">
+						<input class="form-control" placeholder="First Name" ng-model="lc.user.firstName" type="text">
 						<br>
-						<input class="form-control" placeholder="Last Name" type="text">
+						<input class="form-control" placeholder="Last Name" ng-model="lc.user.lastName" type="text">
 						<br><br>
 						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()"value="Register »">
 					</fieldset>
@@ -36,11 +36,11 @@
 				<div class="panel-body">
 					<form class="form-signin">
 						<fieldset>
-							<input class="form-control" placeholder="Email Address" type="text">
+							<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="text">
 							<br>
-							<input class="form-control" placeholder="Password" type="password">
+							<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
 							<br><br>
-							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.logIn()" type="submit" value="Login »">
+							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.signIn()" type="submit" value="Login »">
 						</fieldset>
 					</form>
 				</div>
