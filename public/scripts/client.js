@@ -1,4 +1,4 @@
-var app = angular.module('volunteerApp', ['ngroute', 'firebase']);
+var app = angular.module('volunteerApp', ['ngRoute', 'firebase']);
 
 app.config(['$routeProvider', function($routeProvider) {
   console.log('client.js route provider loaded');
@@ -9,10 +9,10 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'LoginController',
     controllerAs: 'lc'
   })
-  .when ('/home-view', {
-    templateUrl: '/views/home-view.html',
-    controller: 'HomeController',
-    controllerAs: 'hc'
+  .when ('/home', {
+    templateUrl: '/views/home.html',
+    // controller: 'HomeController',
+    // controllerAs: 'hc'
   })
   // .when ('/card-table/:placeType', {
   //   templateUrl: '/views/card-table.html',
