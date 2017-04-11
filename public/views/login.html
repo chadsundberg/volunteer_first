@@ -1,7 +1,3 @@
-<style>
-
-</style>
-
 <body>
 
 	<div class="container">
@@ -13,63 +9,20 @@
 		</div>
 	</div>
 
-	<div class="container-fluid">
-		<section class="container">
-			<div class="container-page">
-				<div class="col-md-6">
-
-
-					<div class="form-group col-lg-6">
-						<label>Email:</label>
-						<input class="form-control" type="email" ng-model="lc.user.email">
-
-
-
-						<label>Password:</label>
-						<input class="form-control" type="password" name="password" ng-model="lc.user.password">
-
-
-
-						<label>First Name:</label>
-						<input class="form-control" name="firstName" ng-model="lc.user.firstName">
-
-
-
-						<label>Last Name:</label>
-						<input class="form-control" name="lastName" ng-model="lc.user.lastName">
-
-					</div>
-					<button ng-click="lc.createUser()" class="btn btn-primary">Register</button>
-				</div>
-
-				<div class="form-group col-lg-6">
-					<label>Email:</label>
-					<input class="form-control" name="registerEmail">
-				</div>
-
-				<div class="form-group col-lg-6">
-					<label>Password:</label>
-					<input class="form-control" name="registerPassword" type="password">
-				</div>
-				<button ng-click="" class="btn btn-primary">Log In</button>
-			</div>
-		</section>
-	</div>
-
 	<div class="col-md-offset-2 col-md-4">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<form class="form-register">
 					<fieldset>
-						<input class="form-control" placeholder="Email Address" type="text">
+						<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="text">
 						<br>
-						<input class="form-control" placeholder="Password" type="password">
+						<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
 						<br>
-						<input class="form-control" placeholder="First Name" type="text">
+						<input class="form-control" placeholder="First Name" ng-model="lc.user.firstName" type="text">
 						<br>
-						<input class="form-control" placeholder="Last Name" type="text">
+						<input class="form-control" placeholder="Last Name" ng-model="lc.user.lastName" type="text">
 						<br><br>
-						<input class="btn btn-lg btn-primary btn-block" type="submit" value="Register »">
+						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()"value="Register »">
 					</fieldset>
 				</form>
 			</div>
@@ -83,11 +36,11 @@
 				<div class="panel-body">
 					<form class="form-signin">
 						<fieldset>
-							<input class="form-control" placeholder="Email Address" type="text">
+							<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="text">
 							<br>
-							<input class="form-control" placeholder="Password" type="password">
+							<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
 							<br><br>
-							<input class="btn btn-lg btn-primary btn-block" type="submit" value="Login »">
+							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.signIn()" type="submit" value="Login »">
 						</fieldset>
 					</form>
 				</div>
