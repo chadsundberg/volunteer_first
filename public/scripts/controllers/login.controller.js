@@ -2,18 +2,19 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
   var auth = $firebaseAuth();
   var self = this;
   self.user = {};
+  self.newUser = {};
 
 
   // This code runs whenever the user logs in
   self.createUser = function () {
-    console.log('self.user:', self.user);
+    console.log('self.user:', self.newUser);
 
-    auth.$createUserWithEmailAndPassword(self.user.email, self.user.password)
+    auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
       .then(function (firebaseUser) {
         console.log('firebaseUser:', firebaseUser);
         // todo: SQL add user with self.names
         self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.user.email);
+        console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
         $location.path('/views/home.html');
       }).catch(function (error) {
         self.error = error;
