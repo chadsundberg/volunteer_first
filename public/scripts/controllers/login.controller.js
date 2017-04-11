@@ -15,7 +15,7 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
         // todo: SQL add user with self.names
         self.message = "User created with uid: " + firebaseUser.uid;
         console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
-        $location.path('/views/home.html');
+        $location.path('/home');
       }).catch(function (error) {
         self.error = error;
       });
@@ -29,8 +29,8 @@ app.controller("LoginController", ["$location", "$firebaseAuth", "$http", functi
         console.log('firebaseUser:', firebaseUser);
         // todo: SQL add user with self.names
         self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.user.email);
-        $location.path('/views/home.html');
+        console.log("Firebase Authenticated as: ", firebaseUser.email);
+        $location.path('/home');
       }).catch(function (error) {
         self.error = error;
       });
