@@ -22,7 +22,37 @@
     <script type="text/javascript" src="/scripts/controllers/calendar.controller.js"></script>
   </head>
   <body ng-controller="LoginController as lc">
+<<<<<<< HEAD
     <h1>Hi! Log in to get some secret data from the server!</h1>
+=======
+    <!-- <h1>Hi! Log in to get some secret data from the server!</h1>
+    <button ng-click="lc.logIn()">Log In</button>
+    <button ng-click="lc.logOut()">Log Out</button>
+    <div ng-if="lc.secretData.length === 0">Log in to get some secret data.</div> -->
+    <table ng-if="lc.secretData.length > 0">
+      <thead>
+        <tr>
+          <th>
+            Secrecy Level
+          </th>
+          <th>
+            Secret Message
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="secret in lc.secretData">
+          <td>
+            {{secret.secrecy_level}}
+          </td>
+          <td>
+            {{secret.secret_text}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+>>>>>>> feature-views
 <main ng-view></main>
   </body>
 </html>
