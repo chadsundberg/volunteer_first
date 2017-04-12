@@ -1,9 +1,9 @@
 var admin = require("firebase-admin");
 
-// admin.initializeApp({
-//   credential: admin.credential.cert("./server/firebase-service-account.json"),
-//   databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
-// });
+admin.initializeApp({
+  credential: admin.credential.cert("./server/firebase-service-account.json"),
+  databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
+});
 
 /* This is where the magic happens. We pull the id_token off of the request,
 verify it against our firebase service account private_key.
@@ -26,6 +26,6 @@ var tokenDecoder = function(req, res, next){
     // Will also be hit when user does not send back an idToken in the header
     res.sendStatus(403);
   }
-}
+};
 
 module.exports = { token: tokenDecoder };
