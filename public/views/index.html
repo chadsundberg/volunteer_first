@@ -30,10 +30,10 @@
 
 <body ng-app="volunteerApp">
   <div ng-controller="LoginController as lc">
-  <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
+    <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
+  </div>
 
-
-  <main ng-view></main>
+    <main ng-view></main>
 </body>
 
 </html>
