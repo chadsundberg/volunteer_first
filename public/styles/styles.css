@@ -1,12 +1,15 @@
 h1 {
-    color: red;
+    /*color: red;*/
 }
 
-body {
+/*body {
         background-color: #444;
         background: url("http://html5webtemplate.com/images/bg.jpg");
         background-repeat: no-repeat;
-    }
+    }*/
+.fc-row .fc-week .fc-widget-content{
+  height: 280px;
+}
 
 .form-signin .form-control {
         position: relative;

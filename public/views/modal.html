@@ -1,1 +1,49 @@
-{{$ctrl.message}}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<body>
+
+
+    $ctrl message: {{$ctrl.message}}
+    $ctrl date clicked: {{$ctrl.dateClicked}}
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1"></label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1"></label>
+      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <label for="exampleSelect1"></label>
+      <select class="form-control" id="exampleSelect1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleTextarea">Example textarea</label>
+      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+    </div>
+    <fieldset class="form-group">
+      <legend>Sign Up</legend>
+    </fieldset>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input">
+        Sign-Up!
+      </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+</body>
+</html>
