@@ -2,7 +2,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function($firebaseAuth, $h
   console.log('data factory loaded');
   var eventList = { list: [] };
   var auth = $firebaseAuth();
-  console.log(dateList);
+  console.log(eventList);
 
   auth.$onAuthStateChanged(getEvents);
 
