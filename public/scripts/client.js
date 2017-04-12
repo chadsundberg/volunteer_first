@@ -1,4 +1,4 @@
-var app = angular.module('volunteerApp', ['ngRoute', 'firebase']);
+var app = angular.module('volunteerApp', ['ngRoute', 'firebase', 'ui.calendar', 'ui.bootstrap', 'ngAnimate', 'ngSanitize']);
 
 app.config(['$routeProvider', function($routeProvider) {
   console.log('client.js route provider loaded');
