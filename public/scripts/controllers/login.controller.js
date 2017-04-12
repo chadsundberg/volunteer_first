@@ -3,6 +3,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   var self = this;
   self.user = {};
   self.newUser = {};
+  self.forgetfulUser = {};
 
 
   // This code runs whenever the user logs in
@@ -37,6 +38,14 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
       }).catch(function (error) {
         self.error = error;
       });
+  };
+
+  self.resetPassword = function () {
+    auth.$sendPasswordResetEmail(self.forgetfulUser.email).then(function () {
+      console.log("Password reset email sent successfully!");
+    }).catch(function (error) {
+      console.error("Error: ", error);
+    });
   };
 
   // This code runs when the user logs out
