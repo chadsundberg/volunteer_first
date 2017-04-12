@@ -1,149 +1,50 @@
-<style>
-body {
-        background-color: #444;
-        background: url("http://html5webtemplate.com/images/bg.jpg");
-        background-repeat: no-repeat;
-    }
-
-    .form-signin .form-control {
-        position: relative;
-        font-size: 16px;
-        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-        height: auto;
-        padding: 10px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    .vertical-offset-100 {
-        padding-top: 100px;
-    }
-    .img-responsive {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: auto;
-    }
-    .panel {
-    margin-bottom: 20px;
-    background-color: rgba(255, 255, 255, 0.75);
-    border: 1px solid transparent;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    }
-
-.jumbotron {
-    background-color: rgba(255, 255, 255, 0.75);
-    border: 1px solid transparent;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-
-  }
-img {
-  display: inline-block;
-  float: right;
-  transform: translate(-25px, 35px);
-  border-radius: 25px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
-
-</style>
-
 <body>
 
-<div class="container">
-  <img src="../assets/starofdavid.jpg">
-  <div class="jumbotron">
+	<div class="container">
+		<img src="../assets/starofdavid.jpg">
+		<div class="jumbotron">
 
-    <h1>Welcome to Registration</h1>
-    <p>Create an account and sign up for volunteer hours</p>
-</div>
-</div>
-
-<<<<<<< HEAD
-<div class="container-fluid">
-    <section class="container">
-		<div class="container-page">
-			<div class="col-md-6">
-
-
-				<div class="form-group col-lg-6">
-					<label>Email:</label>
-					<input class="form-control" type="email" ng-model="lc.user.email">
-				
-
-				
-					<label>Password:</label>
-					<input class="form-control" type="password" name="password" ng-model="lc.user.password">
-				
-
-				
-					<label>First Name:</label>
-					<input class="form-control" name="firstName" ng-model="lc.user.firstName">
-				
-
-				
-					<label>Last Name:</label>
-					<input class="form-control" name="lastName" ng-model="lc.user.lastName">
-
-				</div>
- 				<button ng-click="lc.createUser()" class="btn btn-primary">Register</button>
-</div>
-
-	<div class="form-group col-lg-6">
-	<label>Email:</label>
-	<input class="form-control" name="registerEmail">
-</div>
-
-<div class="form-group col-lg-6">
-	<label>Password:</label>
-	<input class="form-control" name="registerPassword" type="password">
-</div>
-<button ng-click="" class="btn btn-primary">Log In</button>
-			</div>
-		</section>
-=======
-
-<div class="col-md-offset-2 col-md-4">
-		<div class="panel panel-default">
-      <div class="panel-body">
-						<form class="form-register">
-								<fieldset>
-										<input class="form-control" placeholder="Email Address"  type="text">
-										<br>
-										<input class="form-control" placeholder="Password" type="password">
-										<br>
-										<input class="form-control" placeholder="First Name" type="text">
-										<br>
-										<input class="form-control" placeholder="Last Name" type="text">
-										<br><br>
-										<input class="btn btn-lg btn-primary btn-block" type="submit" value="Register »">
-								</fieldset>
-						</form>
-				</div>
+			<h1>Welcome to Registration</h1>
+			<p>Create an account and sign up for volunteer hours</p>
 		</div>
-</div>
+	</div>
 
-<div class="col vertical-offset-90">
-							<div class="col-md-4">
-									<div class="panel panel-default">
+	<div class="col-md-offset-2 col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form class="form-register">
+					<fieldset>
+						<input class="form-control" placeholder="Email Address" ng-model="lc.newUser.email" type="text">
+						<br>
+						<input class="form-control" placeholder="Password" ng-model="lc.newUser.password" type="password">
+						<br>
+						<input class="form-control" placeholder="First Name" ng-model="lc.newUser.firstName" type="text">
+						<br>
+						<input class="form-control" placeholder="Last Name" ng-model="lc.newUser.lastName" type="text">
+						<br><br>
+						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()" value="Register »">
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
 
-											<div class="panel-body">
-													<form class="form-signin">
-															<fieldset>
-																<input class="form-control" placeholder="Email Address"  type="text">
-																	<br>
-																	<input class="form-control" placeholder="Password" type="password">
-																	<br><br>
-																	<input class="btn btn-lg btn-primary btn-block" type="submit" value="Login »">
-															</fieldset>
-													</form>
-											</div>
-									</div>
-							</div>
->>>>>>> feature-views
-</div>
-			</body>
+	<div class="col vertical-offset-90">
+		<div class="col-md-4">
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<form class="form-signin">
+						<fieldset>
+							<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="text">
+							<br>
+							<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
+							<br><br>
+							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.signIn()" type="submit" value="Login »">
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

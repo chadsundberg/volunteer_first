@@ -2,7 +2,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function($firebaseAuth, $h
   console.log('data factory loaded');
   var eventList = { list: [] };
   var auth = $firebaseAuth();
-  console.log(dateList);
+  // console.log(dateList);
 
   auth.$onAuthStateChanged(getEvents);
 
@@ -34,6 +34,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function($firebaseAuth, $h
 
   return {
     allEvents: eventList,
-  }
+  };
 
 }]);
