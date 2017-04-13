@@ -28,6 +28,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
           self.error = error;
         });
     }
+     };
 
     self.signIn = function () {
       console.log('self.user:', self.user);
@@ -51,7 +52,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
         });
     };
-  };
+ 
 
   self.resetPassword = function () {
     auth.$sendPasswordResetEmail(self.forgetfulUser.email).then(function () {
