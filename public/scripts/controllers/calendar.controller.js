@@ -86,5 +86,8 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
   };
 
 
-  // self.eventList = DataFactory.allEvents;
+  self.eventList = DataFactory.eventList;
+  self.getEvents = DataFactory.getEvents();
+  self.users = DataFactory.users;
+  self.getUsers = DataFactory.getUsers();
 }]);
