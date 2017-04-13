@@ -47,6 +47,44 @@ var pool = new pg.Pool(config);
 //   });
 // });
 
+// router.get('/', function(req, res){
+//   console.log(req.decodedToken); // Here you can see the information firebase gives you about the user
+//   res.send("Our Dates!!! You got it!!! Great work " + req.decodedToken.name + "!!!");
+// });
+
+router.get('/events', function (req, res) {
+  console.log('hit');
+  pool.connect()
+  .then(function (client) {
+    client.query('SELECT users.first_name, users.last_name, roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id, users.first_name, users.last_name;')
+    .then(function (result) {
+      client.release();
+      res.send(result.rows);
+    })
+    .catch(function (err) {
+      console.log('error on SELECT', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
+router.get('/', function (req, res) {
+  console.log('hit');
+  pool.connect()
+  .then(function (client) {
+    client.query('SELECT first_name, last_name FROM users')
+    .then(function (result) {
+      client.release();
+      res.send(result.rows);
+    })
+    .catch(function (err) {
+      console.log('error on SELECT', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
+
 router.post('/', function(req, res) {
 	  console.log('hit post route');
 	  console.log('here is the body ->', req.body);

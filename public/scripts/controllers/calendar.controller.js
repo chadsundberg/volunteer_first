@@ -88,6 +88,14 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     }
   };
 
+
 // self.eventSources = [self.events];
   // self.eventList = DataFactory.allEvents;
+
+
+  self.eventList = DataFactory.eventList;
+  self.getEvents = DataFactory.getEvents();
+  self.users = DataFactory.users;
+  self.getUsers = DataFactory.getUsers();
+
 }]);
