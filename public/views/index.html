@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <title>nodeFire with Authentication</title>
@@ -22,18 +21,16 @@
   <script src="scripts/config.js"></script>
   <script src="scripts/client.js"></script>
   <script type="text/javascript" src="/scripts/factories/data.factory.js"></script>
+  <script type="text/javascript" src="/scripts/factories/modal-data.factory.js"></script>
   <script type="text/javascript" src="/scripts/controllers/login.controller.js"></script>
   <script type="text/javascript" src="/scripts/controllers/home.controller.js"></script>
   <script type="text/javascript" src="/scripts/controllers/calendar.controller.js"></script>
   <script src="/scripts/controllers/modal.controller.js" charset="utf-8"></script>
 </head>
-
 <body ng-app="volunteerApp">
   <div ng-controller="LoginController as lc">
     <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
   </div>
-
-    <main ng-view></main>
+  <main ng-view></main>
 </body>
-
 </html>

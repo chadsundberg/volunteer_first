@@ -8,7 +8,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   // console.log(dateList);
 
   auth.$onAuthStateChanged(getUsers);
-  //
+  auth.$onAuthStateChanged(getEvents);
   //
   //
   function getUsers() {
