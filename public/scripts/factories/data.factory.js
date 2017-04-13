@@ -50,7 +50,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           }
         }).then(function (response) {
           console.log(response.data);
-          eventList.list = response.data;
+          response.data.forEach(function(event){
+          eventList.list.push({
+              title: event.role_title,
+              start: new Date('2017-04-13T15:36:07+00:00')
+              // end: new Date(y, m, 29),
+            });
+            console.log(eventList.list);
+          });
         });
       });
     } else {

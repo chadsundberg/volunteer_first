@@ -7,6 +7,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   };
   $ctrl.message = title;
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
+  $ctrl.eventList = DataFactory.eventList;
 
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
