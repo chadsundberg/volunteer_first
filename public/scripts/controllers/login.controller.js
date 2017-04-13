@@ -10,34 +10,47 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.createUser = function () {
     console.log('self.newUser:', self.newUser);
 
-    auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
-      .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        // todo: SQL add user with self.names
-        DataFactory.addUser(self.newUser);
-        self.newUser = {};
+    var inpObj = document.getElementById("newUserEmail");
+    if (inpObj.checkValidity() === false) {
+      document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
+    } else {
+      auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
+        .then(function (firebaseUser) {
+          console.log('firebaseUser:', firebaseUser);
+          // todo: SQL add user with self.names
+          DataFactory.addUser(self.newUser);
+          self.newUser = {};
 
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
-        $location.path('/home');
-      }).catch(function (error) {
-        self.error = error;
-      });
-  };
+          self.message = "User created with uid: " + firebaseUser.uid;
+          console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
+          $location.path('/home');
+        }).catch(function (error) {
+          self.error = error;
+        });
+    }
 
-  self.signIn = function () {
-    console.log('self.user:', self.user);
+    self.signIn = function () {
+      console.log('self.user:', self.user);
 
-    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
-      .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        // todo: SQL add user with self.names
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.email);
-        $location.path('/home');
-      }).catch(function (error) {
-        self.error = error;
-      });
+      auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
+        .then(function (firebaseUser) {
+          console.log('firebaseUser:', firebaseUser);
+          // todo: SQL add user with self.names
+          self.message = "User created with uid: " + firebaseUser.uid;
+          console.log("Firebase Authenticated as: ", firebaseUser.email);
+          $location.path('/home');
+        }).catch(function (error) {
+          self.error = error;
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log('errorCode:', errorCode);
+          console.log('errorMessage:', errorMessage);
+          if (errorCode === 'auth/user-not-found') {
+            alert('User not found!');
+          }
+
+        });
+    };
   };
 
   self.resetPassword = function () {

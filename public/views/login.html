@@ -14,7 +14,7 @@
 			<div class="panel-body">
 				<form class="form-register">
 					<fieldset>
-						<input class="form-control" placeholder="Email Address" ng-model="lc.newUser.email" type="email">
+						<input class="form-control" placeholder="Email Address" ng-model="lc.newUser.email" id="newUserEmail" type="email">
 						<br>
 						<input class="form-control" placeholder="Password" ng-model="lc.newUser.password" type="password">
 						<br>
@@ -22,9 +22,10 @@
 						<br>
 						<input class="form-control" placeholder="Last Name" ng-model="lc.newUser.lastName" type="text">
 						<br><br>
-						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()"value="Register »">
+						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()" value="Register »">
 					</fieldset>
 				</form>
+				{{lc.error}}
 			</div>
 		</div>
 	</div>
