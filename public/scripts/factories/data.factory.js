@@ -69,7 +69,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   }//end Get events
 
 
-//add role to user post
+//add role to user post -- CHRISTINE 
   function volunteerSignUp(userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
