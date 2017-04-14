@@ -1,16 +1,17 @@
 h1 {
     /*color: red;*/
 }
+body {
 
-/*body {
-        background-color: #444;
-        background: url("http://html5webtemplate.com/images/bg.jpg");
-        background-repeat: no-repeat;
-    }*/
+    }
+
+/*CALENDAR STYLING*/
 .fc-row .fc-week .fc-widget-content{
   height: 280px;
 }
 
+
+/*END CALENDAR STYLING*/
 .form-signin .form-control {
         position: relative;
         font-size: 16px;
@@ -72,4 +73,9 @@ img {
 
 .navbar-nav > li > a {
     color: black;
+}
+
+
+.modal-container {
+  padding: 20px;
 }

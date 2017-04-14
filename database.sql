@@ -50,9 +50,11 @@ INSERT INTO role_user (role_id, user_id)
 VALUES (1, 1),
 (2, 2);
 
-SELECT roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up
+SELECT roles.id, roles.role_title, roles.num_users, events.date, users.first_name, users.last_name, COUNT(roles.id) AS signed_up
 FROM users
 JOIN role_user ON users.id=role_user.user_id
 JOIN roles ON roles.id=role_user.role_id
 JOIN events ON roles.event_id=events.id
-GROUP BY roles.id, events.id;
+GROUP BY roles.id, events.id, users.first_name, users.last_name;
+
+ALTER TABLE users ADD COLUMN has_met_requirement BOOLEAN DEFAULT FALSE;

@@ -7,8 +7,11 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   var m = date.getMonth();
   var y = date.getFullYear();
   self.selectedDay = "testing";
-  // self.events = [];
-
+  self.eventList = DataFactory.eventList;
+  self.getEvents = DataFactory.getEvents;
+  self.users = DataFactory.users;
+  self.getUsers = DataFactory.getUsers;
+  // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
   //Example events for calendar
   self.eventSources = [[
@@ -19,7 +22,6 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
     {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
   ]];
-  self.eventSources = [self.eventList];
 
   //Day click for Admin
   self.alertDayClick = function( date, jsEvent, view){
@@ -39,7 +41,6 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     self.open();
   };
 
-
   //Modal
   self.open = function (size, parentSelector) {
     console.log('opening modal');
@@ -58,7 +59,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
       // replace this with event data
       resolve: {
         title: function () {
-          return self.eventSources;
+          return self.events;
         }
       }
     });
@@ -90,13 +91,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   };
 
 
-// self.eventSources = [self.events];
+
   // self.eventList = DataFactory.allEvents;
-
-
-  self.eventList = DataFactory.eventList;
-  self.getEvents = DataFactory.getEvents();
-  self.users = DataFactory.users;
-  self.getUsers = DataFactory.getUsers();
-
+  self.eventSources = [self.eventList.list];
 }]);
