@@ -9,7 +9,6 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   // This code runs whenever the user logs in
   self.createUser = function () {
     console.log('self.newUser:', self.newUser);
-
     var inpObj = document.getElementById("newUserEmail");
     if (inpObj.checkValidity() === false) {
       document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
@@ -20,7 +19,6 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
           // todo: SQL add user with self.names
           DataFactory.addUser(self.newUser);
           self.newUser = {};
-
           self.message = "User created with uid: " + firebaseUser.uid;
           console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
           $location.path('/home');
