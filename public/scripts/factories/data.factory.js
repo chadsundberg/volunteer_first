@@ -39,7 +39,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   // Get events for calendar
   function getEvents() {
     var firebaseUser = auth.$getAuth();
-    console.log('firebaseUser:', firebaseUser);
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
 
@@ -102,7 +101,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
 
 //User registration
   function addUser(newUser) {
-    console.log('factory user', newUser);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {

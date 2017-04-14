@@ -8,19 +8,16 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
 
   self.createUser = function () {
-    console.log('self.newUser:', self.newUser);
     var inpObj = document.getElementById("newUserEmail");
     if (inpObj.checkValidity() === false) {
       document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
     } else {
       auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
         .then(function (firebaseUser) {
-          console.log('firebaseUser:', firebaseUser);
           // todo: SQL add user with self.names
           DataFactory.addUser(self.newUser);
           self.newUser = {};
           self.message = "User created with uid: " + firebaseUser.uid;
-          console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
           $location.path('/home');
         }).catch(function (error) {
           self.error = error;
