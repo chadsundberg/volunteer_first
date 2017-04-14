@@ -13,6 +13,9 @@ var tokenDecoder = function(req, res, next){
     admin.auth().verifyIdToken(req.headers.id_token).then(function(decodedToken) {
       // Adding the decodedToken to the request so that downstream processes can use it
       req.decodedToken = decodedToken;
+      //***  sql query for user email matched to user id
+      //if .. throw err
+      // else -- add id to req.currentUser.id = result.rows[0].id
       next();
     })
     .catch(function(error) {

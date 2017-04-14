@@ -11,6 +11,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
+  self.currentEvent = DataFactory.currentEvent;
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
   //Example events for calendar
@@ -29,6 +30,8 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
     ModalDataFactory.dateClicked.day = date;
+    DataFactory.currentEvent.id = date;
+
     self.open();
   };
 
@@ -36,8 +39,9 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.eventOnClick = function( date, jsEvent, view){
     console.log(date.title + ' was clicked ');
     console.log(jsEvent);
-    console.log(view);
+    console.log('view, date, jsEvent:', view, date, jsEvent);
     self.selectedDay = "Event!";
+    ModalDataFactory.currentEventClicked.id = date;
     self.open();
   };
 
@@ -93,5 +97,5 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
 
   // self.eventList = DataFactory.allEvents;
-  self.eventSources = [self.eventList.list];
+  self.eventSources = [self.eventList.list, self.currentEvent.id];
 }]);
