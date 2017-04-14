@@ -14,7 +14,6 @@ var pool = new pg.Pool(config);
 
 
 router.get('/events', function (req, res) {
-  console.log('hit first');
   pool.connect()
   .then(function (client) {
     client.query('SELECT users.first_name, users.last_name, roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id, users.first_name, users.last_name;')
@@ -30,14 +29,27 @@ router.get('/events', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-  console.log('hit');
   pool.connect()
   .then(function (client) {
     client.query('SELECT first_name, last_name FROM users')
     .then(function (result) {
-      console.log('result:', result);
       client.release();
       res.send(result.rows);
+    })
+    .catch(function (err) {
+      console.log('error on SELECT', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
+router.get('/currentUser', function (req, res) {
+  pool.connect()
+  .then(function (client) {
+    client.query('SELECT * FROM users WHERE email="' + req.params + '"')
+    .then(function (result) {
+      client.release();
+      res.send(result);
     })
     .catch(function (err) {
       console.log('error on SELECT', err);
@@ -76,7 +88,6 @@ router.post('/volunteerSignUp', function(req, res){
 
 //Add user route - firebase
 router.post('/', function(req, res) {
-	  console.log('hit post route');
 	  console.log('here is the body ->', req.body);
 	  var newUser = req.body;
 	  pool.connect(function(err, client, done) {
@@ -84,16 +95,16 @@ router.post('/', function(req, res) {
 	      console.log(err);
 	      res.sendStatus(500);
 	    }else{
-	      client.query('INSERT INTO users (email, first_name, last_name) VALUES ($1, $2, $3);',
-	        [newUser.email, newUser.firstName, newUser.lastName], function(err, result) {
+	      // client.query('INSERT INTO users (email, first_name, last_name) VALUES ($1, $2, $3);',
+	      //   [newUser.email, newUser.firstName, newUser.lastName], function(err, result) {
 	          done();
 	          if(err){
 	            console.log(err);
 	            res.sendStatus(500); // the world exploded
 	          }else{
 	            res.sendStatus(201);
-	          }
-	      });
+            }
+	      // }
 	    }
 	  });
 	}); //end post route
