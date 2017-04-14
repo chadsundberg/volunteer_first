@@ -1,11 +1,17 @@
 <!-- <div ng-controller="ModalController as $ctrl"> -->
-<h1> This is the calendar </h1>
+
 <!-- {{$ctrl.message}} -->
+<div class="container">
+  <h1> This is the calendar </h1>
 <div ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
-    <div ng-repeat="person in cc.users.list">
-        <h1>{{person.first_name}}</h1>
-        <div ng-repeat="event in cc.events.list">
-            <!-- <h1>{{event.first_name}}</h1> -->
-            {{event.first_name}}{{event.date}}{{event.num_users}}{{event.role_title}}
+
+<div ng-repeat="person in cc.users.list">
+  <h3>{{person.first_name}} {{person.last_name}}</h3>
 </div>
+
+  <div ng-repeat="event in cc.eventList.list">
+    <h3>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</h3>
+  </div>
+
 </div>
+<!-- </div> -->

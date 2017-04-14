@@ -1,60 +1,39 @@
 <!DOCTYPE html>
-<html ng-app="volunteerApp">
-  <head>
-    <meta charset="utf-8">
-    <title>nodeFire with Authentication</title>
-    <script src="/vendor/jquery.min.js"></script>
-    <script src="/vendor/moment.min.js"></script>
-    <script src="/vendor/angular.min.js"></script>
-    <script src="/vendor/angular-route.min.js"></script>
-    <script src="/vendor/angular-animate.js"></script>
-    <script src="/vendor/angular-sanitize.js"></script>
-    <script src="/vendor/ui-bootstrap-custom-tpls-2.5.0.js"></script>
-    <script src="/vendor/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/vendor/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/vendor/fullcalendar.css"/>
-    <link rel="stylesheet" href="/styles/styles.css"/>
-    <script src="/vendor/calendar.js"></script>
-    <script src="/vendor/fullcalendar.min.js"></script>
-    <script src="/vendor/firebase.js"></script>
-    <script src="/vendor/angularfire.js"></script>
-    <script src="scripts/config.js"></script>
-    <script src="scripts/client.js"></script>
-    <script type="text/javascript" src="/scripts/factories/data.factory.js"></script>
-    <script type="text/javascript" src="/scripts/controllers/login.controller.js"></script>
-    <script type="text/javascript" src="/scripts/controllers/home.controller.js"></script>
-    <script type="text/javascript" src="/scripts/controllers/calendar.controller.js"></script>
-    <script src="/scripts/controllers/modal.controller.js" charset="utf-8"></script>
-  </head>
-  <body ng-controller="LoginController as lc">
-
-    <!-- <h1>Hi! Log in to get some secret data from the server!</h1>
-    <button ng-click="lc.logIn()">Log In</button>
-    <button ng-click="lc.logOut()">Log Out</button>
-    <div ng-if="lc.secretData.length === 0">Log in to get some secret data.</div> -->
-    <table ng-if="lc.secretData.length > 0">
-      <thead>
-        <tr>
-          <th>
-            Secrecy Level
-          </th>
-          <th>
-            Secret Message
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="secret in lc.secretData">
-          <td>
-            {{secret.secrecy_level}}
-          </td>
-          <td>
-            {{secret.secret_text}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-<main ng-view></main>
-  </body>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>nodeFire with Authentication</title>
+  <script src="/vendor/jquery.min.js"></script>
+  <script src="/vendor/moment.min.js"></script>
+  <script src="/vendor/angular.min.js"></script>
+  <script src="/vendor/angular-route.min.js"></script>
+  <script src="/vendor/angular-animate.js"></script>
+  <script src="/vendor/angular-sanitize.js"></script>
+  <!--<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>-->
+  <script src="/vendor/ui-bootstrap.min.js"></script>
+  <script src="/vendor/ui-bootstrap-tpls.js"></script>
+  <!--<script src="/vendor/ui-bootstrap-custom-tpls-2.5.0.js"></script>-->
+  <script src="/vendor/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/vendor/bootstrap.min.css" />
+  <link rel="stylesheet" href="/vendor/fullcalendar.css" />
+  <link rel="stylesheet" href="/styles/styles.css" />
+  <script src="/vendor/calendar.js"></script>
+  <script src="/vendor/fullcalendar.min.js"></script>
+  <script src="/vendor/firebase.js"></script>
+  <script src="/vendor/angularfire.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/client.js"></script>
+  <script type="text/javascript" src="/scripts/factories/data.factory.js"></script>
+  <script type="text/javascript" src="/scripts/factories/modal-data.factory.js"></script>
+  <script type="text/javascript" src="/scripts/controllers/login.controller.js"></script>
+  <script type="text/javascript" src="/scripts/controllers/home.controller.js"></script>
+  <script type="text/javascript" src="/scripts/controllers/calendar.controller.js"></script>
+  <script src="/scripts/controllers/modal.controller.js" charset="utf-8"></script>
+</head>
+<body ng-app="volunteerApp">
+  <div ng-controller="LoginController as lc">
+    <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
+  </div>
+  <main ng-view></main>
+</body>
 </html>

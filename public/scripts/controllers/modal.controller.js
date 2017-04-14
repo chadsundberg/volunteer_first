@@ -1,4 +1,4 @@
-app.controller("ModalInstanceCtrl", ["DataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function(DataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
+app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
   // $ctrl.items = items;
@@ -6,6 +6,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "$location", "$firebaseAuth"
     // item: $ctrl.items[0]
   };
   $ctrl.message = title;
+  $ctrl.dateClicked = ModalDataFactory.dateClicked;
 
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
