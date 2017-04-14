@@ -39,8 +39,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   // Get events for calendar
   function getEvents() {
     var firebaseUser = auth.$getAuth();
+    console.log('firebaseUser:', firebaseUser);
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
+
+      
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -119,6 +122,30 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
       console.log('no firebase user');
     }
   } // ends addUser function
+  
+  function getCurrentUser() {
+    var firebaseUser = auth.$getAuth();
+
+    if (firebaseUser) {
+
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/currentUser',
+          headers: {
+            id_token: idToken
+          },
+          params: {firebaseUser: firebaseUser.email}
+        }).then(function (response) {
+          console.log(response.data);
+          currentUser = response.data;
+          });
+        });
+
+    } else {
+      console.log('Not logged in or not authorized.');
+    }
+  }//end getCurrentUser
 
 
   return {

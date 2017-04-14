@@ -4,9 +4,9 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.user = {};
   self.newUser = {};
   self.forgetfulUser = {};
+  self.firebaseUser = {};
 
 
-  // This code runs whenever the user logs in
   self.createUser = function () {
     console.log('self.newUser:', self.newUser);
     var inpObj = document.getElementById("newUserEmail");
@@ -26,31 +26,39 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
           self.error = error;
         });
     }
-     };
+  };
 
-    self.signIn = function () {
-      console.log('self.user:', self.user);
+  self.signIn = function () {
+    console.log('self.user:', self.user);
 
-      auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
-        .then(function (firebaseUser) {
-          console.log('firebaseUser:', firebaseUser);
-          // todo: SQL add user with self.names
-          self.message = "User created with uid: " + firebaseUser.uid;
-          console.log("Firebase Authenticated as: ", firebaseUser.email);
-          $location.path('/home');
-        }).catch(function (error) {
-          self.error = error;
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log('errorCode:', errorCode);
-          console.log('errorMessage:', errorMessage);
-          if (errorCode === 'auth/user-not-found') {
-            alert('User not found!');
-          }
+    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
+      .then(function (firebaseUser) {
+        console.log('firebaseUser:', firebaseUser);
+        self.firebaseUser.email = firebaseUser.email;
+        // todo: SQL add user with self.names
+        self.message = "User created with uid: " + firebaseUser.uid;
+        console.log("Firebase Authenticated as: ", firebaseUser.email);
+        self.firebaseUser = firebaseUser;
+      }).catch(function (error) {
+        self.error = error;
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log('errorCode:', errorCode);
+        console.log('errorMessage:', errorMessage);
+        if (errorCode === 'auth/user-not-found') {
+          alert('User not found!');
+        }
 
-        });
-    };
- 
+      });
+
+      // .then(function (self.firebaseUser.email) {
+      //   console.log('self.firebaseUser:', self.firebaseUser);
+      //   $location.path('/home');
+      // });
+
+   
+  };
+
 
   self.resetPassword = function () {
     auth.$sendPasswordResetEmail(self.forgetfulUser.email).then(function () {
