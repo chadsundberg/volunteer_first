@@ -19,7 +19,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $uibModalInstance.dismiss('cancel');
   };
 
-//Role on click to GOD zlilla database
+//Role on click to database
 $ctrl.clickSaveSignUp = function(){
   $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
 }
