@@ -2,5 +2,10 @@
 <h1> This is the calendar </h1>
 <!-- {{$ctrl.message}} -->
 <div ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
-
-<!-- </div> -->
+    <div ng-repeat="person in cc.users.list">
+        <h1>{{person.first_name}}</h1>
+        <div ng-repeat="event in cc.events.list">
+            <!-- <h1>{{event.first_name}}</h1> -->
+            {{event.first_name}}{{event.date}}{{event.num_users}}{{event.role_title}}
+</div>
+</div>

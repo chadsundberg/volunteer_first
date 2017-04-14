@@ -4,13 +4,17 @@ var pg = require('pg');
 var connectionString = require('../modules/database-config');
 
 var config = {
-  database: 'phi',
+  database: 'volunteer_first',
   host: 'localhost',
   port: 5432,
   max: 10,
   idleTimeMillis: 5000
 };
 var pool = new pg.Pool(config);
+
+
+
+
 
 // router.get("/", function(req, res){
 //   pg.connect(connectionString, function(err, client, done){

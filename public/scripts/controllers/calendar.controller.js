@@ -8,6 +8,17 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
   var y = date.getFullYear();
   self.selectedDay = "testing";
 
+  //
+  // self.allEvents=DataFactory.eventList;
+  self.users=DataFactory.users;
+  self.someStuff=DataFactory.someStuff();
+  self.events=DataFactory.events;
+  self.bigAss=DataFactory.bigAss();
+
+
+
+
+
   //Example events for calendar
   self.eventSources = [[
     {title: 'All Day Event',start: new Date(y, m, 1)},
