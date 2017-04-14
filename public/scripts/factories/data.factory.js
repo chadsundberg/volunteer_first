@@ -127,7 +127,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     addUser: addUser,
     getUsers: getUsers,
     users: users,
-    volunteerSignUp: volunteerSignUp
+    volunteerSignUp: volunteerSignUp,
+    currentUser: currentUser
   };
 
 }]);
