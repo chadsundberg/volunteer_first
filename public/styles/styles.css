@@ -1,15 +1,18 @@
-h1 {
-    /*color: red;*/
-}
-body {
 
-    }
 
 /*CALENDAR STYLING*/
 .fc-row .fc-week .fc-widget-content{
   height: 280px;
 }
-
+.fc-event, .fc-event-dot{
+  background-color: transparent;
+}
+.fc-event, .fc-event:hover, .ui-widget .fc-event{
+  color:navy;
+}
+.fc-event{
+  border: 1px solid transparent;
+}
 
 /*END CALENDAR STYLING*/
 .form-signin .form-control {
@@ -59,23 +62,17 @@ img {
 }
 
 
-.navbar-nav {
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-}
-
-
-.navbar-nav > li {
-  float: none;
-  display: inline-block;
-}
-
-.navbar-nav > li > a {
-    color: black;
-}
-
-
 .modal-container {
   padding: 20px;
+}
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.portfolio-item {
+    margin-bottom: 25px;
+}
+
+footer {
+    margin: 50px 0;
 }

@@ -4,10 +4,6 @@ app.factory('UserFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     var currentUser = {};
 
 
-
-
-
-
   return {
     currentUser: currentUser
 };
