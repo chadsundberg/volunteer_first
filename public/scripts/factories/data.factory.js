@@ -3,6 +3,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   var eventList = { list: [] };
   var auth = $firebaseAuth();
   var users = { list: [] };
+  var currentUser = {};
   // var self = this;
   // self.newUser = {};
   // console.log(dateList);
@@ -83,10 +84,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           data: {
             role_id: userRoleId,
             // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
-            user_id: "1"
+            user_id: 1
           }
         }).then(function (response) {
           console.log(response);
+          console.log('firebase', firebaseUser);
         });
       });
     } else {

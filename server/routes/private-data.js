@@ -74,6 +74,7 @@ router.get('/', function (req, res) {
   .then(function (client) {
     client.query('SELECT first_name, last_name FROM users')
     .then(function (result) {
+      console.log('result:', result);
       client.release();
       res.send(result.rows);
     })
