@@ -1,7 +1,7 @@
 {
   "name": "nodefire-attempt2",
   "version": "1.0.0",
-  "description": "",
+  "description": "AngularFire with token authentication on Node backend server. This branch uses the pg node module with a postgres database to show an authorization example.",
   "main": "index.js",
   "scripts": {
     "start": "node server/app.js",
@@ -10,9 +10,30 @@
   "author": "Luke Schlangen",
   "license": "MIT",
   "dependencies": {
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-modal-service": "^0.11.1",
+    "angular-route": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
+    "angular-ui-calendar": "^1.0.2",
+    "angularfire": "^2.3.0",
     "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
     "express": "^4.14.0",
+    "firebase": "^3.7.5",
     "firebase-admin": "^4.0.3",
+    "fullcalendar": "^3.3.1",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
     "pg": "^6.1.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chadsundberg/volunteer_first.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chadsundberg/volunteer_first/issues"
+  },
+  "homepage": "https://github.com/chadsundberg/volunteer_first#readme"
 }

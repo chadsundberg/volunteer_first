@@ -1,0 +1,58 @@
+<body>
+
+	<div class="container">
+		<img src="../assets/starofdavid.jpg">
+		<div class="jumbotron">
+
+			<h1>Welcome to Registration</h1>
+			<p>Create an account and sign up for volunteer hours</p>
+		</div>
+	</div>
+
+	<div class="col-md-offset-2 col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form class="form-register">
+					<fieldset>
+						<input class="form-control" placeholder="Email Address" ng-model="lc.newUser.email" id="newUserEmail" type="email">
+						<br>
+						<input class="form-control" placeholder="Password" ng-model="lc.newUser.password" type="password">
+						<br>
+						<input class="form-control" placeholder="First Name" ng-model="lc.newUser.firstName" type="text">
+						<br>
+						<input class="form-control" placeholder="Last Name" ng-model="lc.newUser.lastName" type="text">
+						<br><br>
+						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()" value="Register »">
+					</fieldset>
+				</form>
+				{{lc.error}}
+			</div>
+		</div>
+	</div>
+
+	<div class="col vertical-offset-90">
+		<div class="col-md-4">
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<form class="form-signin">
+						<fieldset>
+							<input class="form-control" placeholder="Email Address" ng-model="lc.user.email" type="email">
+							<br>
+							<input class="form-control" placeholder="Password" ng-model="lc.user.password" type="password">
+							<br><br>
+							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.signIn()" type="submit" value="Login »">
+						</fieldset>
+						<a href="" ng-click="showme=true">Forgot your password?</a>
+						<br><br>
+						<fieldset ng-show="showme">
+							<input class="form-control" placeholder="Email Address" ng-model="lc.forgetfulUser.email" type="email">
+							<br><br>
+							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.resetPassword()" type="submit" value="Send New Password »">
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

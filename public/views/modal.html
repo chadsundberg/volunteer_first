@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<body>
+{{$ctrl.eventList}}
+  <div class="modal-container">
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Volunteer Opportunity</th>
+      <th>Time</th>
+      <th>Sign Up</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="event in $ctrl.eventList.list">
+      <td scope="row">{{event.title}}</td>
+      <td scope="row">{{event.start}}</td>
+      <td><div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" ng-model="event.id" ng-change="$ctrl.checked(event._id)"  class="form-check-input">
+          Sign-Up!
+        </label>
+      </div>
+    </td>
+    </tr>
+    </tbody>
+</table>
+<button class="btn" ng-click="$ctrl.clickSaveSignUp()"></button>
+</div>
+</body>
+</html>
