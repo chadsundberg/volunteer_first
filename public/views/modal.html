@@ -6,6 +6,7 @@
 </head>
 <body>
 <!-- {{$ctrl.eventList}} -->
+  <div class="modal-container">
   <table class="table table-bordered">
   <thead>
     <tr>
@@ -20,13 +21,15 @@
       <td scope="row">{{event.start}}</td>
       <td><div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input">
+          <input type="checkbox" ng-model="event.id" ng-change="$ctrl.checked(event._id)"  class="form-check-input">
           Sign-Up!
         </label>
-      </div></td>
+      </div>
+    </td>
     </tr>
     </tbody>
 </table>
+<button class="btn" ng-click="$ctrl.clickSaveSignUp()"></button>
 </div>
 </body>
 </html>

@@ -34,8 +34,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     }
   }
 
-  auth.$onAuthStateChanged(getEvents);
 
+  // Get events for calendar
   function getEvents() {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
@@ -51,9 +51,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
         }).then(function (response) {
           console.log(response.data);
           response.data.forEach(function(event){
-          eventList.list.push({
+            eventList.list.push({
               title: event.role_title,
-              start: new Date('2017-04-13T15:36:07+00:00')
+              start: new Date('2017-04-13T15:36:07+00:00'),
+              id: event.id
               // end: new Date(y, m, 29),
             });
             console.log(eventList.list);
@@ -64,19 +65,44 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
       console.log('Not logged in or not authorized.');
       self.secretData = "Log in to search for volunteer activities.";
     }
-  }
+  }//end Get events
 
 
-
-  function addUser(newUser) {
-    console.log('factor user', newUser);
-
+//add role to user post
+  function volunteerSignUp(userRoleId) {
+    console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'POST',
+          url: '/privateData/volunteerSignUp',
+          headers: { id_token: idToken },
+          data: {
+            role_id: userRoleId,
+            // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
+            user_id: "1"
+          }
+        }).then(function (response) {
+          console.log(response);
+        });
+      });
+    } else {
+      console.log('no firebase user');
+    }
+  }//End volunteerSignUp
 
+
+//User registration
+  function addUser(newUser) {
+    console.log('factory user', newUser);
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'POST',
           url: '/privateData',
@@ -85,15 +111,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
         }).then(function (response) {
           console.log(response);
           self.newUser = {};
-
-
         });
       });
     } else {
       console.log('no firebase user');
-
     }
-  } // ends addPerson function
+  } // ends addUser function
 
 
   return {
@@ -101,7 +124,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     getEvents: getEvents,
     addUser: addUser,
     getUsers: getUsers,
-    users: users
+    users: users,
+    volunteerSignUp: volunteerSignUp
   };
 
 }]);
