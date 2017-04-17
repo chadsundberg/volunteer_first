@@ -15,7 +15,6 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
     } else {
       DataFactory.createUser(self.newUser);
     }
-    // self.currentUser = DataFactory.currentUser.list[0];
   };
 
   self.signIn = function () {

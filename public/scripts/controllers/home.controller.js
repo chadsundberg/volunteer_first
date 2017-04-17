@@ -1,8 +1,8 @@
-app.controller("HomeController", ["$location", "$firebaseAuth", "$http", function($location, $firebaseAuth, $http) {
+app.controller("HomeController", ["DataFactory", "$location", "$firebaseAuth", "$http", function (DataFactory, $location, $firebaseAuth, $http) {
   var auth = $firebaseAuth();
   var self = this;
 
-  // bring in data factory
-  // call functions to get user and event data
-
+  // when controller starts up
+  DataFactory.getUsers();
+  DataFactory.getEvents();
 }]);

@@ -173,7 +173,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
   }
 
   function signIn(email, password) {
-    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
+    auth.$signInWithEmailAndPassword(email, password)
       .then(function (firebaseUser) {
         console.log('firebaseUser:', firebaseUser);
         console.log('signIn response:', response);

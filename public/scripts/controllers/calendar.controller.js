@@ -12,11 +12,12 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
   self.currentUser = DataFactory.currentUser;
+  
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
   // when controller starts up
-  // DataFactory.getUsers();
-  // DataFactory.getEvents();
+  DataFactory.getUsers();
+  DataFactory.getEvents();
 
   //Example events for calendar
   self.eventSources = [[
@@ -98,5 +99,6 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
 
   // self.eventList = DataFactory.allEvents;
+  
   self.eventSources = [self.eventList.list];
 }]);
