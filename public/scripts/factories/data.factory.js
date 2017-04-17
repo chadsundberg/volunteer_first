@@ -24,16 +24,15 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           headers: {
             id_token: idToken
           }
-        }).then(function (response) {
+        }).then(function successCallback(response) {
           console.log(response.data);
           users.list = response.data;
+        }, function errorCallback(response) {
+          console.log('dataFactory getUsers error:', response);
         });
       });
-    } else {
-      console.log('Not logged in or not authorized.');
-      self.secretData = "Log in to search for volunteer activities.";
     }
-  }
+  }// end getUsers()
 
 
   // Get events for calendar
@@ -42,7 +41,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
 
-      
+
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -51,9 +50,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           headers: {
             id_token: idToken
           }
-        }).then(function (response) {
+        }).then(function successCallback(response) {
           console.log(response.data);
-          response.data.forEach(function(event){
+          response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
               start: new Date('2017-04-13T15:36:07+00:00'),
@@ -62,16 +61,15 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
             });
             console.log(eventList.list);
           });
+        }, function errorCallback(response) {
+          console.log('datafactory getEvents error', response);
         });
       });
-    } else {
-      console.log('Not logged in or not authorized.');
-      self.secretData = "Log in to search for volunteer activities.";
     }
-  }//end Get events
+  }//end getEvents()
 
 
-//add role to user post -- CHRISTINE 
+  //add role to user post -- CHRISTINE 
   function volunteerSignUp(userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
@@ -88,18 +86,17 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
             // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
             user_id: 1
           }
-        }).then(function (response) {
+        }).then(function successCallback(response) {
           console.log(response);
           console.log('firebase', firebaseUser);
+        }, function errorCallback(response) {
+          console.log('datafactory volunteerSignUp error', response);
         });
       });
-    } else {
-      console.log('no firebase user');
     }
-  }//End volunteerSignUp
+  }//End volunteerSignUp(userRoleId)
 
-
-//User registration
+  //User registration
   function addUser(newUser) {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
@@ -111,16 +108,16 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           url: '/privateData',
           headers: { id_token: idToken },
           data: newUser
-        }).then(function (response) {
+        }).then(function successCallback(response) {
           console.log(response);
           self.newUser = {};
+        }, function errorCallback(response) {
+          console.log('datafactory addUser error', response);
         });
       });
-    } else {
-      console.log('no firebase user');
     }
   } // ends addUser function
-  
+
   function getCurrentUser() {
     var firebaseUser = auth.$getAuth();
 
@@ -133,15 +130,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           headers: {
             id_token: idToken
           },
-          params: {firebaseUser: firebaseUser.email}
-        }).then(function (response) {
+          params: { firebaseUser: firebaseUser.email }
+        }).then(function successCallback(response) {
           console.log(response.data);
           currentUser = response.data;
-          });
+        }, function errorCallback(response) {
+          console.log('datafactory getCurrentUser error', response);
         });
-
-    } else {
-      console.log('Not logged in or not authorized.');
+      });
     }
   }//end getCurrentUser
 

@@ -36,6 +36,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
         self.message = "User created with uid: " + firebaseUser.uid;
         console.log("Firebase Authenticated as: ", firebaseUser.email);
         self.firebaseUser = firebaseUser;
+        $location.path('/home');
       }).catch(function (error) {
         self.error = error;
         var errorCode = error.code;

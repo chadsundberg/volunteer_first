@@ -22,11 +22,11 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 //Role on click to database
 $ctrl.clickSaveSignUp = function(){
   $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
-}
+};
 //Checkbox
 $ctrl.checked = function(id){
   $ctrl.checkedRole = id;
-}
+};
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
