@@ -12,6 +12,7 @@ var config = {
 };
 var pool = new pg.Pool(config);
 
+
 // router.get("/", function(req, res){
 //   pg.connect(connectionString, function(err, client, done){
 //     var userEmail = req.decodedToken.email;

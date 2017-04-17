@@ -12,6 +12,27 @@
     <h3>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</h3>
 
   </div>
-
+  <h1>Reports</h1>
+      <div class="separateExports">
+          <h2>Export to CSV</h2>
+          <div class="cal">
+              <div class="startDate">
+                  <span>
+                  <h4>Start date:</h4>
+                  <div uib-datepicker ng-model="startDate" datepicker-options="options"></div>
+              </span>
+              </div>
+              <div>
+                  <span class="endDate">
+                  <h4>End date:</h4>
+                  <div uib-datepicker ng-model="endDate" datepicker-options="options"></div>
+              </span>
+              </div>
+          </div>
+          <div class="row report-button">
+            <!-- <a ng-href="{{ '/report/invoice/' + startDate.format('YYYY-MM-DD') + '/' + endDate.format('YYYY-MM-DD') + '/invoice.csv' }}"> -->
+                <button type="button" class="btn btn-primary">Volunteer Report</button>
+            </a>
+        </div>
 </div>
 <!-- </div> -->
