@@ -2,4 +2,7 @@ app.controller("HomeController", ["$location", "$firebaseAuth", "$http", functio
   var auth = $firebaseAuth();
   var self = this;
 
+  // bring in data factory
+  // call functions to get user and event data
+
 }]);

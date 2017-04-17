@@ -63,11 +63,12 @@ var tokenDecoder = function (req, res, next) {
                 req.decodedToken.userSQLId = userSQLIdResult.rows[0].id;
                 req.decodedToken.currentUser = userSQLIdResult.rows[0];
                 console.log('req.decodedToken.currentUser:', req.decodedToken.currentUser);
-                res.send(req.decodedToken.currentUser);
-                // next();
-                return;
-              } else {
+                //res.send(req.decodedToken.currentUser);
                 next();
+                //return;
+              } else {
+                // request from unauthorized user // not a user
+                res.sendStatus(403);
               }
               // res.send decodedToken --> store in factory --> pass to controllers??
               done();

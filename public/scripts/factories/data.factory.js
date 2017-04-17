@@ -7,8 +7,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
 
 // merge this with authchange logincontroller l 37-39? //
   auth.$onAuthStateChanged(function () {
-    getUsers();
-    getEvents();
+    // getUsers();
+    // getEvents();
   });
   //
   //
@@ -25,7 +25,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
             id_token: idToken
           }
         }).then(function successCallback(response) {
-          console.log('hello:', response); /// getting correct array here, but not at getEvents()
+          console.log('hello getUsers:', response); /// getting correct array here, but not at getEvents()
           users.list = response.data;
           return users.list;
         }, function errorCallback(response) {
@@ -50,7 +50,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
             id_token: idToken
           }
         }).then(function successCallback(response) {
-          console.log(response.data); ////////////////////  response.data should be array of events but is currentUser!
+          console.log('hello getEvents:', response); ////////////////////  response.data should be array of events but is currentUser!
           response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
@@ -108,7 +108,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
           headers: { id_token: idToken },
           data: newUser
         }).then(function successCallback(response) {
-          console.log(response);
+          console.log('addUser response:', response);
           currentUser = response.data;
           return currentUser;
         }, function errorCallback(response) {
@@ -116,8 +116,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
         });
       });
     }
-    console.log('currentUser:', currentUser);
-
   } // ends addUser function
 
   /////// todo: deletethis???? *jonny*
@@ -148,7 +146,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
     // add user to firebase
     auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(function (firebaseUser) {
-        // add user to db
+        
+      // add user to db
         addUser(newUser);
         self.newUser = {};
         self.message = "User created with uid: " + firebaseUser.uid;
@@ -177,12 +176,15 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
     auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
       .then(function (firebaseUser) {
         console.log('firebaseUser:', firebaseUser);
-        self.firebaseUser.email = firebaseUser.email;
+        console.log('signIn response:', response);
+          currentUser = response.data;
+          self.firebaseUser.email = firebaseUser.email;
         // todo: SQL add user with self.names
         self.message = "User created with uid: " + firebaseUser.uid;
         console.log("Firebase Authenticated as: ", firebaseUser.email);
         self.firebaseUser = firebaseUser;
-        $location.path('/home');
+        return currentUser;
+        
       }).catch(function (error) {
         self.error = error;
         var errorCode = error.code;
@@ -194,6 +196,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
         }
 
       });
+      $location.path('/home');
   }
 
   return {
