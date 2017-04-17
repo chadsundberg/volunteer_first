@@ -1,9 +1,14 @@
 app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', function ($firebaseAuth, $http, $location, $window) {
   console.log('data factory loaded');
+
+  var eventList = { list: [] };
+  // var currentEvent = { id: [] };
   var auth = $firebaseAuth();
   var eventList = { list: [] };
   var users = { list: [] };
   var currentUser = {};
+  var eventRoles = { list: [] };
+
 
   function getUsers() {
     var firebaseUser = auth.$getAuth();
@@ -45,10 +50,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-          response.data.forEach(function (event) {
+          console.log(response.data);
+          response.data.forEach(function(event){
             eventList.list.push({
               title: event.role_title,
-              start: new Date('2017-04-13T15:36:07+00:00'),
+              start: new Date(event.date),
               id: event.id
               // end: new Date(y, m, 29),
             });
@@ -63,8 +69,39 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }//end getEvents()
 
+  // Get events for modal
+  function getEventRoles(eventId) {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/eventRoles/' + eventId,
+          headers: {
+            id_token: idToken
+          }
+        }).then(function (response) {
+          console.log(response.data);
+          eventRoles.list = response.data;
+          // response.data.forEach(function(event){
+          //   currentEventClicked.id.push({
+          //     title: event.id,
+          //     start: new Date(event.date),
+          //     id: event.id
+          //   });
+          //   console.log("currentevent", currentEventClicked.id);
+          // });
+        });
+      });
+    } else {
+      console.log('Not logged in or not authorized.');
+      self.secretData = "Log in to search for volunteer activities.";
+    }
+  }//end Get events
 
-  //add role to user post -- CHRISTINE 
+//add role to user post -- CHRISTINE -- update this
   function volunteerSignUp(userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
@@ -77,10 +114,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           headers: { id_token: idToken },
           data: {
             role_id: userRoleId,
-            // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
-            user_id: 1
           }
         }).then(function (response) {
+          getEventId();
           console.log(response);
           console.log('firebase', firebaseUser);
           return response.data;
@@ -110,7 +146,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     // add user to firebase
     auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(function (firebaseUser) {
-
         firebaseUser.getToken().then(function (idToken) {
           $http({
             method: 'POST',
@@ -134,6 +169,32 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         console.log('addUser catch:', error);
       });
   } // ends createUser function
+
+
+//Admin add role to event -CHRISTINE
+function adminAddRole(newRole, eventId) {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'POST',
+          url: '/privateData/addRole/' + eventId,
+          headers: { id_token: idToken },
+          data: newRole,
+        }).then(function (response) {
+          console.log(response);
+          getEventRoles(eventId);
+        });
+      });
+    } else {
+      console.log('no firebase user');
+    }
+  }
+
+
+
 
   function signOut() {
     auth.$signOut().then(function () {
@@ -208,7 +269,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signOut: signOut,
     signIn: signIn,
     resetPassword: resetPassword,
-    getUserData: getUserData
+    getUserData: getUserData,
+// CHRISTINE exports
+    getEventRoles: getEventRoles,
+    // currentEvent: currentEvent,
+    eventRoles: eventRoles,
+    adminAddRole: adminAddRole // CHRISTINE
   };
 
 }]);

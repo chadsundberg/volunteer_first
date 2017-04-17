@@ -11,9 +11,8 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
-  self.currentUser = DataFactory.currentUser;
-  
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
+  self.currentUser = DataFactory.currentUser;
 
   // state change / refresh
    auth.$onAuthStateChanged(function (firebaseUser) {
@@ -21,6 +20,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     DataFactory.getEvents();
     DataFactory.getUserData(firebaseUser);
   });
+
   //Example events for calendar
   self.eventSources = [[
     {title: 'All Day Event',start: new Date(y, m, 1)},
@@ -36,7 +36,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     self.addModal = (date.title + ' was clicked ');
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
-    ModalDataFactory.dateClicked.day = date;
+    // ModalDataFactory.currentEventClicked = date;
     self.open();
   };
 
@@ -44,8 +44,9 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.eventOnClick = function( date, jsEvent, view){
     console.log(date.title + ' was clicked ');
     console.log(jsEvent);
-    console.log(view);
+    console.log('view, date, jsEvent:', view, date, jsEvent);
     self.selectedDay = "Event!";
+    ModalDataFactory.currentEventClicked = date;
     self.open();
   };
 
@@ -100,7 +101,5 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
 
 
-  // self.eventList = DataFactory.allEvents;
-  
   self.eventSources = [self.eventList.list];
 }]);

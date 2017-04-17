@@ -20,7 +20,6 @@ var tokenDecoder = function (req, res, next) {
   if (req.headers.id_token) {
     admin.auth().verifyIdToken(req.headers.id_token).then(function (decodedToken) {
       req.decodedToken = decodedToken;
-
       pool.connect(function (err, client, done) {
         var firebaseUserEmail = req.decodedToken.email;
         client.query('SELECT * FROM users WHERE email=$1', [firebaseUserEmail], function (err, userSQLIdResult) {
@@ -63,7 +62,7 @@ var tokenDecoder = function (req, res, next) {
                 next();
               } else {
                 console.log('ERROR', userSQLIdResult.rows.length);
-                
+
                 // request from unauthorized user // not a user
                 console.log('decoder unauthorized user');
                 done();
@@ -84,7 +83,7 @@ var tokenDecoder = function (req, res, next) {
     // Will also be hit when user does not send back an idToken in the header
     // technically, some of these should return 403 and some should return 404
     console.log('no token sent');
-    
+
     res.sendStatus(404);
   }
 };
