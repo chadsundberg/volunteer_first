@@ -11,6 +11,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
+  self.currentUser = DataFactory.currentUser;
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
   //Example events for calendar

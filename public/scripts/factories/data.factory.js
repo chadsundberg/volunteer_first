@@ -3,7 +3,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
   var auth = $firebaseAuth();
   var eventList = { list: [] };
   var users = { list: [] };
-  var currentUser = { list: [] };
+  var currentUser = {};
 
 // merge this with authchange logincontroller l 37-39? //
   auth.$onAuthStateChanged(function () {
@@ -58,7 +58,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
               id: event.id
               // end: new Date(y, m, 29),
             });
-            console.log(eventList.list);
           });
         }, function errorCallback(response) {
           console.log('datafactory getEvents error', response);
