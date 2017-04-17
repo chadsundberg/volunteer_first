@@ -30,12 +30,14 @@ router.get('/events', function (req, res) {
   });
 });
 
-router.get('/', function (req, res) {
+router.get('/users', function (req, res) {
   pool.connect()
   .then(function (client) {
     client.query('SELECT first_name, last_name FROM users')
     .then(function (result) {
       client.release();
+      console.log('getting user: ', result.rows);
+      
       res.send(result.rows);
     })
     .catch(function (err) {
@@ -43,6 +45,29 @@ router.get('/', function (req, res) {
       res.sendStatus(500);
     });
   });
+});
+
+router.get('/getUser', function (req, res) {
+  pool.connect()
+  .then(function (client) {
+    client.query('SELECT * FROM users WHERE id = $1',
+    [req.decodedToken.userSQLId],
+    function(err, result) {
+      res.send(result.rows[0]);
+    });
+  });
+    // .then(function (result) {
+    //   client.release();
+    //   console.log('getting user: ', result.rows);
+      
+    //   res.send(result.rows);
+    // })
+    // .catch(function (err) {
+    //   console.log('error on SELECT', err);
+    //   res.sendStatus(500);
+    // });
+  // });
+
 });
 
 // todo: delete this after req.currentUser is working *jonny*

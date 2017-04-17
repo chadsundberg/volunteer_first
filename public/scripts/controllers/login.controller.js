@@ -34,8 +34,10 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
   ////monitor statechange in controller or factory?
 
-  auth.$onAuthStateChanged(function (firebaseUser) {
-    self.userIsLoggedIn = firebaseUser !== null;
-    self.userIsLoggedOut = firebaseUser === null;
-  });
+  // auth.$onAuthStateChanged(function (firebaseUser) {
+  //   console.log('resetting user login controller');
+    
+  //   self.userIsLoggedIn = firebaseUser !== null;
+  //   self.userIsLoggedOut = firebaseUser === null;
+  // });
 }]);

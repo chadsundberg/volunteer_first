@@ -16,9 +16,11 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
   // when controller starts up
-  DataFactory.getUsers();
-  DataFactory.getEvents();
-
+   auth.$onAuthStateChanged(function (firebaseUser) {
+    DataFactory.getUsers();
+    DataFactory.getEvents();
+    DataFactory.getUserData(firebaseUser);
+  });
   //Example events for calendar
   self.eventSources = [[
     {title: 'All Day Event',start: new Date(y, m, 1)},

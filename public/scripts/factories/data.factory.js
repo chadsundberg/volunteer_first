@@ -1,15 +1,15 @@
-app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($firebaseAuth, $http, $location) {
+app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', function ($firebaseAuth, $http, $location, $window) {
   console.log('data factory loaded');
   var auth = $firebaseAuth();
   var eventList = { list: [] };
   var users = { list: [] };
   var currentUser = {};
 
-// merge this with authchange logincontroller l 37-39? //
-  auth.$onAuthStateChanged(function () {
-    // getUsers();
-    // getEvents();
-  });
+  // merge this with authchange logincontroller l 37-39? //
+  // auth.$onAuthStateChanged(function () {
+  //   // getUsers();
+  //   // getEvents();
+  // });
   //
   //
   function getUsers() {
@@ -20,18 +20,21 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
       return firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
-          url: '/privateData',
+          url: '/privateData/users',
           headers: {
             id_token: idToken
           }
-        }).then(function successCallback(response) {
+        }).then(function(response) {
           console.log('hello getUsers:', response); /// getting correct array here, but not at getEvents()
           users.list = response.data;
           return users.list;
-        }, function errorCallback(response) {
+        }, function(response) {
           console.log('dataFactory getUsers error:', response);
         });
       });
+    } else {
+      console.log('get users no firebase user');
+      
     }
   }// end getUsers()
 
@@ -49,7 +52,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
           headers: {
             id_token: idToken
           }
-        }).then(function successCallback(response) {
+        }).then(function(response) {
           console.log('hello getEvents:', response); ////////////////////  response.data should be array of events but is currentUser!
           response.data.forEach(function (event) {
             eventList.list.push({
@@ -59,10 +62,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
               // end: new Date(y, m, 29),
             });
           });
-        }, function errorCallback(response) {
+        }, function(response) {
           console.log('datafactory getEvents error', response);
         });
       });
+    } else {
+      console.log('get events no firebase user');
+      
     }
   }//end getEvents()
 
@@ -84,11 +90,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
             // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
             user_id: 1
           }
-        }).then(function successCallback(response) {
+        }).then(function(response) {
           console.log(response);
           console.log('firebase', firebaseUser);
           return response.data;
-        }, function errorCallback(response) {
+        }, function(response) {
           console.log('datafactory volunteerSignUp error', response);
         });
       });
@@ -96,25 +102,19 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
   }//End volunteerSignUp(userRoleId)
 
   //User registration
-  function addUser(newUser) {
-    var firebaseUser = auth.$getAuth();
+  function addUser(fbuser, newUser) {
+    // var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
-    if (firebaseUser) {
+    if (fbuser) {
       // This is where we make our call to our server
-      return firebaseUser.getToken().then(function (idToken) {
-        $http({
-          method: 'POST',
-          url: '/privateData',
-          headers: { id_token: idToken },
-          data: newUser
-        }).then(function successCallback(response) {
-          console.log('addUser response:', response);
-          currentUser = response.data;
-          return currentUser;
-        }, function errorCallback(response) {
-          console.log('datafactory addUser error', response);
-        });
+      return fbuser.getToken().then(function (idToken) {
+        console.log('ajax post to server to create new user');
+        
+        
       });
+    } else {
+      console.log('add user no fb user!');
+      
     }
   } // ends addUser function
 
@@ -146,14 +146,28 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
     // add user to firebase
     auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(function (firebaseUser) {
-        
-      // add user to db
-        addUser(newUser);
-        self.newUser = {};
-        self.message = "User created with uid: " + firebaseUser.uid;
-        $location.path('/home');
+
+        firebaseUser.getToken().then(function (idToken) {
+          $http({
+            method: 'POST',
+            url: '/privateData',
+            headers: { id_token: idToken },
+            data: newUser
+          }).then(function(response) {
+              console.log('addUser ajax response:', response);
+              currentUser.info = response.data;
+              console.log('currentuser create user', currentUser);
+              
+              self.newUser = {};       
+              $location.path('/home');
+            }, function(err) {
+            console.log('datafactory addUser error', err);
+          });
+        });
+
       }).catch(function (error) {
         self.error = error;
+        console.log('addUser catch:', error);
       });
   }
 
@@ -175,28 +189,41 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
   function signIn(email, password) {
     auth.$signInWithEmailAndPassword(email, password)
       .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        console.log('signIn response:', response);
-          currentUser = response.data;
-          self.firebaseUser.email = firebaseUser.email;
-        // todo: SQL add user with self.names
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.email);
-        self.firebaseUser = firebaseUser;
-        return currentUser;
+        firebaseUser.getToken().then(function (idToken) {
+          console.log('get user infoz');
+          $http({
+              method: 'GET',
+              url: '/privateData/getUser',
+              headers: { id_token: idToken }
+            }).then(function(response) {
+                console.log('getuser ajax response:', response);
+                currentUser.info = response.data;
+                console.log('currentuser get user', currentUser);      
+                $location.path('/home');
+              }, function(err) {
+                console.log('datafactory addUser error', err);
+            });
+        });
         
       }).catch(function (error) {
-        self.error = error;
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log('errorCode:', errorCode);
-        console.log('errorMessage:', errorMessage);
-        if (errorCode === 'auth/user-not-found') {
-          alert('User not found!');
-        }
-
+        console.log('signin with email error', error);
       });
-      $location.path('/home');
+  }
+
+  function getUserData(firebaseUser) {
+    firebaseUser.getToken().then(function (idToken) {
+    $http({
+      method: 'GET',
+      url: '/privateData/getUser',
+      headers: { id_token: idToken }
+    }).then(function(response) {
+        console.log('getuser ajax response:', response);
+        currentUser.info = response.data;
+        console.log('currentuser get user', currentUser);   
+      }, function(err) {
+      console.log('datafactory addUser error', err);
+    });
+  });
   }
 
   return {
@@ -210,7 +237,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', function ($fi
     createUser: createUser,
     signOut: signOut,
     signIn: signIn,
-    resetPassword: resetPassword
+    resetPassword: resetPassword,
+    getUserData: getUserData
   };
 
 }]);
