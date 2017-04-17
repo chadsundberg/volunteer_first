@@ -4,7 +4,6 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.user = {};
   self.newUser = {};
   self.forgetfulUser = {};
-  self.firebaseUser = {};
   self.currentUser = DataFactory.currentUser;
 
 
@@ -32,12 +31,18 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
     DataFactory.signOut();
   };
 
-  ////monitor statechange in controller or factory?
 
-  // auth.$onAuthStateChanged(function (firebaseUser) {
+
+}]);
+
+
+////// TODO: handle self.userIsLoggedIn/Out for nav bar hide ////// --from: jonny--
+
+ // self.firebaseUser = {};
+
+// ie  // auth.$onAuthStateChanged(function (firebaseUser) {
   //   console.log('resetting user login controller');
     
   //   self.userIsLoggedIn = firebaseUser !== null;
   //   self.userIsLoggedOut = firebaseUser === null;
   // });
-}]);

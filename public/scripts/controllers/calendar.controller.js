@@ -15,7 +15,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
-  // when controller starts up
+  // state change / refresh
    auth.$onAuthStateChanged(function (firebaseUser) {
     DataFactory.getUsers();
     DataFactory.getEvents();

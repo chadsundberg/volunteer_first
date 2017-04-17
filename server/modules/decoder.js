@@ -15,16 +15,11 @@ admin.initializeApp({
   databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
 });
 
-/* This is where the magic happens. We pull the id_token off of the request,
-verify it against our firebase service account private_key.
-Then we add the decodedToken */
 var tokenDecoder = function (req, res, next) {
-  // console.log('tokenDecoderhit');
 
   if (req.headers.id_token) {
     admin.auth().verifyIdToken(req.headers.id_token).then(function (decodedToken) {
       req.decodedToken = decodedToken;
-      // console.log('req.decodedToken:', req.decodedToken);
 
       pool.connect(function (err, client, done) {
         var firebaseUserEmail = req.decodedToken.email;
@@ -54,7 +49,6 @@ var tokenDecoder = function (req, res, next) {
                     req.decodedToken.currentUser = newUserSQLIdResult.rows[0];
                     console.log('created new user: ', req.decodedToken.currentUser);
                     res.send(req.decodedToken.currentUser);
-                    // next();
                     return;
                   }
                 });
@@ -64,13 +58,9 @@ var tokenDecoder = function (req, res, next) {
                 // this adds the user's id from the database to the request to simplify future database queries
                 req.decodedToken.userSQLId = userSQLIdResult.rows[0].id;
                 req.decodedToken.currentUser = userSQLIdResult.rows[0];
-                // console.log('req.decodedToken.currentUser:', req.decodedToken.currentUser);
-                //res.send(req.decodedToken.currentUser);
                 console.log('things are cool with this user request');
                 done();
-
                 next();
-                //return;
               } else {
                 console.log('ERROR', userSQLIdResult.rows.length);
                 
@@ -79,7 +69,6 @@ var tokenDecoder = function (req, res, next) {
                 done();
                 res.sendStatus(403);
               }
-              // res.send decodedToken --> store in factory --> pass to controllers??
               done();
             });
           }
@@ -87,8 +76,6 @@ var tokenDecoder = function (req, res, next) {
       });
     })
       .catch(function (error) {
-        // If the id_token isn't right, you end up in this callback function
-        // Here we are returning a forbidden error
         console.error('User token could not be verified:', error);
         res.sendStatus(403);
       });
@@ -105,31 +92,4 @@ var tokenDecoder = function (req, res, next) {
 
 module.exports = { token: tokenDecoder };
 
-
-
-
-
-
-
-// /* This is where the magic happens. We pull the id_token off of the request,
-// verify it against our firebase service account private_key.
-// Then we add the decodedToken */
-// var tokenDecoder = function(req, res, next){
-//   if (req.headers.id_token) {
-//     admin.auth().verifyIdToken(req.headers.id_token).then(function(decodedToken) {
-//       // Adding the decodedToken to the request so that downstream processes can use it
-//       req.decodedToken = decodedToken;
-//       next();
-//     })
-//     .catch(function(error) {
-//       // If the id_token isn't right, you end up in this callback function
-//       // Here we are returning a forbidden error
-//       console.log('User token could not be verified');
-//       res.sendStatus(403);
-//     });
-//   } else {
-//     // Seems to be hit when chrome makes request for map files
-//     // Will also be hit when user does not send back an idToken in the header
-//     res.sendStatus(403);
-//   }
-// };
+///// TODO: move ajax request for newUsers to private-data.js ///// --from: jonny--

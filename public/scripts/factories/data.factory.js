@@ -5,13 +5,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   var users = { list: [] };
   var currentUser = {};
 
-  // merge this with authchange logincontroller l 37-39? //
-  // auth.$onAuthStateChanged(function () {
-  //   // getUsers();
-  //   // getEvents();
-  // });
-  //
-  //
   function getUsers() {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
@@ -24,17 +17,16 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           headers: {
             id_token: idToken
           }
-        }).then(function(response) {
-          console.log('hello getUsers:', response); /// getting correct array here, but not at getEvents()
+        }).then(function (response) {
           users.list = response.data;
           return users.list;
-        }, function(response) {
+        }, function (response) {
           console.log('dataFactory getUsers error:', response);
         });
       });
     } else {
       console.log('get users no firebase user');
-      
+
     }
   }// end getUsers()
 
@@ -52,8 +44,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           headers: {
             id_token: idToken
           }
-        }).then(function(response) {
-          console.log('hello getEvents:', response); ////////////////////  response.data should be array of events but is currentUser!
+        }).then(function (response) {
           response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
@@ -62,13 +53,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               // end: new Date(y, m, 29),
             });
           });
-        }, function(response) {
+        }, function (response) {
           console.log('datafactory getEvents error', response);
         });
       });
     } else {
       console.log('get events no firebase user');
-      
+
     }
   }//end getEvents()
 
@@ -77,7 +68,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   function volunteerSignUp(userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
-    // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
       return firebaseUser.getToken().then(function (idToken) {
@@ -90,11 +80,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             // user_id: firebaseUser.email //NEED user id to associate role with -- firebase?
             user_id: 1
           }
-        }).then(function(response) {
+        }).then(function (response) {
           console.log(response);
           console.log('firebase', firebaseUser);
           return response.data;
-        }, function(response) {
+        }, function (response) {
           console.log('datafactory volunteerSignUp error', response);
         });
       });
@@ -109,38 +99,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       // This is where we make our call to our server
       return fbuser.getToken().then(function (idToken) {
         console.log('ajax post to server to create new user');
-        
-        
-      });
+       });
     } else {
       console.log('add user no fb user!');
-      
+
     }
   } // ends addUser function
-
-  /////// todo: deletethis???? *jonny*
-  // function getCurrentUser() {
-  //   var firebaseUser = auth.$getAuth();
-
-  //   if (firebaseUser) {
-
-  //     firebaseUser.getToken().then(function (idToken) {
-  //       $http({
-  //         method: 'GET',
-  //         url: '/privateData/currentUser',
-  //         headers: {
-  //           id_token: idToken
-  //         },
-  //         params: { firebaseUser: firebaseUser.email }
-  //       }).then(function successCallback(response) {
-  //         console.log(response.data);
-  //         currentUser = response.data;
-  //       }, function errorCallback(response) {
-  //         console.log('datafactory getCurrentUser error', response);
-  //       });
-  //     });
-  //   }
-  // }//end getCurrentUser
 
   function createUser(newUser) {
     // add user to firebase
@@ -153,14 +117,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             url: '/privateData',
             headers: { id_token: idToken },
             data: newUser
-          }).then(function(response) {
-              console.log('addUser ajax response:', response);
-              currentUser.info = response.data;
-              console.log('currentuser create user', currentUser);
-              
-              self.newUser = {};       
-              $location.path('/home');
-            }, function(err) {
+          }).then(function (response) {
+            console.log('addUser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser create user', currentUser);
+
+            self.newUser = {};
+            $location.path('/home');
+          }, function (err) {
             console.log('datafactory addUser error', err);
           });
         });
@@ -169,7 +133,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         self.error = error;
         console.log('addUser catch:', error);
       });
-  }
+  } // ends createUser function
 
   function signOut() {
     auth.$signOut().then(function () {
@@ -192,19 +156,19 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         firebaseUser.getToken().then(function (idToken) {
           console.log('get user infoz');
           $http({
-              method: 'GET',
-              url: '/privateData/getUser',
-              headers: { id_token: idToken }
-            }).then(function(response) {
-                console.log('getuser ajax response:', response);
-                currentUser.info = response.data;
-                console.log('currentuser get user', currentUser);      
-                $location.path('/home');
-              }, function(err) {
-                console.log('datafactory addUser error', err);
-            });
+            method: 'GET',
+            url: '/privateData/getUser',
+            headers: { id_token: idToken }
+          }).then(function (response) {
+            console.log('getuser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser get user', currentUser);
+            $location.path('/home');
+          }, function (err) {
+            console.log('datafactory addUser error', err);
+          });
         });
-        
+
       }).catch(function (error) {
         console.log('signin with email error', error);
       });
@@ -212,18 +176,20 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   function getUserData(firebaseUser) {
     firebaseUser.getToken().then(function (idToken) {
-    $http({
-      method: 'GET',
-      url: '/privateData/getUser',
-      headers: { id_token: idToken }
-    }).then(function(response) {
+      $http({
+        method: 'GET',
+        url: '/privateData/getUser',
+        headers: { id_token: idToken }
+      }).then(function (response) {
         console.log('getuser ajax response:', response);
         currentUser.info = response.data;
-        console.log('currentuser get user', currentUser);   
-      }, function(err) {
-      console.log('datafactory addUser error', err);
+        console.log('currentuser get user', currentUser);
+      }, function (err) {
+        console.log('datafactory addUser error', err);
+      });
+    }).catch(function (error) {
+      console.log('getuserdata error:', error);
     });
-  });
   }
 
   return {
