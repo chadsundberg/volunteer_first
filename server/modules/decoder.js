@@ -24,6 +24,8 @@ var tokenDecoder = function (req, res, next) {
   if (req.headers.id_token) {
     admin.auth().verifyIdToken(req.headers.id_token).then(function (decodedToken) {
       req.decodedToken = decodedToken;
+      console.log('req.decodedToken:', req.decodedToken);
+
       pool.connect(function (err, client, done) {
         var firebaseUserEmail = req.decodedToken.email;
         client.query('SELECT * FROM users WHERE email=$1', [firebaseUserEmail], function (err, userSQLIdResult) {
@@ -33,7 +35,7 @@ var tokenDecoder = function (req, res, next) {
             res.sendStatus(500);
           } else {
             pool.connect(function (err, client, done) {
-              if (userSQLIdResult.rows.length === 0) {
+              if (userSQLIdResult.rows.length === 0 && Object.keys(req.body).length > 0) {
 
 
                 // If the user is not in the database, this adds them to the database
@@ -48,17 +50,21 @@ var tokenDecoder = function (req, res, next) {
                     res.sendStatus(500);
                   } else {
                     // this adds the user's id from the database to the request to simplify future database queries
-                    req.currentUser = newUserSQLIdResult.rows[0];
-                    console.log('req.currentUser:', req.currentUser);
+                    req.decodedToken.currentUser = newUserSQLIdResult.rows[0];
+                    console.log('req.decodedToken.currentUser:', req.decodedToken.currentUser);
                     next();
                   }
                 });
-              } else {
+              } else if (userSQLIdResult.rows.length === 1) {
                 // this else is for users that already exist. This should be the most common path
                 // this adds the user's id from the database to the request to simplify future database queries
                 req.decodedToken.userSQLId = userSQLIdResult.rows[0].id;
+                req.decodedToken.currentUser = userSQLIdResult.rows[0];
+                next();
+              } else {
                 next();
               }
+              // res.send decodedToken --> store in factory --> pass to controllers??
               done();
             });
           }

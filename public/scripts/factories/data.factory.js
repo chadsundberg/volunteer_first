@@ -8,8 +8,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   // self.newUser = {};
   // console.log(dateList);
 
-  auth.$onAuthStateChanged(getUsers);
-  auth.$onAuthStateChanged(getEvents);
+  // auth.$onAuthStateChanged(getUsers);
+  // auth.$onAuthStateChanged(getEvents);
+
+  auth.$onAuthStateChanged(function(){
+    getUsers();
+    getEvents();
+  });
   //
   //
   function getUsers() {
@@ -25,7 +30,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
             id_token: idToken
           }
         }).then(function successCallback(response) {
-          console.log(response.data);
+          console.log('hello:', response);
           users.list = response.data;
         }, function errorCallback(response) {
           console.log('dataFactory getUsers error:', response);

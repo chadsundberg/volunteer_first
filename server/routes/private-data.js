@@ -43,6 +43,7 @@ router.get('/', function (req, res) {
   });
 });
 
+// todo: delete this after req.currentUser is working *jonny*
 router.get('/currentUser', function (req, res) {
   pool.connect()
   .then(function (client) {
