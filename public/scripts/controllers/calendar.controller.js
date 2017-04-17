@@ -11,10 +11,15 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
-  self.currentEvent = DataFactory.currentEvent;
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
+  self.currentUser = DataFactory.currentUser;
 
-
+  // state change / refresh
+   auth.$onAuthStateChanged(function (firebaseUser) {
+    DataFactory.getUsers();
+    DataFactory.getEvents();
+    DataFactory.getUserData(firebaseUser);
+  });
 
   //Example events for calendar
   self.eventSources = [[
@@ -93,6 +98,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
     }
   };
+
 
 
   self.eventSources = [self.eventList.list];
