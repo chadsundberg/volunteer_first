@@ -19,6 +19,8 @@ router.get('/events', function (req, res) {
     client.query('SELECT users.first_name, users.last_name, roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id, users.first_name, users.last_name;')
     .then(function (result) {
       client.release();
+      console.log('/events RESULT.ROWS:', result.rows); // logging correctly
+      
       res.send(result.rows);
     })
     .catch(function (err) {
@@ -88,6 +90,7 @@ router.post('/volunteerSignUp', function(req, res){
 
 
 //Add user route - firebase
+// this is pretty useless now *jonny* //
 router.post('/', function(req, res) {
 	  console.log('here is the body ->', req.body);
 	  var newUser = req.body;
@@ -102,9 +105,10 @@ router.post('/', function(req, res) {
 	          if(err){
 	            console.log(err);
 	            res.sendStatus(500); // the world exploded
-	          }else{
-	            res.sendStatus(201);
             }
+	          // }else{
+	          //   res.sendStatus(201);
+            // }
 	      // }
 	    }
 	  });

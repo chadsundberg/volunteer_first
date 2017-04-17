@@ -5,6 +5,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.newUser = {};
   self.forgetfulUser = {};
   self.firebaseUser = {};
+  self.currentUser = {};
 
 
   self.createUser = function () {
@@ -12,67 +13,27 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
     if (inpObj.checkValidity() === false) {
       document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
     } else {
-      auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
-        .then(function (firebaseUser) {
-          // todo: SQL add user with self.names
-          DataFactory.addUser(self.newUser);
-          self.newUser = {};
-          self.message = "User created with uid: " + firebaseUser.uid;
-          $location.path('/home');
-        }).catch(function (error) {
-          self.error = error;
-        });
+      DataFactory.createUser(self.newUser);
     }
+    self.currentUser = DataFactory.currentUser.list[0];
   };
 
   self.signIn = function () {
     console.log('self.user:', self.user);
-
-    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
-      .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        self.firebaseUser.email = firebaseUser.email;
-        // todo: SQL add user with self.names
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.email);
-        self.firebaseUser = firebaseUser;
-        $location.path('/home');
-      }).catch(function (error) {
-        self.error = error;
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log('errorCode:', errorCode);
-        console.log('errorMessage:', errorMessage);
-        if (errorCode === 'auth/user-not-found') {
-          alert('User not found!');
-        }
-
-      });
-
-      // .then(function (self.firebaseUser.email) {
-      //   console.log('self.firebaseUser:', self.firebaseUser);
-      //   $location.path('/home');
-      // });
-
-   
+    DataFactory.signIn(self.user.email, self.user.password);
   };
 
 
   self.resetPassword = function () {
-    auth.$sendPasswordResetEmail(self.forgetfulUser.email).then(function () {
-      console.log("Password reset email sent successfully!");
-    }).catch(function (error) {
-      console.error("Error: ", error);
-    });
+    DataFactory.resetPassword(self.forgetfulUser.email);
   };
 
   // This code runs when the user logs out
   self.signOut = function () {
-    auth.$signOut().then(function () {
-      console.log('Logging the user out!');
-      $location.path('/');
-    });
+    DataFactory.signOut();
   };
+
+  ////monitor statechange in controller or factory?
 
   auth.$onAuthStateChanged(function (firebaseUser) {
     self.userIsLoggedIn = firebaseUser !== null;

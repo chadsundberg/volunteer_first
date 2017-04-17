@@ -52,7 +52,9 @@ var tokenDecoder = function (req, res, next) {
                     // this adds the user's id from the database to the request to simplify future database queries
                     req.decodedToken.currentUser = newUserSQLIdResult.rows[0];
                     console.log('req.decodedToken.currentUser:', req.decodedToken.currentUser);
-                    next();
+                    res.send(req.decodedToken.currentUser);
+                    // next();
+                    return;
                   }
                 });
               } else if (userSQLIdResult.rows.length === 1) {
@@ -60,7 +62,10 @@ var tokenDecoder = function (req, res, next) {
                 // this adds the user's id from the database to the request to simplify future database queries
                 req.decodedToken.userSQLId = userSQLIdResult.rows[0].id;
                 req.decodedToken.currentUser = userSQLIdResult.rows[0];
-                next();
+                console.log('req.decodedToken.currentUser:', req.decodedToken.currentUser);
+                res.send(req.decodedToken.currentUser);
+                // next();
+                return;
               } else {
                 next();
               }
