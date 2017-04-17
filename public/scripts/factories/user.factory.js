@@ -9,4 +9,4 @@ app.factory('UserFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
 };
 
 
-})];
+}]);

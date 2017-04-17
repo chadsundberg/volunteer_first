@@ -1,39 +1,34 @@
-app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $http) {
+app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', function ($firebaseAuth, $http, $location, $window) {
   console.log('data factory loaded');
-  var eventList = { list: [] };
   var auth = $firebaseAuth();
+  var eventList = { list: [] };
   var users = { list: [] };
   var currentUser = {};
-  // var self = this;
-  // self.newUser = {};
-  // console.log(dateList);
 
-  auth.$onAuthStateChanged(getUsers);
-  auth.$onAuthStateChanged(getEvents);
-  //
-  //
   function getUsers() {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
-      firebaseUser.getToken().then(function (idToken) {
+      return firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
-          url: '/privateData',
+          url: '/privateData/users',
           headers: {
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
           users.list = response.data;
+          return users.list;
+        }, function (response) {
+          console.log('dataFactory getUsers error:', response);
         });
       });
     } else {
-      console.log('Not logged in or not authorized.');
-      self.secretData = "Log in to search for volunteer activities.";
+      console.log('get users no firebase user');
+
     }
-  }
+  }// end getUsers()
 
 
   // Get events for calendar
@@ -41,10 +36,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
-
-      
       // This is where we make our call to our server
-      firebaseUser.getToken().then(function (idToken) {
+      return firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
           url: '/privateData/events',
@@ -52,33 +45,32 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
-          response.data.forEach(function(event){
+          response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
               start: new Date('2017-04-13T15:36:07+00:00'),
               id: event.id
               // end: new Date(y, m, 29),
             });
-            console.log(eventList.list);
           });
+        }, function (response) {
+          console.log('datafactory getEvents error', response);
         });
       });
     } else {
-      console.log('Not logged in or not authorized.');
-      self.secretData = "Log in to search for volunteer activities.";
+      console.log('get events no firebase user');
+
     }
-  }//end Get events
+  }//end getEvents()
 
 
-//add role to user post -- CHRISTINE 
+  //add role to user post -- CHRISTINE 
   function volunteerSignUp(userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
-    // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
-      firebaseUser.getToken().then(function (idToken) {
+      return firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'POST',
           url: '/privateData/volunteerSignUp',
@@ -91,60 +83,118 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
         }).then(function (response) {
           console.log(response);
           console.log('firebase', firebaseUser);
+          return response.data;
+        }, function (response) {
+          console.log('datafactory volunteerSignUp error', response);
         });
       });
-    } else {
-      console.log('no firebase user');
     }
-  }//End volunteerSignUp
+  }//End volunteerSignUp(userRoleId)
 
-
-//User registration
-  function addUser(newUser) {
-    var firebaseUser = auth.$getAuth();
+  //User registration
+  function addUser(fbuser, newUser) {
+    // var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
-    if (firebaseUser) {
+    if (fbuser) {
       // This is where we make our call to our server
-      firebaseUser.getToken().then(function (idToken) {
-        $http({
-          method: 'POST',
-          url: '/privateData',
-          headers: { id_token: idToken },
-          data: newUser
-        }).then(function (response) {
-          console.log(response);
-          self.newUser = {};
-        });
+      return fbuser.getToken().then(function (idToken) {
+        console.log('ajax post to server to create new user');
       });
     } else {
-      console.log('no firebase user');
+      console.log('add user no fb user!');
+
     }
   } // ends addUser function
-  
-  function getCurrentUser() {
-    var firebaseUser = auth.$getAuth();
 
-    if (firebaseUser) {
+  function createUser(newUser) {
+    // add user to firebase
+    auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .then(function (firebaseUser) {
 
-      firebaseUser.getToken().then(function (idToken) {
-        $http({
-          method: 'GET',
-          url: '/privateData/currentUser',
-          headers: {
-            id_token: idToken
-          },
-          params: {firebaseUser: firebaseUser.email}
-        }).then(function (response) {
-          console.log(response.data);
-          currentUser = response.data;
+        firebaseUser.getToken().then(function (idToken) {
+          $http({
+            method: 'POST',
+            url: '/privateData',
+            headers: { id_token: idToken },
+            data: newUser
+          }).then(function (response) {
+            console.log('addUser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser create user', currentUser);
+
+            self.newUser = {};
+            $location.path('/home');
+          }, function (err) {
+            console.log('datafactory addUser error', err);
           });
         });
 
-    } else {
-      console.log('Not logged in or not authorized.');
-    }
-  }//end getCurrentUser
+      }).catch(function (error) {
+        self.error = error;
+        console.log('addUser catch:', error);
+      });
+  } // ends createUser function
 
+  function signOut() {
+    auth.$signOut().then(function () {
+      console.log('Logging the user out!');
+      $location.path('/');
+    });
+  }
+
+  function resetPassword(forgetfulUserEmail) {
+    auth.$sendPasswordResetEmail(forgetfulUserEmail).then(function () {
+      console.log("Password reset email sent successfully!");
+    }).catch(function (error) {
+      console.error("Error: ", error);
+    });
+  }
+
+  function signIn(email, password) {
+    auth.$signInWithEmailAndPassword(email, password)
+      .then(function (firebaseUser) {
+        firebaseUser.getToken().then(function (idToken) {
+          console.log('get user infoz');
+          $http({
+            method: 'GET',
+            url: '/privateData/getUser',
+            headers: { id_token: idToken }
+          }).then(function (response) {
+            console.log('getuser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser get user', currentUser);
+            $location.path('/home');
+          }, function (err) {
+            console.log('datafactory addUser error', err);
+          });
+        });
+
+      }).catch(function (error) {
+        console.log('signin with email error', error);
+      });
+  }
+
+  function getUserData(firebaseUser) {
+    if (firebaseUser) {
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/getUser',
+          headers: { id_token: idToken }
+        }).then(function (response) {
+          console.log('getuser ajax response:', response);
+          currentUser.info = response.data;
+          console.log('currentuser get user', currentUser);
+        }, function (err) {
+          console.log('datafactory addUser error', err);
+        });
+      }).catch(function (error) {
+        console.log('getuserdata error:', error);
+      });
+    } else {
+      currentUser.info = null;
+    }
+  }
 
   return {
     eventList: eventList,
@@ -153,7 +203,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     getUsers: getUsers,
     users: users,
     volunteerSignUp: volunteerSignUp,
-    currentUser: currentUser
+    currentUser: currentUser,
+    createUser: createUser,
+    signOut: signOut,
+    signIn: signIn,
+    resetPassword: resetPassword,
+    getUserData: getUserData
   };
 
 }]);
