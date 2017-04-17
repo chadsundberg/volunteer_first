@@ -33,8 +33,7 @@
 </head>
 <body ng-app="volunteerApp">
   <div ng-controller="LoginController as lc">
-    <!--ng-if="lc.userIsLoggedIn"-->
-    <nav ng-include="'/views/templates/nav.html'"></nav>
+    <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
   </div>
   <main ng-view></main>
 </body>

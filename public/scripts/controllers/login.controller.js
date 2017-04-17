@@ -5,6 +5,14 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.newUser = {};
   self.forgetfulUser = {};
   self.currentUser = DataFactory.currentUser;
+  self.firebaseUser = {};
+
+  auth.$onAuthStateChanged(function (firebaseUser) {
+    console.log('resetting user login controller');
+
+    self.userIsLoggedIn = firebaseUser !== null;
+    self.userIsLoggedOut = firebaseUser === null;
+  });
 
 
   self.createUser = function () {
@@ -38,11 +46,3 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
 ////// TODO: handle self.userIsLoggedIn/Out for nav bar hide ////// --from: jonny--
 
- // self.firebaseUser = {};
-
-// ie  // auth.$onAuthStateChanged(function (firebaseUser) {
-  //   console.log('resetting user login controller');
-    
-  //   self.userIsLoggedIn = firebaseUser !== null;
-  //   self.userIsLoggedOut = firebaseUser === null;
-  // });

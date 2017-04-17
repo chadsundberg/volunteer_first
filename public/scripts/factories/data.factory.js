@@ -99,7 +99,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       // This is where we make our call to our server
       return fbuser.getToken().then(function (idToken) {
         console.log('ajax post to server to create new user');
-       });
+      });
     } else {
       console.log('add user no fb user!');
 
@@ -175,21 +175,25 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   }
 
   function getUserData(firebaseUser) {
-    firebaseUser.getToken().then(function (idToken) {
-      $http({
-        method: 'GET',
-        url: '/privateData/getUser',
-        headers: { id_token: idToken }
-      }).then(function (response) {
-        console.log('getuser ajax response:', response);
-        currentUser.info = response.data;
-        console.log('currentuser get user', currentUser);
-      }, function (err) {
-        console.log('datafactory addUser error', err);
+    if (firebaseUser) {
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/getUser',
+          headers: { id_token: idToken }
+        }).then(function (response) {
+          console.log('getuser ajax response:', response);
+          currentUser.info = response.data;
+          console.log('currentuser get user', currentUser);
+        }, function (err) {
+          console.log('datafactory addUser error', err);
+        });
+      }).catch(function (error) {
+        console.log('getuserdata error:', error);
       });
-    }).catch(function (error) {
-      console.log('getuserdata error:', error);
-    });
+    } else {
+      currentUser.info = null;
+    }
   }
 
   return {
