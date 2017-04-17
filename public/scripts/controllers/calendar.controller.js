@@ -14,6 +14,8 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.currentEvent = DataFactory.currentEvent;
   // self.volunteerSignUp = DataFactory.volunteerSignUp;
 
+
+
   //Example events for calendar
   self.eventSources = [[
     {title: 'All Day Event',start: new Date(y, m, 1)},
@@ -29,9 +31,8 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     self.addModal = (date.title + ' was clicked ');
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
-    ModalDataFactory.dateClicked.day = date;
-    // DataFactory.currentEvent.id = date;
-
+    self.eventList.list = [];
+    ModalDataFactory.currentEventClicked = date;
     self.open();
   };
 
@@ -41,7 +42,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     console.log(jsEvent);
     console.log('view, date, jsEvent:', view, date, jsEvent);
     self.selectedDay = "Event!";
-    ModalDataFactory.currentEventClicked.id = date;
+    ModalDataFactory.currentEventClicked = date;
     self.open();
   };
 

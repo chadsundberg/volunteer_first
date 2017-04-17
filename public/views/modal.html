@@ -5,35 +5,97 @@
   <title></title>
 </head>
 <body>
-  <!-- {{$ctrl.eventList}}<br> -->
-  <!-- $ctrl.currentEventClicked.title{{$ctrl.currentEventClickedId.title}}<br>
-  $ctrl.currentEvent{{$ctrl.currentEvent}}<br> -->
-  {{$ctrl.currentEventClicked.id.title}}<br>
-  <!-- {{$ctrl.currentEvent.id.title}} -->
-  <div class="modal-container">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Volunteer Opportunity</th>
-          <th>Time</th>
-          <th>Sign Up</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="event in $ctrl.eventRoles.list">
-          <td scope="row">{{event.role_title}}</td>
-          <td scope="row">{{event.start_time}}</td>
-          <td><div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" ng-model="event.id" ng-change="$ctrl.checked(event._id)"  class="form-check-input">
-              Sign-Up!
-            </label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
+
+  <!-- USER MODAL -->
+  <!-- <div class="modal-container" id="signupModal">
+  <table class="table table-bordered">
+  <thead>
+  <tr>
+  <th>Volunteer Opportunity</th>
+  <th>Time</th>
+  <th>Sign Up</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="event in $ctrl.eventRoles.list">
+<td scope="row">{{event.role_title}}</td>
+<td scope="row">{{event.start_time}}</td>
+<td><div class="form-check">
+<label class="form-check-label">
+<input type="checkbox" ng-model="event.id" ng-change="$ctrl.checked(event._id)"  class="form-check-input">
+Sign-Up!
+</label>
 </div>
+</td>
+</tr>
+</tbody>
+</table>
+<button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
+</div> -->
+<!-- END USER MODAL -->
+
+<!-- ADMIN MODAL -->
+<div class="modal-container">
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Volunteer Opportunity</th>
+        <th>Start Time - End Time</th>
+        <th>Sign Up</th>
+        <th>Save/Delete</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="event in $ctrl.eventRoles.list">
+        <td scope="row">
+          <input ng-model="event.role_title" type="text">
+        </td>
+        <td scope="row">
+          <input ng-model="event.start_time" type="text">-<input ng-model="event.end_time" type="text">
+        </td>
+        <td>
+          <div class="form-check"
+          <label class="form-check-label">
+            <input type="checkbox" ng-model="event.id" ng-change="$ctrl.checked(event._id)"  class="form-check-input">
+            Sign-Up!
+          </label>
+        </div>
+      </td>
+      <td>
+        <div class="btn-group" role="group" aria-label="Basic example">
+        <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp()">Save</button>
+        <button class="btn btn-danger" type="button" ng-click="$ctrl.deleteRole(event.id)">Delete</button>
+      </div>
+    </td>
+    </tr>
+
+    <!-- Add new role row  -->
+    <tr>
+      <td scope="row">
+        <input ng-model="$ctrl.newRole.role_title" type="text">
+      </td>
+      <td scope="row">
+        <input ng-model="$ctrl.newRole.start_time" type="text">-<input ng-model="$ctrl.newRole.end_time" type="text">
+      </td>
+      <td>
+
+    </td>
+    <td>
+      <div class="btn-group" role="group" aria-label="Basic example">
+      <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.currentEventClicked.id)">Add Role</button>
+    </div>
+  </td>
+  </tr>
+
+
+</tbody>
+</table>
+<!-- <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole)">Add Role</button> -->
+</div>
+<!-- END ADMIN MODAL -->
+
+
 </body>
 </html>

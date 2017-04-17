@@ -1,9 +1,9 @@
-app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
+app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title",  function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
   $ctrl.checkedRole;
 
-  // $ctrl.items = items;
+  $ctrl.items = [];
   $ctrl.selected = {
     // item: $ctrl.items[0]
   };
@@ -16,9 +16,10 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
     console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.currentEventClicked.id._id);
+  $ctrl.getEventRoles($ctrl.currentEventClicked._id); //if currentEventClicked doesn't have id don't show
+  $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
 
-  //
+  //Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
   };
@@ -26,9 +27,13 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $uibModalInstance.dismiss('cancel');
   };
 
+
+
+
+//USER SIGN UP FUNCTIONS
 //Role on click to database
 $ctrl.clickSaveSignUp = function(){
-  $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
+  $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id from auth
 }
 //Checkbox
 $ctrl.checked = function(id){

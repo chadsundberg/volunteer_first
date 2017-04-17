@@ -6,9 +6,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   var users = { list: [] };
   var currentUser = {};
   var eventRoles = { list: [] };
-  // var self = this;
-  // self.newUser = {};
-  // console.log(dateList);
+
 
   auth.$onAuthStateChanged(getUsers);
   auth.$onAuthStateChanged(getEvents);
@@ -133,6 +131,28 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   }//End volunteerSignUp
 
 
+//Admin add role to event -CHRISTINE
+function adminAddRole(newRole, eventId) {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'POST',
+          url: '/privateData/addRole/' + eventId,
+          headers: { id_token: idToken },
+          data: newRole,
+        }).then(function (response) {
+          console.log(response);
+          getEventRoles(eventId);
+        });
+      });
+    } else {
+      console.log('no firebase user');
+    }
+  }
+
 //User registration
   function addUser(newUser) {
     console.log('factory user', newUser);
@@ -167,7 +187,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     volunteerSignUp: volunteerSignUp,
     getEventRoles: getEventRoles,
     currentEvent: currentEvent,
-    eventRoles: eventRoles
+    eventRoles: eventRoles,
+    adminAddRole: adminAddRole // CHRISTINE
   };
 
 }]);
