@@ -1,6 +1,6 @@
 {
   "name": "nodefire-attempt2",
-  "version": "1.0.0",
+  "version": "0.23.2",
   "description": "AngularFire with token authentication on Node backend server. This branch uses the pg node module with a postgres database to show an authorization example.",
   "main": "index.js",
   "scripts": {
@@ -25,8 +25,10 @@
     "firebase-admin": "^4.0.3",
     "fullcalendar": "^3.3.1",
     "jquery": "^3.2.1",
+    "logger": "^0.0.1",
     "moment": "^2.18.1",
-    "pg": "^6.1.0"
+    "pg": "^6.1.0",
+    "pg-pool": "^1.7.1"
   },
   "devDependencies": {},
   "repository": {

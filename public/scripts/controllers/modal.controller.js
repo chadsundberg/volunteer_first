@@ -1,17 +1,26 @@
-app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
+app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title",  function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
+  self.currentUser = DataFactory.currentUser;
   $ctrl.checkedRole;
 
-  // $ctrl.items = items;
+  $ctrl.items = [];
   $ctrl.selected = {
     // item: $ctrl.items[0]
   };
-
+  $ctrl.eventRoles = DataFactory.eventRoles;
   $ctrl.message = title;
   $ctrl.volunteerSignUp = DataFactory.volunteerSignUp;
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
+  $ctrl.currentEventClicked = ModalDataFactory.currentEventClicked;
   $ctrl.eventList = DataFactory.eventList;
+  $ctrl.currentEvent = DataFactory.currentEvent;
+    console.log($ctrl.currentEventClicked);
+  $ctrl.getEventRoles = DataFactory.getEventRoles;
+  $ctrl.getEventRoles($ctrl.currentEventClicked._id); //if currentEventClicked doesn't have id don't show
+  $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
+
+  //Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
   };
@@ -19,14 +28,19 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $uibModalInstance.dismiss('cancel');
   };
 
-//Role on click to GOD zlilla database
+
+
+
+//USER SIGN UP FUNCTIONS
+//Role on click to database
 $ctrl.clickSaveSignUp = function(){
   $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
-}
+};
+
 //Checkbox
 $ctrl.checked = function(id){
   $ctrl.checkedRole = id;
-}
+};
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
