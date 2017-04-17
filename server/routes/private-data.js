@@ -113,31 +113,7 @@ router.post('/addRole/:id', function (req, res) {
     });
 });
 
-// THIS NEEDS TO BE MOVED TO decodedToken
 
-// //Add user route - firebase
-// router.post('/', function(req, res) {
-// 	  console.log('hit post route');
-// 	  console.log('here is the body ->', req.body);
-// 	  var newUser = req.body;
-// 	  pool.connect(function(err, client, done) {
-// 	    if(err){
-// 	      console.log(err);
-// 	      res.sendStatus(500);
-// 	    }else{
-// 	      client.query('INSERT INTO users (email, first_name, last_name) VALUES ($1, $2, $3);',
-// 	        [newUser.email, newUser.firstName, newUser.lastName], function(err, result) {
-// 	          done();
-// 	          if(err){
-// 	            console.log(err);
-// 	            res.sendStatus(500); // the world exploded
-// 	          }else{
-// 	            res.sendStatus(201);
-// 	          }
-// 	      });
-// 	    }
-// 	  });
-// 	}); //end post route
 
 
 

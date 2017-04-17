@@ -12,7 +12,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   auth.$onAuthStateChanged(getEvents);
 
 
-  //
+
   //
   function getUsers() {
     var firebaseUser = auth.$getAuth();
