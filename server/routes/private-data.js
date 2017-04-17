@@ -33,13 +33,14 @@ router.get('/events', function (req, res) {
 // get request for all roles for specific event for modal
 router.get('/eventRoles/:id', function (req, res) {
   var eventId = req.params.id;
-  console.log('hit first');
+  console.log('hit first', eventId);
   pool.connect()
   .then(function (client) {
-    client.query('SELECT * FROM roles WHERE event_id = $1;',
+    client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
     [eventId])
     .then(function (result) {
       client.release();
+      console.log(result.rows);
       res.send(result.rows);
     })
     .catch(function (err) {

@@ -5,6 +5,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   var auth = $firebaseAuth();
   var users = { list: [] };
   var currentUser = {};
+  var eventRoles = { list: [] };
   // var self = this;
   // self.newUser = {};
   // console.log(dateList);
@@ -87,6 +88,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
           }
         }).then(function (response) {
           console.log(response.data);
+          eventRoles.list = response.data;
           // response.data.forEach(function(event){
           //   currentEventClicked.id.push({
           //     title: event.id,
@@ -164,7 +166,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     users: users,
     volunteerSignUp: volunteerSignUp,
     getEventRoles: getEventRoles,
-    currentEvent: currentEvent
+    currentEvent: currentEvent,
+    eventRoles: eventRoles
   };
 
 }]);

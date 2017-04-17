@@ -7,7 +7,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.selected = {
     // item: $ctrl.items[0]
   };
-
+  $ctrl.eventRoles = DataFactory.eventRoles;
   $ctrl.message = title;
   $ctrl.volunteerSignUp = DataFactory.volunteerSignUp;
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
