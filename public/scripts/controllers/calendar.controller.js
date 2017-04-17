@@ -30,7 +30,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
     ModalDataFactory.dateClicked.day = date;
-    DataFactory.currentEvent.id = date;
+    // DataFactory.currentEvent.id = date;
 
     self.open();
   };
@@ -97,5 +97,5 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
 
   // self.eventList = DataFactory.allEvents;
-  self.eventSources = [self.eventList.list, self.currentEvent.id];
+  self.eventSources = [self.eventList.list];
 }]);

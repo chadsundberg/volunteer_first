@@ -11,7 +11,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
 
   auth.$onAuthStateChanged(getUsers);
   auth.$onAuthStateChanged(getEvents);
-  getEventId();
+
 
   //
   //
@@ -73,7 +73,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
   }//end Get events
 
   // Get events for modal
-  function getEventId() {
+  function getEventRoles(eventId) {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -81,20 +81,20 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
       firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
-          url: '/privateData/eventId',
+          url: '/privateData/eventRoles/' + eventId,
           headers: {
             id_token: idToken
           }
         }).then(function (response) {
           console.log(response.data);
-          response.data.forEach(function(event){
-            currentEventClicked.id.push({
-              title: event.id,
-              start: new Date(event.date),
-              id: event.id
-            });
-            console.log("currentevent", currentEvent.id);
-          });
+          // response.data.forEach(function(event){
+          //   currentEventClicked.id.push({
+          //     title: event.id,
+          //     start: new Date(event.date),
+          //     id: event.id
+          //   });
+          //   console.log("currentevent", currentEventClicked.id);
+          // });
         });
       });
     } else {
@@ -163,7 +163,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', function ($firebaseAuth, $
     getUsers: getUsers,
     users: users,
     volunteerSignUp: volunteerSignUp,
-    getEventId: getEventId,
+    getEventRoles: getEventRoles,
     currentEvent: currentEvent
   };
 

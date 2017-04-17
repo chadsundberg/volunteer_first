@@ -14,6 +14,10 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEventClicked = ModalDataFactory.currentEventClicked;
   $ctrl.eventList = DataFactory.eventList;
   $ctrl.currentEvent = DataFactory.currentEvent;
+    console.log($ctrl.currentEventClicked);
+  $ctrl.getEventRoles = DataFactory.getEventRoles;
+  $ctrl.getEventRoles($ctrl.currentEventClicked.id._id);
+
   //
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);

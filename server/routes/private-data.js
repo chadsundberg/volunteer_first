@@ -31,11 +31,13 @@ router.get('/events', function (req, res) {
 
 
 // get request for all roles for specific event for modal
-router.get('/eventId', function (req, res) {
+router.get('/eventRoles/:id', function (req, res) {
+  var eventId = req.params.id;
   console.log('hit first');
   pool.connect()
   .then(function (client) {
-    client.query('SELECT roles.id, roles.role_title, roles.num_users, events.date, users.first_name, users.last_name, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id, users.first_name, users.last_name;')
+    client.query('SELECT * FROM roles WHERE event_id = $1;',
+    [eventId])
     .then(function (result) {
       client.release();
       res.send(result.rows);

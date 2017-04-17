@@ -5,11 +5,11 @@
   <title></title>
 </head>
 <body>
-  {{$ctrl.eventList}}<br>
-  $ctrl.currentEventClicked.title{{$ctrl.currentEventClickedId.title}}<br>
-  $ctrl.currentEvent{{$ctrl.currentEvent}}<br>
+  <!-- {{$ctrl.eventList}}<br> -->
+  <!-- $ctrl.currentEventClicked.title{{$ctrl.currentEventClickedId.title}}<br>
+  $ctrl.currentEvent{{$ctrl.currentEvent}}<br> -->
   {{$ctrl.currentEventClicked.id.title}}<br>
-  {{$ctrl.currentEvent.id.title}}
+  <!-- {{$ctrl.currentEvent.id.title}} -->
   <div class="modal-container">
     <table class="table table-bordered">
       <thead>
@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="event in $ctrl.currentEventClicked.id">
+        <tr ng-repeat="event in $ctrl.currentEventClicked">
           <td scope="row">{{event.title}}</td>
           <td scope="row">{{event.start}}</td>
           <td><div class="form-check">
