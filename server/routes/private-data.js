@@ -26,7 +26,7 @@ router.get('/events', function (req, res) {
       res.sendStatus(500);
     });
 });
-
+});
 
 // get all roles for specific event for modal
 router.get('/eventRoles/:id', function (req, res) {
