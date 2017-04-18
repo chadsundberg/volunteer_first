@@ -1,7 +1,6 @@
 app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', function ($firebaseAuth, $http, $location, $window) {
   console.log('data factory loaded');
 
-  var eventList = { list: [] };
   // var currentEvent = { id: [] };
   var auth = $firebaseAuth();
   var eventList = { list: [] };
@@ -51,7 +50,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           }
         }).then(function (response) {
           console.log(response.data);
-          response.data.forEach(function(event){
+          response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
               start: new Date(event.date),
@@ -86,14 +85,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         }).then(function (response) {
           console.log(response.data);
           eventRoles.list = response.data;
-          // response.data.forEach(function(event){
-          //   currentEventClicked.id.push({
-          //     title: event.id,
-          //     start: new Date(event.date),
-          //     id: event.id
-          //   });
-          //   console.log("currentevent", currentEventClicked.id);
-          // });
         });
       });
     } else {
@@ -101,6 +92,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       self.secretData = "Log in to search for volunteer activities.";
     }
   }//end Get events
+
 
 //add role to user  -- CHRISTINE -- update this
   function volunteerSignUp(eventId, userRoleId) {
@@ -172,8 +164,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   } // ends createUser function
 
 
-//Admin add role to event -CHRISTINE
-function adminAddRole(newRole, eventId) {
+  //Admin add role to event -CHRISTINE
+  function adminAddRole(newRole, eventId) {
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -271,9 +263,8 @@ function adminAddRole(newRole, eventId) {
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
-// CHRISTINE exports
+    // CHRISTINE exports
     getEventRoles: getEventRoles,
-    // currentEvent: currentEvent,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole // CHRISTINE
   };

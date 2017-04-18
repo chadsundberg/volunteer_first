@@ -25,7 +25,6 @@ router.get('/events', function (req, res) {
       console.log('error on SELECT', err);
       res.sendStatus(500);
     });
-  });
 });
 
 
@@ -35,19 +34,19 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log("req.params", req.params);
   console.log('hit first', eventId);
   pool.connect()
-  .then(function (client) {
-    client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
-    [eventId])
-    .then(function (result) {
-      client.release();
-      console.log(result.rows);
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      console.log('error on SELECT', err);
-      res.sendStatus(500);
+    .then(function (client) {
+      client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
+        [eventId])
+        .then(function (result) {
+          client.release();
+          console.log(result.rows);
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          res.sendStatus(500);
+        });
     });
-});
 });
 
 router.get('/users', function (req, res) {
