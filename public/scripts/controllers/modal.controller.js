@@ -20,6 +20,26 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getEventRoles = DataFactory.getEventRoles;
   $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
   $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
+  $ctrl.button=true;
+
+
+// Melissa test
+$ctrl.clickSaveSignUp = function(roleClickedId){
+  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
+   $ctrl.button = false;
+   $ctrl.currentUser = true;
+   console.log($ctrl.currentUser);
+ };
+
+
+
+
+
+
+
+
+
+
 
 
   //Modal

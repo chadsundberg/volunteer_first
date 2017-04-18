@@ -26,7 +26,7 @@ router.get('/events', function (req, res) {
       res.sendStatus(500);
     });
 });
-
+});
 
 // get all roles for specific event for modal
 router.get('/eventRoles/:id', function (req, res) {
@@ -35,7 +35,22 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
+
+
+      // SELECT users.first_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up
+      // FROM users
+      // JOIN role_user ON users.id=role_user.user_id
+      // JOIN roles ON roles.id=role_user.role_id
+      // JOIN events ON roles.event_id=events.id
+      // WHERE events.id=$1
+      // GROUP BY roles.id, events.id, users.first_name, users.id;
+
+
+
+
+
+
+      client.query('SELECT users.first_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.id;',
         [eventId])
         .then(function (result) {
           client.release();
