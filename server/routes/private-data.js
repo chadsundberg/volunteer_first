@@ -15,23 +15,23 @@ var pool = new pg.Pool(config);
 //get all events for calendar display
 router.get('/events', function (req, res) {
   pool.connect()
-    .then(function (client) {
-      client.query('SELECT roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
-        .then(function (result) {
-          client.release();
-          res.send(result.rows);
-        })
-        .catch(function (err) {
-          console.log('error on SELECT', err);
-          res.sendStatus(500);
-        });
+  .then(function (client) {
+    client.query('SELECT roles.id as role_id, roles.role_title, roles.num_users, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+    .then(function (result) {
+      client.release();
+      res.send(result.rows);
+    })
+    .catch(function (err) {
+      console.log('error on SELECT', err);
+      res.sendStatus(500);
     });
 });
+});
 
-
-// get request for all roles for specific event for modal
+// get all roles for specific event for modal
 router.get('/eventRoles/:id', function (req, res) {
   var eventId = req.params.id;
+  console.log("req.params", req.params);
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
@@ -94,6 +94,9 @@ router.get('/getUser', function (req, res) {
 router.post('/volunteerSignUp', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var signUpEntry = req.body;
+  if (!req.decodedToken.currentUser.is_admin || !signUpEntry.user_id){
+    signUpEntry.user_id = req.decodedToken.userSQLId;
+  }
   pool.connect(function (err, client, done) {
     if (err) {
       console.log(err);
