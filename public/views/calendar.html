@@ -2,10 +2,17 @@
 <div class="container">
   <h1> This is the calendar </h1>
   <h2> {{cc.currentUser}} </h2>
+
+  <!-- //TESTING IF ADMIN  -->
+<div ng-if="!cc.currentUser.is_admin">
+
+
+  <p>Hello ADMIN</p>
+</div>
   <div ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
 
   <div ng-repeat="event in cc.eventList.list">
     <h3>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</h3>
   </div>
-
+<div id="modalId" ></div>
 </div>

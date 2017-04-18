@@ -1,24 +1,26 @@
 app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title",  function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
-  self.currentUser = DataFactory.currentUser;
-  $ctrl.checkedRole;
 
-  $ctrl.items = [];
-  $ctrl.selected = {
-    // item: $ctrl.items[0]
-  };
+  // $ctrl.items = [];
+  // $ctrl.selected = {
+  //   // item: $ctrl.items[0]
+  // };
+
+  $ctrl.currentUser = DataFactory.currentUser;
   $ctrl.eventRoles = DataFactory.eventRoles;
   $ctrl.message = title;
   $ctrl.volunteerSignUp = DataFactory.volunteerSignUp;
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
   $ctrl.currentEventClicked = ModalDataFactory.currentEventClicked;
+  $ctrl.eventId = $ctrl.currentEventClicked.event_id;
   $ctrl.eventList = DataFactory.eventList;
   $ctrl.currentEvent = DataFactory.currentEvent;
     console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.currentEventClicked._id); //if currentEventClicked doesn't have id don't show
+  $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
   $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
+
 
   //Modal
   $ctrl.ok = function () {
@@ -29,18 +31,15 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   };
 
 
-
-
 //USER SIGN UP FUNCTIONS
 //Role on click to database
-$ctrl.clickSaveSignUp = function(){
-  $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
+$ctrl.clickSaveSignUp = function(roleClickedId){
+  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
 };
 
-//Checkbox
-$ctrl.checked = function(id){
-  $ctrl.checkedRole = id;
-};
+
+
+
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {

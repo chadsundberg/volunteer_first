@@ -11,7 +11,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
-  // self.volunteerSignUp = DataFactory.volunteerSignUp;
+  self.volunteerSignUp = DataFactory.volunteerSignUp;
   self.currentUser = DataFactory.currentUser;
 
   // state change / refresh
@@ -55,7 +55,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     console.log('opening modal');
     var parentElem =
     parentSelector ?
-    angular.element($document[0].querySelector('.thing ' + parentSelector)) : undefined;
+    angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: self.animationsEnabled,
       ariaLabelledBy: 'modal-title',
