@@ -250,6 +250,33 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }
 
+  function deleteRole(roleId) {
+        console.log('delete role function getting place:', roleId);
+        // var firebaseUser = auth.$getAuth();
+        var firebaseUser = auth.$getAuth();
+        // firebaseUser will be null if not logged in
+        if(firebaseUser) {
+          // This is where we make our call to our server
+          firebaseUser.getToken().then(function(idToken){
+            $http({
+              method: 'DELETE',
+              url: '/privateData/eventRoles/' + roleId,
+              headers: {
+                id_token: idToken
+              },
+              params: {roleId: roleId}
+            }).then(function(response) {
+              // console.log(response.data);
+              getEvents();
+              getUsers();
+            });
+          });
+        } else {
+          console.log('Not logged in or not authorized.');
+        }
+      }
+
+
   return {
     eventList: eventList,
     getEvents: getEvents,
@@ -266,7 +293,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     // CHRISTINE exports
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
-    adminAddRole: adminAddRole // CHRISTINE
+    adminAddRole: adminAddRole, // CHRISTINE
+    deleteRole: deleteRole
   };
 
 }]);
