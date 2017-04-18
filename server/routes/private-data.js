@@ -15,17 +15,17 @@ var pool = new pg.Pool(config);
 //get all events for calendar display
 router.get('/events', function (req, res) {
   pool.connect()
-  .then(function (client) {
-    client.query('SELECT roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
-    .then(function (result) {
-      client.release();
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      console.log('error on SELECT', err);
-      res.sendStatus(500);
+    .then(function (client) {
+      client.query('SELECT roles.id, roles.role_title, roles.num_users, events.date, COUNT(roles.id) AS signed_up FROM users JOIN role_user ON users.id=role_user.user_id JOIN roles ON roles.id=role_user.role_id JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+        .then(function (result) {
+          client.release();
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          res.sendStatus(500);
+        });
     });
-  });
 });
 
 
@@ -34,19 +34,19 @@ router.get('/eventRoles/:id', function (req, res) {
   var eventId = req.params.id;
   console.log('hit first', eventId);
   pool.connect()
-  .then(function (client) {
-    client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
-    [eventId])
-    .then(function (result) {
-      client.release();
-      console.log(result.rows);
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      console.log('error on SELECT', err);
-      res.sendStatus(500);
+    .then(function (client) {
+      client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
+        [eventId])
+        .then(function (result) {
+          client.release();
+          console.log(result.rows);
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          res.sendStatus(500);
+        });
     });
-});
 });
 
 router.get('/users', function (req, res) {
