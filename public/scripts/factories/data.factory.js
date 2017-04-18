@@ -54,7 +54,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             eventList.list.push({
               title: event.role_title,
               start: new Date(event.date),
-              id: event.id
+              role_id: event.role_id,
+              event_id:event.event_id
               // end: new Date(y, m, 29),
             });
           });
@@ -84,14 +85,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         }).then(function (response) {
           console.log(response.data);
           eventRoles.list = response.data;
-          // response.data.forEach(function(event){
-          //   currentEventClicked.id.push({
-          //     title: event.id,
-          //     start: new Date(event.date),
-          //     id: event.id
-          //   });
-          //   console.log("currentevent", currentEventClicked.id);
-          // });
         });
       });
     } else {
@@ -100,8 +93,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }//end Get events
 
-  //add role to user post -- CHRISTINE -- update this
-  function volunteerSignUp(userRoleId) {
+
+//add role to user  -- CHRISTINE -- update this
+  function volunteerSignUp(eventId, userRoleId) {
     console.log('factory userRoleId', userRoleId);
     var firebaseUser = auth.$getAuth();
     if (firebaseUser) {
@@ -115,7 +109,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             role_id: userRoleId,
           }
         }).then(function (response) {
-          getEventId();
+          getEventRoles(eventId);
           console.log(response);
           console.log('firebase', firebaseUser);
           return response.data;
@@ -271,7 +265,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getUserData: getUserData,
     // CHRISTINE exports
     getEventRoles: getEventRoles,
-    // currentEvent: currentEvent,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole // CHRISTINE
   };
