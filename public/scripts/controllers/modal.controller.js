@@ -1,6 +1,7 @@
-app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title",  function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
+app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function (DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
+  // var auth = $firebaseAuth();
 
   // $ctrl.items = [];
   // $ctrl.selected = {
@@ -21,6 +22,12 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
   $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
 
+  // auth.$onAuthStateChanged(function (firebaseUser) {
+  //   DataFactory.getUsers();
+  //   DataFactory.getEvents();
+  //   DataFactory.getUserData(firebaseUser);
+  // });
+
 
   // Modal
 
@@ -32,36 +39,36 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   };
 
 
-//USER SIGN UP FUNCTIONS
-//Role on click to database
-$ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
-};
+  //USER SIGN UP FUNCTIONS
+  //Role on click to database
+  $ctrl.clickSaveSignUp = function (roleClickedId) {
+    $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
+  };
 
 
 
-// Please note that the close and dismiss bindings are from $uibModalInstance.
-angular.module('volunteerApp').component('modalComponent', {
-  templateUrl: 'myModalContent.html',
-  bindings: {
-    resolve: '<',
-    close: '&',
-    dismiss: '&'
-  },
-  controller: function () {
-    var $ctrl = this;
-    $ctrl.$onInit = function () {
-      $ctrl.items = $ctrl.resolve.items;
-      $ctrl.selected = {
-        item: $ctrl.items[0]
+  // Please note that the close and dismiss bindings are from $uibModalInstance.
+  angular.module('volunteerApp').component('modalComponent', {
+    templateUrl: 'myModalContent.html',
+    bindings: {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    },
+    controller: function () {
+      var $ctrl = this;
+      $ctrl.$onInit = function () {
+        $ctrl.items = $ctrl.resolve.items;
+        $ctrl.selected = {
+          item: $ctrl.items[0]
+        };
       };
-    };
-    $ctrl.ok = function () {
-      $ctrl.close({$value: $ctrl.selected.item});
-    };
-    $ctrl.cancel = function () {
-      $ctrl.dismiss({$value: 'cancel'});
-    };
-  }
-});
+      $ctrl.ok = function () {
+        $ctrl.close({ $value: $ctrl.selected.item });
+      };
+      $ctrl.cancel = function () {
+        $ctrl.dismiss({ $value: 'cancel' });
+      };
+    }
+  });
 }]);

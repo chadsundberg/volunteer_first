@@ -7,7 +7,7 @@
 <body>
 
   <!-- USER MODAL -->
-  <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
+  <!--<div class="modal-container" id="signupModal" ng-show="!$ctrl.currentUser.is_admin">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -26,11 +26,11 @@
       </tbody>
     </table>
     <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
-  </div>
+  </div>-->
   <!-- END USER MODAL -->
 
   <!-- ADMIN MODAL -->
-  <div class="modal-container" ng-if="$ctrl.currentUser.is_admin">
+  <div class="modal-container" ng-show="!$ctrl.currentUser.is_admin">
     <table class="table table-bordered">
       <thead>
         <tr>
