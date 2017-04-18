@@ -20,7 +20,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getEventRoles($ctrl.currentEventClicked._id); //if currentEventClicked doesn't have id don't show
   $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
 
-  //Modal
+  // Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
   };
