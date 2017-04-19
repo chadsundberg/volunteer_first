@@ -18,28 +18,9 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
   console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
-  $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
-  $ctrl.button=true;
-
-
-// Melissa test
-// $ctrl.clickSaveSignUp = function(roleClickedId){
-//   $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
-//    $ctrl.button = false;
-//    $ctrl.currentUser = true;
-//    console.log($ctrl.currentUser);
-//  };
-
-
-
-
-
-
-
-
-
-
+  $ctrl.getEventRoles($ctrl.eventId);
+  $ctrl.adminAddRole = DataFactory.adminAddRole;
+  $ctrl.deleteRole = DataFactory.deleteRole;
 
 
   //Modal
@@ -53,11 +34,10 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 
 //USER SIGN UP FUNCTIONS
 //Role on click to database
+
 $ctrl.clickSaveSignUp = function(roleClickedId){
   $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId); //hardcoded for testing -- need role id
   console.log(roleClickedId);
-};
-
 
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.

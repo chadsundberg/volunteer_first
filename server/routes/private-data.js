@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
-var connectionString = require('../modules/database-config');
+
+// var connectionString = require('../modules/database-config');
+
+var pool = require('../modules/pool-connection');
 
 var config = {
   database: 'phi',
@@ -22,6 +25,7 @@ router.get('/events', function (req, res) {
       res.send(result.rows);
     })
     .catch(function (err) {
+      client.release();
       console.log('error on SELECT', err);
       res.sendStatus(500);
     });
@@ -35,17 +39,6 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-
-
-      // SELECT users.first_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up
-      // FROM users
-      // JOIN role_user ON users.id=role_user.user_id
-      // JOIN roles ON roles.id=role_user.role_id
-      // JOIN events ON roles.event_id=events.id
-      // WHERE events.id=$1
-      // GROUP BY roles.id, events.id, users.first_name, users.id;
-
-
       client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
         [eventId, ])
         .then(function (result) {
@@ -55,6 +48,7 @@ router.get('/eventRoles/:id', function (req, res) {
         })
         .catch(function (err) {
           console.log('error on SELECT', err);
+          client.release();
           res.sendStatus(500);
         });
     });
@@ -66,15 +60,18 @@ router.get('/users', function (req, res) {
       client.query('SELECT first_name, last_name FROM users')
         .then(function (result) {
           client.release();
+
           console.log('getting user: ', result.rows);
 
           res.send(result.rows);
         })
         .catch(function (err) {
           console.log('error on SELECT', err);
+          client.release();
+
           res.sendStatus(500);
         });
-    });
+      });
 });
 
 router.get('/getUser', function (req, res) {
@@ -85,6 +82,7 @@ router.get('/getUser', function (req, res) {
         function (err, result) {
           res.send(result.rows[0]);
         });
+        client.release();
     });
   // .then(function (result) {
   //   client.release();
@@ -116,7 +114,7 @@ router.post('/volunteerSignUp', function (req, res) {
     } else {
       client.query('INSERT INTO role_user (role_id, user_id) VALUES ($1, $2);',
         [signUpEntry.role_id, signUpEntry.user_id], function (err, result) {
-          done();
+
           if (err) {
             console.log(err);
             res.sendStatus(500); // the world exploded
@@ -125,16 +123,18 @@ router.post('/volunteerSignUp', function (req, res) {
           }
         });
     }
+    done();
   });
 });//end post
 
 //ADMIN ADD ROLE TO EVENT
 router.post('/addRole/:id', function (req, res) {
   var newRole = req.body;
+  console.log("req.params", req.params);
   console.log('new Role: ', newRole);
   pool.connect()
     .then(function (client) {
-      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id) VALUES ($1, $2, $3, $4)',
+      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id) VALUES ($1, $2, $3, $4);',
         [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id])
         .then(function (result) {
           client.release();
@@ -142,6 +142,7 @@ router.post('/addRole/:id', function (req, res) {
         })
         .catch(function (err) {
           console.log('error on INSERT', err);
+          client.release();
           res.sendStatus(500);
         });
     });
@@ -159,7 +160,7 @@ router.post('/', function (req, res) {
     } else {
       // client.query('INSERT INTO users (email, first_name, last_name) VALUES ($1, $2, $3);',
       //   [newUser.email, newUser.firstName, newUser.lastName], function(err, result) {
-      done();
+
       if (err) {
         console.log(err);
         res.sendStatus(500); // the world exploded
@@ -171,6 +172,25 @@ router.post('/', function (req, res) {
     }
   });
 }); //end post route
+
+router.delete('/eventRoles/:id', function(req, res) {
+  var roleId = req.params.id;
+  // var review = req.body;
+  console.log('Updating review: ', roleId);
+  pool.connect()
+  .then(function (client) {
+    client.query('DELETE FROM roles WHERE id=$1',
+    [roleId])
+    .then(function (result) {
+      client.release();
+      res.sendStatus(200);
+    })
+    .catch(function (err) {
+      console.log('error on DELETE', err);
+      res.sendStatus(500);
+    });
+  });
+});
 
 
 module.exports = router;
