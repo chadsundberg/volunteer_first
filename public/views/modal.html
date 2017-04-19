@@ -17,15 +17,29 @@
         </tr>
       </thead>
       <tbody>
+
+        <!-- <button ng-click="tc.completeTask(task.id)" ng-hide="task.status">Complete</button>
+          <button ng-click="tc.deleteTask(task.id)">Delete</button>
+          <span class="col-xs-3" ng-show="task.status"><button ng-click="tc.uncompleteTask(task.id)" class="btn btn-info">This shouldn't be complete</button></span>
+        </div> -->
+
+
+
+
+
+  <!-- ng-if ="$ctrl.currentUser.info.id==role.user.id" -->
+
+
         <tr ng-repeat="role in $ctrl.eventRoles.list">
           <td scope="row">{{role.role_title}}</td>
           <td scope="row">{{role.start_time}}</td>
-          <td><button ng-if="$ctrl.button" class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id); $ctrl.currentUser=true">Sign Up</button>
-            <div ng-if ="$ctrl.currentUser.info.id==role.userid">
-              {{$ctrl.currentUser}}
+          <td><button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+            <div>
+              {{role.first_name}} {{role.last_name}}
             </div>
           </td>
         </tr>
+
       </tbody>
     </table>
     <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>

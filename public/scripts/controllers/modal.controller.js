@@ -24,12 +24,12 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 
 
 // Melissa test
-$ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
-   $ctrl.button = false;
-   $ctrl.currentUser = true;
-   console.log($ctrl.currentUser);
- };
+// $ctrl.clickSaveSignUp = function(roleClickedId){
+//   $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
+//    $ctrl.button = false;
+//    $ctrl.currentUser = true;
+//    console.log($ctrl.currentUser);
+//  };
 
 
 
@@ -54,7 +54,8 @@ $ctrl.clickSaveSignUp = function(roleClickedId){
 //USER SIGN UP FUNCTIONS
 //Role on click to database
 $ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
+  $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId); //hardcoded for testing -- need role id
+  console.log(roleClickedId);
 };
 
 
