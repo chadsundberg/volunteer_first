@@ -3,7 +3,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // var currentEvent = { id: [] };
   var auth = $firebaseAuth();
-  var eventList = { list: [] };
+  var eventList = { list: [[]] };
   var users = { list: [] };
   var currentUser = {};
   var eventRoles = { list: [] };
@@ -58,9 +58,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           }
         }).then(function (response) {
           console.log(response.data);
-          eventList.list = [];
+          eventList.list[0] = [];
           response.data.forEach(function (event) {
-            eventList.list.push({
+            eventList.list[0].push({
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
@@ -82,6 +82,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // Get events for modal
   function getEventRoles(eventId) {
+    console.log(eventId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -106,8 +107,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
 
 //add role to user  -- CHRISTINE -- update this
-  function volunteerSignUp(eventId, userRoleId) {
-    console.log('factory userRoleId', userRoleId);
+  function volunteerSignUp(eventId, roleClickedId) {
+    console.log('factory userRoleId', roleClickedId);
     var firebaseUser = auth.$getAuth();
     if (firebaseUser) {
       // This is where we make our call to our server
@@ -117,7 +118,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           url: '/privateData/volunteerSignUp',
           headers: { id_token: idToken },
           data: {
-            role_id: userRoleId,
+            role_id: roleClickedId,
           }
         }).then(function (response) {
           getEventRoles(eventId);

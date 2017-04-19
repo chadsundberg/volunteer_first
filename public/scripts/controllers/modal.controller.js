@@ -23,9 +23,6 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.deleteRole = DataFactory.deleteRole;
 
 
-
-
-
   //Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
@@ -39,11 +36,9 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 //Role on click to database
 
 $ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
+  $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId); //hardcoded for testing -- need role id
+  console.log(roleClickedId);
 };
-
-
-
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
