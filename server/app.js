@@ -6,22 +6,6 @@ var decoder = require('./modules/decoder');
 var privateData = require('./routes/private-data');
 var portDecision = process.env.PORT || 5000;
 
-//this code is from express-csv-enc
-// var express = require('express')
-//   , csv = require('express-csv')
-//   , app = module.exports = express.createServer();
-//
-// csv.encoding = 'win1251';
-//
-// app.get('/', function(req, res) {
-//   res.csv([
-//     ["a", "b", "c"]
-//   , ["d", "e", "f"]
-//   ]);
-// });
-// this ends the code from express-csv-enc
-
-
 app.get('/', function(req, res){
   res.sendFile(path.resolve('./public/views/index.html'));
 });
