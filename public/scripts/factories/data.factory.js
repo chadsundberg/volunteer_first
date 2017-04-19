@@ -132,6 +132,32 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }//End volunteerSignUp(userRoleId)
 
+//remove user from role  -- Melissa
+  function volunteerRemove(eventId, roleClickedId) {
+    console.log('factory userRoleId', roleClickedId);
+    var firebaseUser = auth.$getAuth();
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'DELETE',
+          url: '/privateData/volunteerRemove',
+          headers: { id_token: idToken },
+          data: {
+            role_id: roleClickedId,
+          }
+        }).then(function (response) {
+          getEventRoles(eventId);
+          console.log(response);
+          console.log('firebase', firebaseUser);
+          return response.data;
+        }, function (response) {
+          console.log('datafactory volunteerSignUp error', response);
+        });
+      });
+    }
+  }//End volunteerSignUp(userRoleId)
+
   //User registration
   function addUser(fbuser, newUser) {
     // var firebaseUser = auth.$getAuth();
@@ -295,6 +321,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getUsers: getUsers,
     users: users,
     volunteerSignUp: volunteerSignUp,
+    volunteerRemove: volunteerRemove,
     currentUser: currentUser,
     createUser: createUser,
     signOut: signOut,
