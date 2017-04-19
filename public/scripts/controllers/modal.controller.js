@@ -1,17 +1,32 @@
-app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
+app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModalInstance", "title",  function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModalInstance, title) {
   console.log('Modal Controller was loaded');
   var $ctrl = this;
-  $ctrl.checkedRole;
 
-  // $ctrl.items = items;
-  $ctrl.selected = {
-    // item: $ctrl.items[0]
-  };
+  // $ctrl.items = [];
+  // $ctrl.selected = {
+  //   // item: $ctrl.items[0]
+  // };
 
+  $ctrl.currentUser = DataFactory.currentUser;
+  $ctrl.eventRoles = DataFactory.eventRoles;
   $ctrl.message = title;
   $ctrl.volunteerSignUp = DataFactory.volunteerSignUp;
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
+  $ctrl.currentEventClicked = ModalDataFactory.currentEventClicked;
+  $ctrl.eventId = $ctrl.currentEventClicked.event_id;
   $ctrl.eventList = DataFactory.eventList;
+  $ctrl.currentEvent = DataFactory.currentEvent;
+  console.log($ctrl.currentEventClicked);
+  $ctrl.getEventRoles = DataFactory.getEventRoles;
+  $ctrl.getEventRoles($ctrl.eventId);
+  $ctrl.adminAddRole = DataFactory.adminAddRole;
+  $ctrl.deleteRole = DataFactory.deleteRole;
+
+
+
+
+
+  //Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);
   };
@@ -19,14 +34,16 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $uibModalInstance.dismiss('cancel');
   };
 
+
+//USER SIGN UP FUNCTIONS
 //Role on click to database
-$ctrl.clickSaveSignUp = function(){
-  $ctrl.volunteerSignUp($ctrl.checkedRole); //hardcoded for testing -- need role id
-}
-//Checkbox
-$ctrl.checked = function(id){
-  $ctrl.checkedRole = id;
-}
+
+$ctrl.clickSaveSignUp = function(roleClickedId){
+  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
+};
+
+
+
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
