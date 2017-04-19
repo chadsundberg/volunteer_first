@@ -262,7 +262,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }
 
-  function deleteRole(roleId) {
+  function deleteRole(roleId, eventId) {
       console.log('delete role function getting place:', roleId);
       // var firebaseUser = auth.$getAuth();
       var firebaseUser = auth.$getAuth();
@@ -279,7 +279,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             params: {roleId: roleId}
           }).then(function(response) {
             // console.log(response.data);
-            // getEventRoles();
+            getEventRoles(eventId);
           });
         });
       } else {
