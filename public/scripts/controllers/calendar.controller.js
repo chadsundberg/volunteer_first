@@ -1,4 +1,4 @@
-app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document) {
+app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location) {
   console.log('Calendar Controller was loaded');
   var auth = $firebaseAuth();
   var self = this;
@@ -21,6 +21,14 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     DataFactory.getUserData(firebaseUser);
   });
 
+  //export to CSV
+self.filename = "test";
+  self.getArray = [{a: 1, b:2}, {a:3, b:4}];
+
+  self.clickFn = function(click) {
+  console.log("click click click");
+};
+
   //Example events for calendar
   self.eventSources = [[
     {title: 'All Day Event',start: new Date(y, m, 1)},
@@ -33,10 +41,10 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
   //Day click for Admin
   self.alertDayClick = function( date, jsEvent, view){
-    self.addModal = (date.title + ' was clicked ');
+    // self.addModal = (date.title + ' was clicked ');
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
-    // ModalDataFactory.currentEventClicked = date;
+    ModalDataFactory.dateClicked.day = date;
     self.open();
   };
 
@@ -73,6 +81,8 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
       }
     });
 
+
+
     modalInstance.result.then(function (selectedItem) {
       $ctrl.selected = selectedItem;
     }, function () {
@@ -99,7 +109,46 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
     }
   };
 
+//test to clear calendar
+// Clear events and assign the static events source.
+self.eventList.list = [];
+self.staticEvents = [
+  {title: 'Static 1', start: new Date(y, m, 1), allDay: true},
+  {title: 'Static 2', start: new Date(y, m, 8), allDay: true},
+  {title: 'Static 3', start: new Date(y, m, d), allDay: true}
+];
 
+// Clear events via splice(0) and then push into events source.
+self.getEventsEmptySplice = function () {
+  console.log('Clearing $scope.events via splice(0)');
+
+  // Clearing in this manner maintains the two-way data bind.
+  // This can be called over and over, with old events cleared,
+  // and new random events displayed. This no longer works
+  // if getEventsEmptyArray is ever called, due to two-way
+  // data bind being broken within that function.
+  self.eventList.list.splice(0);
+
+  // Get 3 random days, 1-28
+  var day1 = Math.floor(Math.random() * (28 - 1)) + 1;
+  var day2 = Math.floor(Math.random() * (28 - 1)) + 1;
+  var day3 = Math.floor(Math.random() * (28 - 1)) + 1;
+
+  // Simulating an AJAX request with $timeout.
+  $timeout(function () {
+    // Create temp events array.
+    var newEvents = [
+      {title: 'Random 1', start: new Date(y, m, day1), allDay: true},
+      {title: 'Random 2', start: new Date(y, m, day2), allDay: true},
+      {title: 'Random 3', start: new Date(y, m, day3), allDay: true}
+    ];
+    // Push newEvents into events, one by one.
+    angular.forEach(newEvents, function (event) {
+      self.eventList.list.push(event);
+    });
+    console.log('New Events pushed');
+  }, 100);
+};
 
   self.eventSources = [self.eventList.list];
 }]);

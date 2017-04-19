@@ -55,7 +55,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
-              event_id:event.event_id
+              event_id:event.event_id,
               // end: new Date(y, m, 29),
             });
           });

@@ -33,9 +33,11 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 
 //USER SIGN UP FUNCTIONS
 //Role on click to database
+
 $ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
+  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
 };
+
 
 
 
