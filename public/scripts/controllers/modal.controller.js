@@ -38,7 +38,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 $ctrl.clickSaveSignUp = function(roleClickedId){
   $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId); //hardcoded for testing -- need role id
   console.log(roleClickedId);
-
+};
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
