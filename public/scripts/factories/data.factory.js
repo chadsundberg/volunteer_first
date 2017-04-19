@@ -22,6 +22,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
+
           users.list = response.data;
           return users.list;
         }, function (response) {
@@ -37,6 +38,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // Get events for calendar
   function getEvents() {
+
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -49,7 +51,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
+
           console.log(response.data);
+          eventList.list = [];
           response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
@@ -59,6 +63,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               // end: new Date(y, m, 29),
             });
           });
+          console.log('list after forEach', eventList.list)
         }, function (response) {
           console.log('datafactory getEvents error', response);
         });
@@ -267,8 +272,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               params: {roleId: roleId}
             }).then(function(response) {
               // console.log(response.data);
-              getEvents();
-              getUsers();
+              // getEventRoles();
             });
           });
         } else {
