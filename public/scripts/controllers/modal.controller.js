@@ -41,6 +41,7 @@ $ctrl.clickSaveSignUp = function(roleClickedId){
   console.log(roleClickedId);
 };
 
+
 // Melissa
 $ctrl.clickRemove = function(roleClickedId){
   $ctrl.volunteerRemove($ctrl.eventId, roleClickedId);
