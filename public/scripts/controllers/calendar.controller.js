@@ -113,7 +113,7 @@ self.eventOnClick = function( date, jsEvent, view){
 
   // };
 
-self.eventSources = [self.eventList.list];
+self.eventSources = self.eventList.list;
 
 
 }]);
