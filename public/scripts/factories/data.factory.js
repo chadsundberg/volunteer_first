@@ -272,7 +272,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               params: {roleId: roleId}
             }).then(function(response) {
               // console.log(response.data);
+              eventRoles.list.splice(roleId);
               // getEventRoles();
+
             });
           });
         } else {
