@@ -13,7 +13,10 @@
 .fc-event{
   border: 1px solid transparent;
 }
-
+.fc-unthemed td.fc-today {
+  background: LightCyan ;
+  border: -3px solid transparent;
+}
 /*END CALENDAR STYLING*/
 .form-signin .form-control {
         position: relative;

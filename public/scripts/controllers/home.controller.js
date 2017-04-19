@@ -6,10 +6,10 @@ app.controller("HomeController", ["DataFactory", "$location", "$firebaseAuth", "
   self.currentUser = DataFactory.currentUser;
 
   // when controller starts up
-  auth.$onAuthStateChanged(function (firebaseUser) {
-    DataFactory.getUsers();
-    DataFactory.getEvents();
-    DataFactory.getUserData(firebaseUser);
-  });
+  // auth.$onAuthStateChanged(function (firebaseUser) {
+  //   DataFactory.getUsers();
+  //   // DataFactory.getEvents();
+  //   DataFactory.getUserData(firebaseUser);
+  // });
 
 }]);
