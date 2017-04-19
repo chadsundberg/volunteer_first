@@ -11,6 +11,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.eventRoles = DataFactory.eventRoles;
   $ctrl.message = title;
   $ctrl.volunteerSignUp = DataFactory.volunteerSignUp;
+  $ctrl.volunteerRemove = DataFactory.volunteerRemove; // Melissa
   $ctrl.dateClicked = ModalDataFactory.dateClicked;
   $ctrl.currentEventClicked = ModalDataFactory.currentEventClicked;
   $ctrl.eventId = $ctrl.currentEventClicked.event_id;
@@ -36,9 +37,17 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 //Role on click to database
 
 $ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId); //hardcoded for testing -- need role id
+  $ctrl.volunteerSignUp($ctrl.eventId, roleClickedId);
   console.log(roleClickedId);
 };
+
+
+// Melissa
+$ctrl.clickRemove = function(roleClickedId){
+  $ctrl.volunteerRemove($ctrl.eventId, roleClickedId);
+  console.log(roleClickedId);
+};
+
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
 angular.module('volunteerApp').component('modalComponent', {
