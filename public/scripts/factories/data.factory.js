@@ -8,6 +8,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   var currentUser = {};
   var eventRoles = { list: [] };
 
+  auth.$onAuthStateChanged(function (firebaseUser) {
+    console.log('cal controller state changed');
+    getUsers();
+    getEvents();
+    getUserData(firebaseUser);
+ });
 
   function getUsers() {
     var firebaseUser = auth.$getAuth();
@@ -22,7 +28,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-
           users.list = response.data;
           return users.list;
         }, function (response) {
@@ -38,12 +43,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // Get events for calendar
   function getEvents() {
-
+    console.log('GET EVENTS RUNNING!');
+    // eventList.list = [];
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
-      return firebaseUser.getToken().then(function (idToken) {
+      firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
           url: '/privateData/events',
@@ -51,7 +57,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-
           console.log(response.data);
           eventList.list = [];
           response.data.forEach(function (event) {
@@ -59,11 +64,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
-              event_id:event.event_id
+              event_id:event.event_id,
+
               // end: new Date(y, m, 29),
             });
           });
-          console.log('list after forEach', eventList.list)
+          console.log('events?: ', eventList);
         }, function (response) {
           console.log('datafactory getEvents error', response);
         });
@@ -171,6 +177,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   //Admin add role to event -CHRISTINE
   function adminAddRole(newRole, eventId) {
+    console.log(eventId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -256,30 +263,29 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   }
 
   function deleteRole(roleId) {
-        console.log('delete role function getting place:', roleId);
-        // var firebaseUser = auth.$getAuth();
-        var firebaseUser = auth.$getAuth();
-        // firebaseUser will be null if not logged in
-        if(firebaseUser) {
-          // This is where we make our call to our server
-          firebaseUser.getToken().then(function(idToken){
-            $http({
-              method: 'DELETE',
-              url: '/privateData/eventRoles/' + roleId,
-              headers: {
-                id_token: idToken
-              },
-              params: {roleId: roleId}
-            }).then(function(response) {
-              // console.log(response.data);
-              // getEventRoles();
-            });
+      console.log('delete role function getting place:', roleId);
+      // var firebaseUser = auth.$getAuth();
+      var firebaseUser = auth.$getAuth();
+      // firebaseUser will be null if not logged in
+      if(firebaseUser) {
+        // This is where we make our call to our server
+        firebaseUser.getToken().then(function(idToken){
+          $http({
+            method: 'DELETE',
+            url: '/privateData/eventRoles/' + roleId,
+            headers: {
+              id_token: idToken
+            },
+            params: {roleId: roleId}
+          }).then(function(response) {
+            // console.log(response.data);
+            // getEventRoles();
           });
-        } else {
-          console.log('Not logged in or not authorized.');
-        }
+        });
+      } else {
+        console.log('Not logged in or not authorized.');
       }
-
+    }
 
   return {
     eventList: eventList,
@@ -294,10 +300,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
+
     // CHRISTINE exports
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
-    adminAddRole: adminAddRole, // CHRISTINE
+    adminAddRole: adminAddRole,
     deleteRole: deleteRole
   };
 

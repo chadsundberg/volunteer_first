@@ -18,9 +18,12 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
   console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
-  $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
-  $ctrl.deleteRole = DataFactory.deleteRole; // Chad and Jonny
+  $ctrl.getEventRoles($ctrl.eventId);
+  $ctrl.adminAddRole = DataFactory.adminAddRole;
+  $ctrl.deleteRole = DataFactory.deleteRole;
+
+
+
 
 
   //Modal
@@ -34,9 +37,11 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
 
 //USER SIGN UP FUNCTIONS
 //Role on click to database
+
 $ctrl.clickSaveSignUp = function(roleClickedId){
-  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId); //hardcoded for testing -- need role id
+  $ctrl.volunteerSignUp(roleClickedId, $ctrl.eventId);
 };
+
 
 
 
