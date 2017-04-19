@@ -22,6 +22,9 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
 
 
+
+
+
   //Modal
   $ctrl.ok = function () {
     $uibModalInstance.close($ctrl.selected.item);

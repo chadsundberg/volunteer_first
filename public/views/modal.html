@@ -8,76 +8,74 @@
 
   <!-- USER MODAL -->
   <!-- <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Volunteer Opportunity</th>
-          <th>Time</th>
-          <th>Sign Up</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="role in $ctrl.eventRoles.list">
-          <td scope="row">{{role.role_title}}</td>
-          <td scope="row">{{role.start_time}}{{$ctrl.currentUser}}</td>
+  <table class="table table-bordered">
+  <thead>
+  <tr>
+  <th>Volunteer Opportunity</th>
+  <th>Time</th>
+  <th>Sign Up</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="role in $ctrl.eventRoles.list">
+<td scope="row">{{role.role_title}}</td>
+<td scope="row">{{role.start_time}}{{$ctrl.currentUser}}</td>
+<td>
+<button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+</td>
+</tr>
+</tbody>
+</table>
+<button class="btn" ng-click="$ctrl.clickToShowName()">Save</button>
+</div> -->
+<!-- END USER MODAL -->
+
+<!-- ADMIN MODAL ng-if="$ctrl.currentUser.is_admin" -->
+<div class="modal-container" >
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Volunteer Opportunity</th>
+        <th>Start Time - End Time</th>
+        <th>Save Role</th>
+        <th>Delete Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="role in $ctrl.eventRoles.list">
+        <td scope="row">
+          <input ng-model="role.role_title" type="text">
+        </td>
+        <td scope="row">
+          <input type="text" ng-model="role.start_time" >-<input type="text"  ng-model="role.end_time" >
+        </td>
+        <td>
+          <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Save</button>
+        </td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn btn-danger" type="button" ng-click="$ctrl.deleteRole(role.id)">Delete</button>
+          </div>
+        </td>
+      </tr>
+      <!-- Add new role row  -->
+      <tr>
+        <td scope="row">
+          <input ng-model="$ctrl.newRole.role_title" type="text">
+        </td>
+        <td scope="row">
+          <input ng-model="$ctrl.newRole.start_time" type="text">-<input ng-model="$ctrl.newRole.end_time" type="text"></td>
           <td>
-            <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.eventId)">Add Role </button>
+            </div>
           </td>
+          <td></td>
         </tr>
       </tbody>
     </table>
-    <button class="btn" ng-click="$ctrl.clickToShowName()">Save</button>
-  </div> -->
-  <!-- END USER MODAL -->
-
-  <!-- ADMIN MODAL ng-if="$ctrl.currentUser.is_admin" -->
-  <div class="modal-container" >
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Volunteer Opportunity</th>
-          <th>Start Time - End Time</th>
-          <th>Sign Up</th>
-          <th>Save/Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="role in $ctrl.eventRoles.list">
-          <td scope="row">
-            <input ng-model="role.role_title" type="text">
-          </td>
-          <td scope="row">
-            <input type="time" name="time" ng-model="role.start_time" value="{{role.start_time}}">-<input type="time" name="time" ng-model="role.end_time" value="{{role.end_time}}">
-          </td>
-          <td>
-            <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
-          </td>
-          <td>
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <button class="btn btn-danger" type="button" ng-click="$ctrl.deleteRole(event.id)">Delete</button>
-            </div>
-          </td>
-        </tr>
-        <!-- Add new role row  -->
-        <tr>
-          <td scope="row">
-            <input ng-model="$ctrl.newRole.role_title" type="text">
-          </td>
-          <td scope="row">
-            <input ng-model="$ctrl.newRole.start_time" type="time">-<input ng-model="$ctrl.newRole.end_time" type="time"></td>
-            <td>
-              <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
-            </td>
-            <td>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.currentEventClicked.id)">Add Role</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div><!-- END ADMIN MODAL -->
+  </div><!-- END ADMIN MODAL -->
 
 
-  </body>
-  </html>
+</body>
+</html>

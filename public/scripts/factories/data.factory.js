@@ -37,11 +37,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // Get events for calendar
   function getEvents() {
+    console.log('GET EVENTS RUNNING!');
+    // eventList.list = [];
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
       // This is where we make our call to our server
-      return firebaseUser.getToken().then(function (idToken) {
+      firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'GET',
           url: '/privateData/events',
@@ -49,16 +51,19 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
+          // console.log(response.data);
+          eventList.list = [];
           response.data.forEach(function (event) {
             eventList.list.push({
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
               event_id:event.event_id,
+              
               // end: new Date(y, m, 29),
             });
           });
+          console.log('events?: ', eventList);
         }, function (response) {
           console.log('datafactory getEvents error', response);
         });
@@ -166,6 +171,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   //Admin add role to event -CHRISTINE
   function adminAddRole(newRole, eventId) {
+    console.log(eventId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
@@ -263,6 +269,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
+
     // CHRISTINE exports
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,

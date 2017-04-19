@@ -8,7 +8,7 @@ app.controller("HomeController", ["DataFactory", "$location", "$firebaseAuth", "
   // when controller starts up
   auth.$onAuthStateChanged(function (firebaseUser) {
     DataFactory.getUsers();
-    DataFactory.getEvents();
+    // DataFactory.getEvents();
     DataFactory.getUserData(firebaseUser);
   });
 

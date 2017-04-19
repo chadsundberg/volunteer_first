@@ -1,15 +1,20 @@
 <div class="container">
-  <h1> This is the calendar </h1>
-  <h2> {{cc.currentUser}} </h2>
+<h3> This is the calendar </h3>
 
   <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
 
-  <div ng-repeat="event in cc.eventList.list">
-    <h3>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</h3>
-  </div>
+
 
   <div id="modalId" ></div>
+
   <button class="btn btn-info"
-             ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
-             ng-click="cc.clickFn(click)">Export CSV</button>
+  ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
+  ng-click="cc.clickFn(click)">Export CSV</button>
+
+  <div ng-repeat="event in cc.eventList.list">
+    <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
+  </div>
+
+<p>{{cc.eventList}}</p>
+  <p> {{cc.currentUser}} </p>
 </div>
