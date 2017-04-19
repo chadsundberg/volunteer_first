@@ -175,5 +175,24 @@ router.post('/', function (req, res) {
   });
 }); //end post route
 
+router.delete('/eventRoles/:id', function(req, res) {
+  var roleId = req.params.id;
+  // var review = req.body;
+  console.log('Updating review: ', roleId);
+  pool.connect()
+  .then(function (client) {
+    client.query('DELETE FROM roles WHERE id=$1',
+    [roleId])
+    .then(function (result) {
+      client.release();
+      res.sendStatus(200);
+    })
+    .catch(function (err) {
+      console.log('error on DELETE', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
 
 module.exports = router;

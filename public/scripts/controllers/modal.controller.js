@@ -18,8 +18,9 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
   console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.eventId); //if currentEventClicked doesn't have id don't show
-  $ctrl.adminAddRole = DataFactory.adminAddRole; //CHRISTINE
+  $ctrl.getEventRoles($ctrl.eventId);
+  $ctrl.adminAddRole = DataFactory.adminAddRole;
+  $ctrl.deleteRole = DataFactory.deleteRole;
 
 
 

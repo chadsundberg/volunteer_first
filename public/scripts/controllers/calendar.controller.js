@@ -20,12 +20,12 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
 
 
   // state change / refresh
-   auth.$onAuthStateChanged(function (firebaseUser) {
-     console.log('cal controller state changed');
-    DataFactory.getUsers();
-    DataFactory.getEvents();
-    DataFactory.getUserData(firebaseUser);
-  });
+  //  auth.$onAuthStateChanged(function (firebaseUser) {
+  //    console.log('cal controller state changed');
+  //   DataFactory.getUsers();
+  //   DataFactory.getEvents();
+  //   DataFactory.getUserData(firebaseUser);
+  // });
 
   //export to CSV
 self.filename = "test";
