@@ -3,7 +3,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   // var currentEvent = { id: [] };
   var auth = $firebaseAuth();
-  var eventList = { list: [] };
+  var eventList = { list: [[]] };
   var users = { list: [] };
   var currentUser = {};
   var eventRoles = { list: [] };
@@ -58,9 +58,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           }
         }).then(function (response) {
           console.log(response.data);
-          eventList.list = [];
+          eventList.list[0] = [];
           response.data.forEach(function (event) {
-            eventList.list.push({
+            eventList.list[0].push({
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
