@@ -33,10 +33,17 @@
         <tr ng-repeat="role in $ctrl.eventRoles.list">
           <td scope="row">{{role.role_title}}</td>
           <td scope="row">{{role.start_time}}</td>
-          <td><button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+          <td>
+            <div ng-if="role.userid">
+              <button class="btn btn-success" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickSaveSignUp(role.id)">Remove Me</button>
+            </div>
+            <div ng-if="!role.userid">
+              <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+            </div>
             <div>
               {{role.first_name}} {{role.last_name}}
             </div>
+            {{role}}
           </td>
         </tr>
 
