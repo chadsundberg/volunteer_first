@@ -39,7 +39,7 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
+      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.start_time, roles.end_time, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
         [eventId, ])
         .then(function (result) {
           client.release();
@@ -126,6 +126,38 @@ router.post('/volunteerSignUp', function (req, res) {
     done();
   });
 });//end post
+
+
+//Add entry to role_user table, update users.has_met_requirement -CHRISTINE
+router.delete('/volunteerRemove', function (req, res) {
+  console.log('hit volunteerSignUp post route');
+  var removeEntry = req.body;
+  console.log("req.body:", req.body);
+  if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id){
+    removeEntry.user_id = req.decodedToken.userSQLId;
+  }
+  pool.connect(function (err, client, done) {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      client.query('DELETE FROM role_user WHERE user_id=$1;',
+        [removeEntry.user_id], function (err, result) {
+
+          if (err) {
+            console.log(err);
+            res.sendStatus(500); // the world exploded
+          } else {
+            res.sendStatus(201);
+          }
+        });
+    }
+    done();
+  });
+});//end post
+
+
+
 
 //ADMIN ADD ROLE TO EVENT
 router.post('/addRole/:id', function (req, res) {
