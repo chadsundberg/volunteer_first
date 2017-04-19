@@ -29,7 +29,6 @@ router.get('/events', function (req, res) {
       console.log('error on SELECT', err);
       res.sendStatus(500);
     });
-
 });
 });
 
@@ -40,8 +39,8 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query('SELECT * FROM roles WHERE event_id = $1 ORDER BY role_title ASC;',
-        [eventId])
+      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
+        [eventId, ])
         .then(function (result) {
           client.release();
           console.log(result.rows);
@@ -72,9 +71,7 @@ router.get('/users', function (req, res) {
 
           res.sendStatus(500);
         });
-
-
-    });
+      });
 });
 
 router.get('/getUser', function (req, res) {
@@ -106,6 +103,7 @@ router.get('/getUser', function (req, res) {
 router.post('/volunteerSignUp', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var signUpEntry = req.body;
+  console.log("req.body:", req.body);
   if (!req.decodedToken.currentUser.is_admin || !signUpEntry.user_id){
     signUpEntry.user_id = req.decodedToken.userSQLId;
   }
