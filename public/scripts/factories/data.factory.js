@@ -95,8 +95,24 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
           eventRoles.list = response.data;
+         //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
+          for (i = 0; i < eventRoles.list.length; i++) {
+            var newStartTime = eventRoles.list[i].start_time.split(':', 3);
+            var newEndTime = eventRoles.list[i].end_time.split(':', 3);
+            
+          
+            var newStartHours = newStartTime[0];
+            var newStartMinutes = newStartTime[1];
+            var newStartSeconds = newStartTime[2];
+            var newEndHours = newEndTime[0];
+            var newEndMinutes = newEndTime[1];
+            var newEndSeconds = newEndTime[2];
+            
+           
+            eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
+            eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+          }
         });
       });
     } else {
@@ -208,6 +224,22 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
+      console.log('newRole.start_time:', newRole.start_time);
+      console.log('getHours:', newRole.start_time.getHours());
+      var newStartHours = newRole.start_time.getHours();
+      var newStartMinutes = newRole.start_time.getMinutes();
+      var newEndHours = newRole.end_time.getHours();
+      var newEndMinutes = newRole.end_time.getMinutes();
+      newRole.start_time = newStartHours + ':' + newStartMinutes + ':' + 00;
+      newRole.end_time = newEndHours + ':' + newEndMinutes + ':' + 00;
+      var startTime = moment(newRole.start_time , "HH:mm:ss");
+      var endTime = moment(newRole.end_time , "HH:mm:ss");
+      var duration = moment.duration(endTime.diff(startTime));
+      
+      newRole.duration = (duration._milliseconds / 60000);
+      console.log('newRole.duration:', newRole.duration);
+      
+      
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -314,6 +346,34 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       }
     }
 
+    function editRole(role, eventId) {
+      console.log('factory getting place:', role);
+      var firebaseUser = auth.$getAuth();
+      // auth.$onAuthStateChanged(function(firebaseUser){
+      // firebaseUser will be null if not logged in
+      if(firebaseUser) {
+        // This is where we make our call to our server
+        firebaseUser.getToken().then(function(idToken){
+          $http({
+            method: 'PUT',
+            url: '/privateData/editRole/' + role.id,
+            headers: {
+              id_token: idToken
+            },
+            data: role
+          }).then(function(response) {
+            console.log(response.data);
+            getEvents();
+            getEventRoles(eventId);
+            // reviewUpdateDetails.list = response.data;
+          });
+        });
+      } else {
+        console.log('Not logged in or not authorized.');
+        self.secretData = "Log in to search for date activities.";
+      }
+    }
+
   return {
     eventList: eventList,
     getEvents: getEvents,
@@ -333,7 +393,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
-    deleteRole: deleteRole
+    deleteRole: deleteRole,
+
+    // Chad exports
+    editRole: editRole
   };
 
 }]);

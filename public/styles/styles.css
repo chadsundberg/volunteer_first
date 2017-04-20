@@ -1,9 +1,52 @@
+/*navbar*/
+.navbar-brand {
+  padding: 20px 20px 0px 0px;
+}
 
+.navbar{
+  width: 100%;
+}
+
+li {
+	display: block;
+	padding: 5px 8px;
+	line-height: 1;
+}
+
+.center-block img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 200px;
+  clear: both;
+}
+
+.modal-container {
+  padding: 20px;
+}
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.portfolio-item {
+    margin-bottom: 25px;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.unstyled {
+  margin-top: 60px;
+  clear: both;
+}
 
 /*CALENDAR STYLING*/
-.fc-row .fc-week .fc-widget-content{
+
+/*.fc-row .fc-week .fc-widget-content{
   height: 280px;
-}
+}*/
+
 .fc-event, .fc-event-dot{
   background-color: transparent;
 }
@@ -17,7 +60,29 @@
   background: LightCyan ;
   border: -3px solid transparent;
 }
+
+.well{
+	float: right;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  clear:both;
+}
+.row-fluid [class*="span"]:first-child {
+  margin-left: 0px;
+}
+.row-fluid .span4{
+  float: left;
+  clear: both;
+}
+
+alert{
+	width: 595px;
+  float: right;
+  margin-bottom: 5px;
+}
+
 /*END CALENDAR STYLING*/
+
 .form-signin .form-control {
         position: relative;
         font-size: 16px;
@@ -31,12 +96,13 @@
 .vertical-offset-100 {
         padding-top: 100px;
     }
-.img-responsive {
+/*.img-responsive {
     display: block;
     max-width: 100%;
     height: auto;
     margin: auto;
-    }
+    }*/
+
 .panel {
     margin-bottom: 20px;
     background-color: rgba(255, 255, 255, 0.75);
@@ -55,26 +121,17 @@
 
   }
 
-img {
+/*img {
   display: inline-block;
   float: right;
   transform: translate(-25px, 35px);
   border-radius: 25px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
+}*/
 
 
-.modal-container {
-  padding: 20px;
-}
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-}
 
-.portfolio-item {
-    margin-bottom: 25px;
-}
 
 footer {
     margin: 50px 0;

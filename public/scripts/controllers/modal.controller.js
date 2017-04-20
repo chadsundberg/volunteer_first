@@ -19,9 +19,21 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
   console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.eventId);
   $ctrl.adminAddRole = DataFactory.adminAddRole;
   $ctrl.deleteRole = DataFactory.deleteRole;
+  $ctrl.editRole = DataFactory.editRole;
+
+  if ($ctrl.eventId === undefined) {
+      $ctrl.eventRoles.list = {};
+  } else {
+    $ctrl.getEventRoles($ctrl.eventId)
+  }
+
+if($ctrl.eventId === undefined){
+  $ctrl.eventRoles.list = {};
+} else {
+    $ctrl.getEventRoles($ctrl.eventId);
+  }
 
 
   //Modal
@@ -47,6 +59,30 @@ $ctrl.clickRemove = function(roleClickedId){
   $ctrl.volunteerRemove($ctrl.eventId, roleClickedId);
   console.log(roleClickedId);
 };
+
+// MELISSA STUFF!!
+// var _selected;
+//
+//  this.selected = undefined;
+//  $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+//  // Any function returning a promise object can be used to load values asynchronously
+//  $scope.getLocation = function(val) {
+//    return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+//      params: {
+//        address: val,
+//        sensor: false
+//      }
+//    }).then(function(response){
+//      return response.data.results.map(function(item){
+//        return item.formatted_address;
+//      });
+//    });
+//  };
+
+
+
+
+
 
 
 // Please note that the close and dismiss bindings are from $uibModalInstance.
