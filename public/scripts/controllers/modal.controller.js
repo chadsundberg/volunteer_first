@@ -21,7 +21,13 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getEventRoles = DataFactory.getEventRoles;
   $ctrl.adminAddRole = DataFactory.adminAddRole;
   $ctrl.deleteRole = DataFactory.deleteRole;
+  $ctrl.editRole = DataFactory.editRole;
 
+  if ($ctrl.eventId === undefined) {
+      $ctrl.eventRoles.list = {};
+  } else {
+    $ctrl.getEventRoles($ctrl.eventId)
+  }
 
 if($ctrl.eventId === undefined){
   $ctrl.eventRoles.list = {};
