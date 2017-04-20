@@ -143,8 +143,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           method: 'DELETE',
           url: '/privateData/volunteerRemove',
           headers: { id_token: idToken },
-          data: {
-            role_id: roleClickedId,
+          params: {
+            role_id: roleClickedId
           }
         }).then(function (response) {
           getEventRoles(eventId);

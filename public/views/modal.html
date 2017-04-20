@@ -49,6 +49,7 @@
       <tr>
         <th>Volunteer Opportunity</th>
         <th>Start Time - End Time</th>
+        <th>Name</th>
         <th>Save Role</th>
         <th>Delete Role</th>
       </tr>
@@ -60,6 +61,9 @@
         </td>
         <td scope="row">
           <input type="text" ng-model="role.start_time" >-<input type="text"  ng-model="role.end_time" >
+        </td>
+        <td scope="row">
+          <input type="text" ng-model="role.first_name" ><input type="text"  ng-model="role.last_name" >
         </td>
         <td>
           <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Save</button>
