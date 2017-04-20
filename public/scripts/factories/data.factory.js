@@ -95,8 +95,24 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
           eventRoles.list = response.data;
+         //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
+          for (i = 0; i < eventRoles.list.length; i++) {
+            var newStartTime = eventRoles.list[i].start_time.split(':', 3);
+            var newEndTime = eventRoles.list[i].end_time.split(':', 3);
+            
+          
+            var newStartHours = newStartTime[0];
+            var newStartMinutes = newStartTime[1];
+            var newStartSeconds = newStartTime[2];
+            var newEndHours = newEndTime[0];
+            var newEndMinutes = newEndTime[1];
+            var newEndSeconds = newEndTime[2];
+            
+           
+            eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
+            eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+          }
         });
       });
     } else {
@@ -116,6 +132,32 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         $http({
           method: 'POST',
           url: '/privateData/volunteerSignUp',
+          headers: { id_token: idToken },
+          data: {
+            role_id: roleClickedId,
+          }
+        }).then(function (response) {
+          getEventRoles(eventId);
+          console.log(response);
+          console.log('firebase', firebaseUser);
+          return response.data;
+        }, function (response) {
+          console.log('datafactory volunteerSignUp error', response);
+        });
+      });
+    }
+  }//End volunteerSignUp(userRoleId)
+
+//remove user from role  -- Melissa
+  function volunteerRemove(eventId, roleClickedId) {
+    console.log('factory userRoleId', roleClickedId);
+    var firebaseUser = auth.$getAuth();
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'DELETE',
+          url: '/privateData/volunteerRemove',
           headers: { id_token: idToken },
           data: {
             role_id: roleClickedId,
@@ -295,6 +337,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getUsers: getUsers,
     users: users,
     volunteerSignUp: volunteerSignUp,
+    volunteerRemove: volunteerRemove,
     currentUser: currentUser,
     createUser: createUser,
     signOut: signOut,

@@ -127,6 +127,38 @@ router.post('/volunteerSignUp', function (req, res) {
   });
 });//end post
 
+
+//Add entry to role_user table, update users.has_met_requirement -CHRISTINE
+router.delete('/volunteerRemove', function (req, res) {
+  console.log('hit volunteerSignUp post route');
+  var removeEntry = req.body;
+  console.log("req.body:", req.body);
+  if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id){
+    removeEntry.user_id = req.decodedToken.userSQLId;
+  }
+  pool.connect(function (err, client, done) {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      client.query('DELETE FROM role_user WHERE user_id=$1;',
+        [removeEntry.user_id], function (err, result) {
+
+          if (err) {
+            console.log(err);
+            res.sendStatus(500); // the world exploded
+          } else {
+            res.sendStatus(201);
+          }
+        });
+    }
+    done();
+  });
+});//end post
+
+
+
+
 //ADMIN ADD ROLE TO EVENT
 router.post('/addRole/:id', function (req, res) {
   var newRole = req.body;
