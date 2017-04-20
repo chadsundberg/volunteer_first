@@ -90,7 +90,7 @@ self.eventOnClick = function( date, jsEvent, view){
   /* config object for Calendar */
   self.uiConfig = {
     calendar:{
-      height: 650,
+      height: 850,
       editable: true,
       header:{
         left: 'month basicWeek basicDay agendaWeek agendaDay',

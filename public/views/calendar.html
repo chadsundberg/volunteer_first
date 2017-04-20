@@ -1,13 +1,83 @@
 <div class="container">
 
-
-
-
   <div class="well">
+                  <div class="row-fluid">
+                      <div class="span4">
+                          <!-- <h3> This is the calendar </h3>
+
+
+                          <div class="btn-group calTools">
+
+                            <button class="btn" ng-click="addRemoveEventSource(eventSources,eventSource)">
+                              Toggle Source
+                            </button>
+                            <button type="button" class="btn btn-primary" ng-click="addEvent()">
+                              Add Event
+                            </button>
+                          </div> -->
+
+                          <ul class="unstyled">
+                              <li>
+                                  <div class="alert alert-info">
+                                      <a><i class="icon-remove"></i></a>
+                                      <b> <input ng-model="cc.currentUser"></b>
+                                      {{cc.currentUser.name}} - {{cc.currentUser.name}}
+                                  </div>
+                              </li>
+                          </ul>
+
+                      </div>
+
+                      <div class="span8">
+
+                                <div class="alert-success calAlert" >
+                                  <h4>{{alertMessage}}</h4>
+                                </div>
+                                <div class="btn-toolbar">
+                                  <p class="pull-right lead">Calendar One View Options</p>
+                                  <div class="btn-group">
+                                      <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar')">AgendaDay</button>
+                                      <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">AgendaWeek</button>
+                                      <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
+                                  </div>
+                                </div>
+                                <div class="span8">
+                                <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
+                                  <div id="modalId" ></div>
+
+
+
+                                  <div ng-repeat="event in cc.eventList.list">
+                                    <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
+                                  </div>
+
+                                <p>{{cc.eventList}}</p>
+                                  <p> {{cc.currentUser}} </p>
+                                </div>
+
+
+
+                      </div>
+                      <button class="btn btn-info"
+                      ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
+                      ng-click="cc.clickFn(click)">Export CSV</button>
+                  </div>
+              </div>
+
+
+  <!-- <div class="well">
       <div class="row-fluid">
           <div class="span4">
             <h3> This is the calendar </h3>
+            <ul>
+              <li>stuff</li>
+              <li>stuff</li>
+              <li>stuff</li><li>stuff</li>
+            </ul>
           </div>
+
+
+
 <div class="span8">
 <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
   <div id="modalId" ></div>
@@ -24,4 +94,4 @@
   <p> {{cc.currentUser}} </p>
 </div>
 </div>
-</div>
+</div> -->
