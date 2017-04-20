@@ -346,6 +346,34 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       }
     }
 
+    function editRole(role, eventId) {
+      console.log('factory getting place:', role);
+      var firebaseUser = auth.$getAuth();
+      // auth.$onAuthStateChanged(function(firebaseUser){
+      // firebaseUser will be null if not logged in
+      if(firebaseUser) {
+        // This is where we make our call to our server
+        firebaseUser.getToken().then(function(idToken){
+          $http({
+            method: 'PUT',
+            url: '/privateData/editRole/' + role.id,
+            headers: {
+              id_token: idToken
+            },
+            data: role
+          }).then(function(response) {
+            console.log(response.data);
+            getEvents();
+            getEventRoles(eventId);
+            // reviewUpdateDetails.list = response.data;
+          });
+        });
+      } else {
+        console.log('Not logged in or not authorized.');
+        self.secretData = "Log in to search for date activities.";
+      }
+    }
+
   return {
     eventList: eventList,
     getEvents: getEvents,
@@ -365,7 +393,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
-    deleteRole: deleteRole
+    deleteRole: deleteRole,
+
+    // Chad exports
+    editRole: editRole
   };
 
 }]);

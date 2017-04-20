@@ -39,7 +39,7 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.start_time, roles.end_time, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
+      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;',
         [eventId, ])
         .then(function (result) {
           client.release();
@@ -207,8 +207,7 @@ router.post('/', function (req, res) {
 
 router.delete('/eventRoles/:id', function(req, res) {
   var roleId = req.params.id;
-  // var review = req.body;
-  console.log('Updating review: ', roleId);
+  console.log('Deleting role: ', roleId);
   pool.connect()
   .then(function (client) {
     client.query('DELETE FROM roles WHERE id=$1',
@@ -223,6 +222,26 @@ router.delete('/eventRoles/:id', function(req, res) {
     });
   });
 });
+
+router.put('/editRole/:id', function(req, res) {
+  var roleId = req.params.id;
+  var role = req.body;
+  console.log('Updating role: ', roleId);
+  pool.connect()
+  .then(function (client) {
+    client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
+    [role.role_title, role.start_time, role.end_time, roleId])
+    .then(function (result) {
+      client.release();
+      res.sendStatus(200);
+    })
+    .catch(function (err) {
+      console.log('error on UPDATE', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
 
 
 module.exports = router;
