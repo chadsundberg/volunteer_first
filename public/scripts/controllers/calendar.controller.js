@@ -9,13 +9,15 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.selectedDay = "testing";
 
   self.eventList = DataFactory.eventList;
-
+  self.eventId = DataFactory.eventId;
+  self.eventRoles = DataFactory.eventRoles;
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
+  self.getUserData = DataFactory.getUserData;
   self.volunteerSignUp = DataFactory.volunteerSignUp;
   self.currentUser = DataFactory.currentUser;
-
+  self.getEventRoles = DataFactory.getEventRoles;
 
 
 
@@ -41,8 +43,9 @@ self.alertDayClick = function( date, jsEvent, view){
   // self.addModal = (date.title + ' was clicked ');
   console.log("day click works ", date);
   self.selectedDay = "Open Day!";
-  ModalDataFactory.dateClicked.day = date;
+  ModalDataFactory.currentEventClicked = date;
   self.open();
+
 };
 
 //Event click for User
