@@ -27,11 +27,11 @@
             <div ng-if="role.userid">
               <button class="btn btn-warning" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
             </div>
+            {{role.id}}
             <div ng-if="!role.userid">
               <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
             </div>
             <div>
-              {{role.first_name}} {{role.last_name}} {{$ctrl.currentUser.info.is_admin}}
             </div>
           </td>
         </tr>
