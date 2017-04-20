@@ -8,7 +8,7 @@
 
   <!-- USER MODAL -->
 
-  <!-- <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
+   <!--<div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -59,7 +59,7 @@
           <input ng-model="role.role_title" type="text">
         </td>
         <td scope="row">
-          <input type="text" ng-model="role.start_time" >-<input type="text"  ng-model="role.end_time" >
+          <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
         </td>
         <td>
           <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Save</button>
@@ -76,7 +76,7 @@
           <input ng-model="$ctrl.newRole.role_title" type="text">
         </td>
         <td scope="row">
-          <input ng-model="$ctrl.newRole.start_time" type="text">-<input ng-model="$ctrl.newRole.end_time" type="text"></td>
+          <input ng-model="$ctrl.newRole.start_time" type="time">-<input ng-model="$ctrl.newRole.end_time" type="time"></td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
               <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.eventId)">Add Role </button>
@@ -86,7 +86,8 @@
         </tr>
       </tbody>
     </table>
-  </div><!-- END ADMIN MODAL -->
+  </div> 
+  <!-- END ADMIN MODAL -->
 
 
 </body>
