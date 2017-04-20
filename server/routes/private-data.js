@@ -207,8 +207,7 @@ router.post('/', function (req, res) {
 
 router.delete('/eventRoles/:id', function(req, res) {
   var roleId = req.params.id;
-  // var review = req.body;
-  console.log('Updating review: ', roleId);
+  console.log('Deleting role: ', roleId);
   pool.connect()
   .then(function (client) {
     client.query('DELETE FROM roles WHERE id=$1',
@@ -223,6 +222,26 @@ router.delete('/eventRoles/:id', function(req, res) {
     });
   });
 });
+
+router.put('/editRole/:id', function(req, res) {
+  var roleId = req.params.id;
+  var role = req.body;
+  console.log('Updating role: ', roleId);
+  pool.connect()
+  .then(function (client) {
+    client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
+    [role.role_title, role.start_time, role.end_time, roleId])
+    .then(function (result) {
+      client.release();
+      res.sendStatus(200);
+    })
+    .catch(function (err) {
+      console.log('error on UPDATE', err);
+      res.sendStatus(500);
+    });
+  });
+});
+
 
 
 module.exports = router;

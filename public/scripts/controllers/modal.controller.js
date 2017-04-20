@@ -19,10 +19,15 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.currentEvent = DataFactory.currentEvent;
   console.log($ctrl.currentEventClicked);
   $ctrl.getEventRoles = DataFactory.getEventRoles;
-  $ctrl.getEventRoles($ctrl.eventId);
   $ctrl.adminAddRole = DataFactory.adminAddRole;
   $ctrl.deleteRole = DataFactory.deleteRole;
+  $ctrl.editRole = DataFactory.editRole;
 
+  if ($ctrl.eventId === undefined) {
+      $ctrl.eventRoles.list = {};
+  } else {
+    $ctrl.getEventRoles($ctrl.eventId)
+  }
 
   //Modal
   $ctrl.ok = function () {

@@ -41,7 +41,7 @@ self.alertDayClick = function( date, jsEvent, view){
   // self.addModal = (date.title + ' was clicked ');
   console.log("day click works ", date);
   self.selectedDay = "Open Day!";
-  ModalDataFactory.dateClicked.day = date;
+  ModalDataFactory.currentEventClicked = date;
   self.open();
 };
 
