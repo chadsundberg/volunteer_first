@@ -95,8 +95,24 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
           eventRoles.list = response.data;
+         //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
+          for (i = 0; i < eventRoles.list.length; i++) {
+            var newStartTime = eventRoles.list[i].start_time.split(':', 3);
+            var newEndTime = eventRoles.list[i].end_time.split(':', 3);
+            
+          
+            var newStartHours = newStartTime[0];
+            var newStartMinutes = newStartTime[1];
+            var newStartSeconds = newStartTime[2];
+            var newEndHours = newEndTime[0];
+            var newEndMinutes = newEndTime[1];
+            var newEndSeconds = newEndTime[2];
+            
+           
+            eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
+            eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+          }
         });
       });
     } else {
