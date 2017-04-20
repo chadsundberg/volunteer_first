@@ -166,8 +166,8 @@ router.post('/addRole/:id', function (req, res) {
   console.log('new Role: ', newRole);
   pool.connect()
     .then(function (client) {
-      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id) VALUES ($1, $2, $3, $4);',
-        [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id])
+      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
+        [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id, newRole.duration])
         .then(function (result) {
           client.release();
           res.sendStatus(201);
