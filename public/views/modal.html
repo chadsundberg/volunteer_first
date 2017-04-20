@@ -8,7 +8,7 @@
 
   <!-- USER MODAL -->
 
-   <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
+   <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.info.is_admin">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -24,7 +24,7 @@
           <td scope="row">{{role.start_time | date:'h:mm a'}} - {{role.end_time | date:'h:mm a'}}</td>
           <td>
             <div ng-if="role.userid">
-              <button class="btn btn-success" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
+              <button class="btn btn-warning" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
             </div>
             <div ng-if="!role.userid">
               <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
@@ -42,8 +42,8 @@
   <!-- END USER MODAL -->
 
 
-<!-- ADMIN MODAL ng-if="$ctrl.currentUser.is_admin" -->
-<div class="modal-container" >
+<!-- ADMIN MODAL -->
+<div class="modal-container" ng-if="$ctrl.currentUser.info.is_admin">
   <table class="table table-bordered">
     <thead>
       <tr>
