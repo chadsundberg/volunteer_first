@@ -7,7 +7,6 @@
 <body>
 
   <!-- USER MODAL -->
-
 <div ng-if="!$ctrl.currentUser.info.is_admin">
   <div class="modal-container" id="signupModal">
     <table class="table table-bordered">
@@ -27,7 +26,7 @@
             <div ng-if="role.userid">
               <button class="btn btn-warning" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
             </div>
-            {{role.id}}
+            {{role.first_name}} {{role.last_name}}
             <div ng-if="!role.userid">
               <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
             </div>
@@ -41,6 +40,7 @@
     <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
   </div>
   </div><!-- END USER MODAL -->
+
 
 
 <!-- ADMIN MODAL  -->
