@@ -7,6 +7,12 @@
   width: 100%;
 }
 
+li {
+	display: block;
+	padding: 5px 8px;
+	line-height: 1;
+}
+
 .center-block img{
   display: block;
   margin-left: auto;
@@ -28,6 +34,11 @@ body {
 
 .pull-right {
   float: right !important;
+}
+
+.unstyled {
+  margin-top: 60px;
+  clear: both;
 }
 
 /*CALENDAR STYLING*/
@@ -53,6 +64,7 @@ body {
 .well{
 	float: right;
   margin-bottom: 40px;
+  margin-top: 20px;
   clear:both;
 }
 .row-fluid [class*="span"]:first-child {
@@ -63,14 +75,12 @@ body {
   clear: both;
 }
 
-li {
-	display: block;
-	padding: 5px 8px;
-	line-height: 1;
+alert{
+	width: 595px;
+  float: right;
+  margin-bottom: 5px;
 }
-.calAlert{
-	width: 595px; float: right; margin-bottom: 5px;
-}
+
 /*END CALENDAR STYLING*/
 
 .form-signin .form-control {
