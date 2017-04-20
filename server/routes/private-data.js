@@ -131,7 +131,7 @@ router.post('/volunteerSignUp', function (req, res) {
 //Add entry to role_user table, update users.has_met_requirement -CHRISTINE
 router.delete('/volunteerRemove', function (req, res) {
   console.log('hit volunteerSignUp post route');
-  var removeEntry = req.body;
+  var removeEntry = req.query;
   console.log("req.body:", req.body);
   if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id){
     removeEntry.user_id = req.decodedToken.userSQLId;
@@ -141,8 +141,8 @@ router.delete('/volunteerRemove', function (req, res) {
       console.log(err);
       res.sendStatus(500);
     } else {
-      client.query('DELETE FROM role_user WHERE user_id=$1;',
-        [removeEntry.user_id], function (err, result) {
+      client.query('DELETE FROM role_user WHERE user_id=$1 AND role_id=$2;',
+        [removeEntry.user_id, removeEntry.role_id], function (err, result) {
 
           if (err) {
             console.log(err);
