@@ -9,13 +9,15 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.selectedDay = "testing";
 
   self.eventList = DataFactory.eventList;
-
+  self.eventId = DataFactory.eventId;
+  self.eventRoles = DataFactory.eventRoles;
   self.getEvents = DataFactory.getEvents;
   self.users = DataFactory.users;
   self.getUsers = DataFactory.getUsers;
+  self.getUserData = DataFactory.getUserData;
   self.volunteerSignUp = DataFactory.volunteerSignUp;
   self.currentUser = DataFactory.currentUser;
-
+  self.getEventRoles = DataFactory.getEventRoles;
 
 
 
@@ -43,6 +45,7 @@ self.alertDayClick = function( date, jsEvent, view){
   self.selectedDay = "Open Day!";
   ModalDataFactory.currentEventClicked = date;
   self.open();
+
 };
 
 //Event click for User
@@ -90,7 +93,7 @@ self.eventOnClick = function( date, jsEvent, view){
   /* config object for Calendar */
   self.uiConfig = {
     calendar:{
-      height: 650,
+      height: 850,
       editable: true,
       header:{
         left: 'month basicWeek basicDay agendaWeek agendaDay',

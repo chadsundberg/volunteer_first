@@ -7,8 +7,8 @@
 <body>
 
   <!-- USER MODAL -->
-
-  <!-- <div class="modal-container" id="signupModal" ng-if="!$ctrl.currentUser.is_admin">
+<div ng-if="!$ctrl.currentUser.info.is_admin">
+  <div class="modal-container" id="signupModal">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -21,16 +21,16 @@
         {{role}}
         <tr ng-repeat="role in $ctrl.eventRoles.list">
           <td scope="row">{{role.role_title}}</td>
-          <td scope="row">{{role.start_time}} - {{role.end_time}}</td>
+          <td scope="row">{{role.start_time | date:'h:mm a'}} - {{role.end_time | date:'h:mm a'}}</td>
           <td>
             <div ng-if="role.userid">
-              <button class="btn btn-success" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
+              <button class="btn btn-warning" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
             </div>
+            {{role.first_name}} {{role.last_name}}
             <div ng-if="!role.userid">
               <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
             </div>
             <div>
-              {{role.first_name}} {{role.last_name}}
             </div>
           </td>
         </tr>
@@ -38,18 +38,21 @@
       </tbody>
     </table>
     <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
-  </div> -->
-  <!-- END USER MODAL -->
+  </div>
+  </div><!-- END USER MODAL -->
 
 
-<!-- ADMIN MODAL ng-if="$ctrl.currentUser.is_admin" -->
-<div class="modal-container" >
+
+<!-- ADMIN MODAL  -->
+<div ng-if="$ctrl.currentUser.info.is_admin">
+<div class="modal-container">
   <table class="table table-bordered">
     <thead>
       <tr>
         <th>Volunteer Opportunity</th>
         <th>Start Time - End Time</th>
-        <th>Save Edits</th>
+        <th>Name</th>
+        <th>Save Role</th>
         <th>Delete Role</th>
       </tr>
     </thead>
@@ -59,7 +62,10 @@
           <input ng-model="role.role_title" type="text">
         </td>
         <td scope="row">
-          <input type="text" ng-model="role.start_time" >-<input type="text"  ng-model="role.end_time" >
+          <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
+        </td>
+        <td scope="row">
+          <input ng-model="role.first_name" type="text"><input type="text"  ng-model="role.last_name" >
         </td>
         <td>
           <button class="btn btn-success" type="button" ng-click="$ctrl.editRole(role, $ctrl.eventId)">Save</button>
@@ -76,18 +82,19 @@
           <input ng-model="$ctrl.newRole.role_title" type="text">
         </td>
         <td scope="row">
-          <input ng-model="$ctrl.newRole.start_time" type="text">-<input ng-model="$ctrl.newRole.end_time" type="text"></td>
+          <input ng-model="$ctrl.newRole.start_time" type="time">-<input ng-model="$ctrl.newRole.end_time" type="time"></td>
           <td>
             <div class="btn-group" role="group" aria-label="Basic example">
               <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.eventId)">Add Role </button>
             </div>
           </td>
           <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
-  </div><!-- END ADMIN MODAL -->
-
+  </div>
+</div><!-- END ADMIN MODAL -->
 
 </body>
 </html>
