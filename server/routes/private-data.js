@@ -18,18 +18,18 @@ var pool = new pg.Pool(config);
 //get all events for calendar display
 router.get('/events', function (req, res) {
   pool.connect()
-  .then(function (client) {
-    client.query('SELECT roles.id as role_id, roles.role_title, roles.num_users, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
-    .then(function (result) {
-      client.release();
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      client.release();
-      console.log('error on SELECT', err);
-      res.sendStatus(500);
+    .then(function (client) {
+      client.query('SELECT roles.id as role_id, roles.role_title, roles.num_users, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+        .then(function (result) {
+          client.release();
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          client.release();
+          console.log('error on SELECT', err);
+          res.sendStatus(500);
+        });
     });
-});
 });
 
 // get all roles for specific event for modal
@@ -40,7 +40,7 @@ router.get('/eventRoles/:id', function (req, res) {
   pool.connect()
     .then(function (client) {
       client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;',
-        [eventId, ])
+        [eventId,])
         .then(function (result) {
           client.release();
           console.log(result.rows);
@@ -71,23 +71,18 @@ router.get('/users', function (req, res) {
 
           res.sendStatus(500);
         });
-      });
+    });
 });
 
 router.get('/getUser', function (req, res) {
   pool.connect()
     .then(function (client) {
-      client.query(`SELECT users.id, users.first_name, users.last_name, users.email, users.is_admin, SUM(roles.duration) AS signed_up_duration
-        FROM role_user
-        LEFT OUTER JOIN users ON users.id=role_user.user_id
-        RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
-        WHERE role_user.user_id = $1
-        GROUP BY users.id;`,
+      client.query('SELECT * FROM users WHERE id = $1',
         [req.decodedToken.userSQLId],
         function (err, result) {
           res.send(result.rows[0]);
         });
-        client.release();
+      client.release();
     });
   // .then(function (result) {
   //   client.release();
@@ -109,7 +104,7 @@ router.post('/volunteerSignUp', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var signUpEntry = req.body;
   console.log("req.body:", req.body);
-  if (!req.decodedToken.currentUser.is_admin || !signUpEntry.user_id){
+  if (!req.decodedToken.currentUser.is_admin || !signUpEntry.user_id) {
     signUpEntry.user_id = req.decodedToken.userSQLId;
   }
   pool.connect(function (err, client, done) {
@@ -138,7 +133,7 @@ router.delete('/volunteerRemove', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var removeEntry = req.query;
   console.log("req.body:", req.body);
-  if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id){
+  if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id) {
     removeEntry.user_id = req.decodedToken.userSQLId;
   }
   pool.connect(function (err, client, done) {
@@ -210,24 +205,25 @@ router.post('/', function (req, res) {
   });
 }); //end post route
 
-router.delete('/eventRoles/:id', function(req, res) {
+router.delete('/eventRoles/:id', function (req, res) {
   var roleId = req.params.id;
   console.log('Deleting role: ', roleId);
   pool.connect()
-  .then(function (client) {
-    client.query('DELETE FROM roles WHERE id=$1',
-    [roleId])
-    .then(function (result) {
-      client.release();
-      res.sendStatus(200);
-    })
-    .catch(function (err) {
-      console.log('error on DELETE', err);
-      res.sendStatus(500);
+    .then(function (client) {
+      client.query('DELETE FROM roles WHERE id=$1',
+        [roleId])
+        .then(function (result) {
+          client.release();
+          res.sendStatus(200);
+        })
+        .catch(function (err) {
+          console.log('error on DELETE', err);
+          res.sendStatus(500);
+        });
     });
-  });
 });
 
+<<<<<<< HEAD
 router.put('/editRole/:id', function(req, res) {
  var roleId = req.params.id;
  var role = req.body;
@@ -257,6 +253,7 @@ router.put('/editRole/:id', function(req, res) {
      res.sendStatus(500);
    });
  });
+
 });
 
 router.get('/users/duration', function (req, res) {
@@ -272,7 +269,7 @@ router.get('/users/duration', function (req, res) {
         .then(function (result) {
           client.release();
 
-          console.log('getting user: ', result.rows);
+          console.log('getting userduration: ', result.rows);
 
           res.send(result.rows);
         })
@@ -282,7 +279,7 @@ router.get('/users/duration', function (req, res) {
 
           res.sendStatus(500);
         });
-      });
+    });
 });
 
 
