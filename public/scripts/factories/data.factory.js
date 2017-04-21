@@ -218,7 +218,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   } // ends createUser function
 
 
-  //Admin add role to event -CHRISTINE
+//Admin add role to event -CHRISTINE
   function adminAddRole(role, eventId) {
     console.log(eventId);
     var firebaseUser = auth.$getAuth();
