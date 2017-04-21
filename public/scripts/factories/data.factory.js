@@ -5,7 +5,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   var auth = $firebaseAuth();
   var eventList = { list: [[]] };
   var users = { list: [] };
-  var currentUser = {};
+  var currentUser = { info: {} };
   var eventRoles = { list: [] };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
@@ -317,7 +317,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         console.log('getuserdata error:', error);
       });
     } else {
-      currentUser.info = null;
+      currentUser.info = {};
     }
   }
 
