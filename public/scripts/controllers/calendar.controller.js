@@ -1,4 +1,4 @@
-app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", "$scope", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location, $scope) {
+app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", "$scope", function (DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location, $scope) {
   console.log('Calendar Controller was loaded');
   var auth = $firebaseAuth();
   var self = this;
@@ -30,40 +30,40 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   // });
 
   //export to CSV
-self.filename = "test";
-  self.getArray = [{a: 1, b:2}, {a:3, b:4}];
+  self.filename = "test";
+  self.getArray = [{ a: 1, b: 2 }, { a: 3, b: 4 }];
 
-  self.clickFn = function(click) {
-  console.log("click click click");
-};
+  self.clickFn = function (click) {
+    console.log("click click click");
+  };
 
 
-//Day click for Admin
-self.alertDayClick = function( date, jsEvent, view){
-  // self.addModal = (date.title + ' was clicked ');
-  console.log("day click works ", date);
-  self.selectedDay = "Open Day!";
-  ModalDataFactory.currentEventClicked = date;
-  self.open();
+  //Day click for Admin
+  self.alertDayClick = function (date, jsEvent, view) {
+    // self.addModal = (date.title + ' was clicked ');
+    console.log("day click works ", date);
+    self.selectedDay = "Open Day!";
+    ModalDataFactory.currentEventClicked = date;
+    self.open();
 
-};
+  };
 
-//Event click for User
-self.eventOnClick = function( date, jsEvent, view){
-  console.log(date.title + ' was clicked ');
-  console.log(jsEvent);
-  console.log('view, date, jsEvent:', view, date, jsEvent);
-  self.selectedDay = "Event!";
-  ModalDataFactory.currentEventClicked = date;
-  self.open();
-};
+  //Event click for User
+  self.eventOnClick = function (date, jsEvent, view) {
+    console.log(date.title + ' was clicked ');
+    console.log(jsEvent);
+    console.log('view, date, jsEvent:', view, date, jsEvent);
+    self.selectedDay = "Event!";
+    ModalDataFactory.currentEventClicked = date;
+    self.open();
+  };
 
   //Modal
   self.open = function (size, parentSelector) {
     console.log('opening modal');
     var parentElem =
-    parentSelector ?
-    angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
+      parentSelector ?
+        angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: self.animationsEnabled,
       ariaLabelledBy: 'modal-title',
@@ -92,10 +92,10 @@ self.eventOnClick = function( date, jsEvent, view){
 
   /* config object for Calendar */
   self.uiConfig = {
-    calendar:{
+    calendar: {
       height: 850,
       editable: true,
-      header:{
+      header: {
         left: 'month basicWeek basicDay agendaWeek agendaDay',
         center: 'title',
         right: 'today prev,next'
@@ -108,15 +108,15 @@ self.eventOnClick = function( date, jsEvent, view){
     }
   };
 
-    // self.eventRender = function(event, element, view) {
-    //   self.currentEvent = event;
-    // };
+  // self.eventRender = function(event, element, view) {
+  //   self.currentEvent = event;
+  // };
 
 
 
   // };
 
-self.eventSources = self.eventList.list;
+  self.eventSources = self.eventList.list;
 
 
 }]);
