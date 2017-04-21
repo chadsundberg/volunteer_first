@@ -223,7 +223,6 @@ router.delete('/eventRoles/:id', function (req, res) {
     });
 });
 
-<<<<<<< HEAD
 router.put('/editRole/:id', function(req, res) {
  var roleId = req.params.id;
  var role = req.body;
