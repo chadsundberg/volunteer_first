@@ -57,7 +57,7 @@ router.get('/eventRoles/:id', function (req, res) {
 router.get('/users', function (req, res) {
   pool.connect()
     .then(function (client) {
-      client.query('SELECT first_name, last_name FROM users')
+      client.query('SELECT first_name, last_name, id FROM users')
         .then(function (result) {
           client.release();
 
@@ -231,7 +231,7 @@ router.delete('/eventRoles/:id', function(req, res) {
 router.put('/editRole/:id', function(req, res) {
   var roleId = req.params.id;
   var role = req.body;
-  console.log('Updating role: ', roleId);
+  console.log('Updating role: ', roleId, role);
   pool.connect()
   .then(function (client) {
     client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',

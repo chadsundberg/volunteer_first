@@ -46,6 +46,7 @@
 <!-- ADMIN MODAL  -->
 <div ng-if="$ctrl.currentUser.info.is_admin">
 <div class="modal-container">
+        asdfasdfawefawefasdcfasfewdfawdwdeawedawed    {{$ctrl.eventRoles.list}}
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -58,14 +59,16 @@
     </thead>
     <tbody>
       <tr ng-repeat="role in $ctrl.eventRoles.list">
-        <td scope="row">
+        <td>
           <input ng-model="role.role_title" type="text">
         </td>
-        <td scope="row">
+        <td>
           <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
         </td>
-        <td scope="row">
-          <input ng-model="role.first_name" type="text"><input type="text"  ng-model="role.last_name" >
+        <td>
+          {{$ctrl}}
+          <!-- (user.first_name + ' ' + user.last_name) -->
+            <input type="text" ng-model="role.userObject" uib-typeahead="user as (user.first_name + ' ' + user.last_name) for user in $ctrl.users | filter:$viewValue | limitTo:8">
         </td>
         <td>
           <button class="btn btn-success" type="button" ng-click="$ctrl.editRole(role, $ctrl.eventId)">Save</button>
@@ -93,6 +96,13 @@
         </tr>
       </tbody>
     </table>
+
+
+
+
+
+
+
   </div>
 </div><!-- END ADMIN MODAL -->
 
