@@ -352,27 +352,40 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }
 
-  function editRole(role, eventId) {
-    console.log('factory getting place:', role);
-    var firebaseUser = auth.$getAuth();
-    // auth.$onAuthStateChanged(function(firebaseUser){
-    // firebaseUser will be null if not logged in
-    if(firebaseUser) {
-      // This is where we make our call to our server
-      firebaseUser.getToken().then(function(idToken){
-        $http({
-          method: 'PUT',
-          url: '/privateData/editRole/' + role.id,
-          headers: {
-            id_token: idToken
-          },
-          data: role,
-        }).then(function(response) {
-          console.log(response.data);
-          getEvents();
-          getEventRoles(eventId);
-          // reviewUpdateDetails.list = response.data;
-        });
+    function editRole(role, eventId) {
+      console.log('factory getting place:', role);
+      var firebaseUser = auth.$getAuth();
+      // auth.$onAuthStateChanged(function(firebaseUser){
+      // firebaseUser will be null if not logged in
+      if(firebaseUser) {
+        var editedRole = Object.assign({}, role);
+
+        var startTime = moment(editedRole.start_time);
+        var endTime = moment(editedRole.end_time);
+
+        editedRole.start_time = moment(startTime).format('HH:mm:00');
+        editedRole.end_time = moment(endTime).format('HH:mm:00');
+        editedRole.duration = endTime.diff(startTime, 'minutes');
+
+        //// duration to be at least 30 min per client request - JONNY \\\\
+        if (editedRole.duration < 30) {
+           editedRole.duration = 30;
+        }
+        // This is where we make our call to our server
+        firebaseUser.getToken().then(function(idToken){
+          $http({
+            method: 'PUT',
+            url: '/privateData/editRole/' + role.id,
+            headers: {
+              id_token: idToken
+            },
+            data: editedRole
+          }).then(function(response) {
+            console.log(response.data);
+            getEvents();
+            getEventRoles(eventId);
+            // reviewUpdateDetails.list = response.data;
+          });
       });
     } else {
       console.log('Not logged in or not authorized.');
