@@ -159,8 +159,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           method: 'DELETE',
           url: '/privateData/volunteerRemove',
           headers: { id_token: idToken },
-          data: {
-            role_id: roleClickedId,
+          params: {
+            role_id: roleClickedId
           }
         }).then(function (response) {
           getEventRoles(eventId);
@@ -219,25 +219,25 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
 
   //Admin add role to event -CHRISTINE
-  function adminAddRole(newRole, eventId) {
+  function adminAddRole(role, eventId) {
     console.log(eventId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
-      console.log('newRole.start_time:', newRole.start_time);
-      console.log('getHours:', newRole.start_time.getHours());
-      var newStartHours = newRole.start_time.getHours();
-      var newStartMinutes = newRole.start_time.getMinutes();
-      var newEndHours = newRole.end_time.getHours();
-      var newEndMinutes = newRole.end_time.getMinutes();
-      newRole.start_time = newStartHours + ':' + newStartMinutes + ':' + 00;
-      newRole.end_time = newEndHours + ':' + newEndMinutes + ':' + 00;
-      var startTime = moment(newRole.start_time , "HH:mm:ss");
-      var endTime = moment(newRole.end_time , "HH:mm:ss");
-      var duration = moment.duration(endTime.diff(startTime));
-      
-      newRole.duration = (duration._milliseconds / 60000);
-      console.log('newRole.duration:', newRole.duration);
+      //// ngmodel bound to role, we are changing Date to string so making a copy for database --JONNY
+      var newRole = Object.assign({}, role);
+
+      var startTime = moment(newRole.start_time);
+      var endTime = moment(newRole.end_time);
+
+      newRole.start_time = moment(startTime).format('HH:mm:00');
+      newRole.end_time = moment(endTime).format('HH:mm:00');
+      newRole.duration = endTime.diff(startTime, 'minutes');
+
+      //// duration to be at least 30 min per client request - JONNY \\\\
+      if (newRole.duration < 30) {
+         newRole.duration = 30;
+      }
       
       
       // This is where we make our call to our server

@@ -131,7 +131,7 @@ router.post('/volunteerSignUp', function (req, res) {
 //Add entry to role_user table, update users.has_met_requirement -CHRISTINE
 router.delete('/volunteerRemove', function (req, res) {
   console.log('hit volunteerSignUp post route');
-  var removeEntry = req.body;
+  var removeEntry = req.query;
   console.log("req.body:", req.body);
   if (!req.decodedToken.currentUser.is_admin || !removeEntry.user_id){
     removeEntry.user_id = req.decodedToken.userSQLId;
@@ -141,8 +141,8 @@ router.delete('/volunteerRemove', function (req, res) {
       console.log(err);
       res.sendStatus(500);
     } else {
-      client.query('DELETE FROM role_user WHERE user_id=$1;',
-        [removeEntry.user_id], function (err, result) {
+      client.query('DELETE FROM role_user WHERE user_id=$1 AND role_id=$2;',
+        [removeEntry.user_id, removeEntry.role_id], function (err, result) {
 
           if (err) {
             console.log(err);
@@ -240,6 +240,32 @@ router.put('/editRole/:id', function(req, res) {
       res.sendStatus(500);
     });
   });
+});
+
+router.get('/users/duration', function (req, res) {
+  pool.connect()
+    .then(function (client) {
+      client.query(`SELECT users.id, users.has_met_requirement, SUM(roles.duration) AS signed_up_duration
+        FROM role_user
+        LEFT OUTER JOIN users ON users.id=role_user.user_id
+        RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+        WHERE role_user.user_id = $1
+        GROUP BY users.id;`,
+        [req.decodedToken.userSQLId])
+        .then(function (result) {
+          client.release();
+
+          console.log('getting user: ', result.rows);
+
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          client.release();
+
+          res.sendStatus(500);
+        });
+      });
 });
 
 
