@@ -280,7 +280,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             console.log('currentuser get user', currentUser);
             $location.path('/home');
           }, function (err) {
-            console.log('datafactory addUser error', err);
+            console.log('datafactory signIn error', err);
           });
         });
 

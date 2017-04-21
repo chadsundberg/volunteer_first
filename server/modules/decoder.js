@@ -18,9 +18,7 @@ admin.initializeApp({
 var tokenDecoder = function (req, res, next) {
 
   if (req.headers.id_token) {
-    console.log('req.headers.id_token:', req.headers.id_token);
-    
-    admin.auth().verifyIdToken(req.headers.id_token).then(function (decodedToken) {
+      admin.auth().verifyIdToken(req.headers.id_token).then(function (decodedToken) {
       req.decodedToken = decodedToken;
       pool.connect(function (err, client, done) {
         var firebaseUserEmail = req.decodedToken.email;
