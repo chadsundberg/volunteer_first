@@ -12,7 +12,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     console.log('state changed');
     getUsers();
     getEvents();
-
     getUserData(firebaseUser);
     getCurrentDuration();
   });
@@ -408,10 +407,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             id_token: idToken
           }
         }).then(function (response) {
+          if (response.data[0] && response.data[0].signed_up_duration) {
+
+          
           console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
           currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
           console.log('hihihi currentUser:', currentUser.info);
           return currentUser.info.signed_up_duration
+          }
         }, function (response) {
           console.log('dataFactory getCurrentDuration error:', response);
         });
