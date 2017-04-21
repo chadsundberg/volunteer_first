@@ -67,20 +67,22 @@
         <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
       </div>
 
-      <!-- <p>{{cc.eventList}}</p>
-      <p> {{cc.currentUser}} </p> -->
+      <p>{{cc.eventList}}</p>
+      <p> {{cc.currentUser.info.is_admin}} </p>
+
 
 
 
 
     </div>
+    <div ng-if="cc.currentUser.info.is_admin">
     <button class="btn btn-info"
     ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
     ng-click="cc.clickFn(click)">Export CSV</button>
   </div>
 </div>
-
-
+</div>
+</div>
 <!-- <div class="well">
 <div class="row-fluid">
 <div class="span4">
