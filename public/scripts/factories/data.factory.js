@@ -9,9 +9,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   var eventRoles = { list: [] };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
-    console.log('cal controller state changed');
+    console.log('state changed');
     getUsers();
     getEvents();
+    getCurrentDuration();
     getUserData(firebaseUser);
   });
 
@@ -64,7 +65,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
-              event_id:event.event_id,
+              event_id: event.event_id,
 
               // end: new Date(y, m, 29),
             });
@@ -201,33 +202,33 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   function createUser(newUser) {
     // add user to firebase
     auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
-    .then(function (firebaseUser) {
-      firebaseUser.getToken().then(function (idToken) {
-        $http({
-          method: 'POST',
-          url: '/privateData',
-          headers: { id_token: idToken },
-          data: newUser
-        }).then(function (response) {
-          console.log('addUser ajax response:', response);
-          currentUser.info = response.data;
-          console.log('currentuser create user', currentUser);
+      .then(function (firebaseUser) {
+        firebaseUser.getToken().then(function (idToken) {
+          $http({
+            method: 'POST',
+            url: '/privateData',
+            headers: { id_token: idToken },
+            data: newUser
+          }).then(function (response) {
+            console.log('addUser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser create user', currentUser);
 
-          self.newUser = {};
-          $location.path('/home');
-        }, function (err) {
-          console.log('datafactory addUser error', err);
+            self.newUser = {};
+            $location.path('/home');
+          }, function (err) {
+            console.log('datafactory addUser error', err);
+          });
         });
-      });
 
-    }).catch(function (error) {
-      self.error = error;
-      console.log('addUser catch:', error);
-    });
+      }).catch(function (error) {
+        self.error = error;
+        console.log('addUser catch:', error);
+      });
   } // ends createUser function
 
 
-//Admin add role to event -CHRISTINE
+  //Admin add role to event -CHRISTINE
   function adminAddRole(role, eventId) {
     console.log(eventId);
     var firebaseUser = auth.$getAuth();
@@ -246,7 +247,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
       //// duration to be at least 30 min per client request - JONNY \\\\
       if (newRole.duration < 30) {
-         newRole.duration = 30;
+        newRole.duration = 30;
       }
 
       // This is where we make our call to our server
@@ -283,26 +284,26 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
   function signIn(email, password) {
     auth.$signInWithEmailAndPassword(email, password)
-    .then(function (firebaseUser) {
-      firebaseUser.getToken().then(function (idToken) {
-        console.log('get user infoz');
-        $http({
-          method: 'GET',
-          url: '/privateData/getUser',
-          headers: { id_token: idToken }
-        }).then(function (response) {
-          console.log('getuser ajax response:', response);
-          currentUser.info = response.data;
-          console.log('currentuser get user', currentUser);
-          $location.path('/home');
-        }, function (err) {
-          console.log('datafactory addUser error', err);
+      .then(function (firebaseUser) {
+        firebaseUser.getToken().then(function (idToken) {
+          console.log('get user infoz');
+          $http({
+            method: 'GET',
+            url: '/privateData/getUser',
+            headers: { id_token: idToken }
+          }).then(function (response) {
+            console.log('getuser ajax response:', response);
+            currentUser.info = response.data;
+            console.log('currentuser get user', currentUser);
+            $location.path('/home');
+          }, function (err) {
+            console.log('datafactory addUser error', err);
+          });
         });
-      });
 
-    }).catch(function (error) {
-      console.log('signin with email error', error);
-    });
+      }).catch(function (error) {
+        console.log('signin with email error', error);
+      });
   }
 
   function getUserData(firebaseUser) {
@@ -332,17 +333,17 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     // var firebaseUser = auth.$getAuth();
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
-    if(firebaseUser) {
+    if (firebaseUser) {
       // This is where we make our call to our server
-      firebaseUser.getToken().then(function(idToken){
+      firebaseUser.getToken().then(function (idToken) {
         $http({
           method: 'DELETE',
           url: '/privateData/eventRoles/' + roleId,
           headers: {
             id_token: idToken
           },
-          params: {roleId: roleId}
-        }).then(function(response) {
+          params: { roleId: roleId }
+        }).then(function (response) {
           // console.log(response.data);
           getEventRoles(eventId);
         });
@@ -352,46 +353,73 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }
 
-    function editRole(role, eventId) {
-      console.log('factory getting place:', role);
-      var firebaseUser = auth.$getAuth();
-      // auth.$onAuthStateChanged(function(firebaseUser){
-      // firebaseUser will be null if not logged in
-      if(firebaseUser) {
-        var editedRole = Object.assign({}, role);
+  function editRole(role, eventId) {
+    console.log('factory getting place:', role);
+    var firebaseUser = auth.$getAuth();
+    // auth.$onAuthStateChanged(function(firebaseUser){
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      var editedRole = Object.assign({}, role);
 
-        var startTime = moment(editedRole.start_time);
-        var endTime = moment(editedRole.end_time);
+      var startTime = moment(editedRole.start_time);
+      var endTime = moment(editedRole.end_time);
 
-        editedRole.start_time = moment(startTime).format('HH:mm:00');
-        editedRole.end_time = moment(endTime).format('HH:mm:00');
-        editedRole.duration = endTime.diff(startTime, 'minutes');
+      editedRole.start_time = moment(startTime).format('HH:mm:00');
+      editedRole.end_time = moment(endTime).format('HH:mm:00');
+      editedRole.duration = endTime.diff(startTime, 'minutes');
 
-        //// duration to be at least 30 min per client request - JONNY \\\\
-        if (editedRole.duration < 30) {
-           editedRole.duration = 30;
-        }
-        // This is where we make our call to our server
-        firebaseUser.getToken().then(function(idToken){
-          $http({
-            method: 'PUT',
-            url: '/privateData/editRole/' + role.id,
-            headers: {
-              id_token: idToken
-            },
-            data: editedRole
-          }).then(function(response) {
-            console.log(response.data);
-            getEvents();
-            getEventRoles(eventId);
-            // reviewUpdateDetails.list = response.data;
-          });
+      //// duration to be at least 30 min per client request - JONNY \\\\
+      if (editedRole.duration < 30) {
+        editedRole.duration = 30;
+      }
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'PUT',
+          url: '/privateData/editRole/' + role.id,
+          headers: {
+            id_token: idToken
+          },
+          data: editedRole
+        }).then(function (response) {
+          console.log(response.data);
+          getEvents();
+          getEventRoles(eventId);
+          // reviewUpdateDetails.list = response.data;
+        });
       });
     } else {
       console.log('Not logged in or not authorized.');
       self.secretData = "Log in to search for date activities.";
     }
   }
+
+  function getCurrentDuration() {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/users/duration',
+          headers: {
+            id_token: idToken
+          }
+        }).then(function (response) {
+          console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
+          currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
+          console.log('hihihi currentUser:', currentUser.info);
+          return currentUser.info.signed_up_duration
+        }, function (response) {
+          console.log('dataFactory getCurrentDuration error:', response);
+        });
+      });
+    } else {
+      console.log('get users no firebase user');
+
+    }
+  }// end getUsers()
 
   return {
     eventList: eventList,
@@ -407,6 +435,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
+    getUserDuration = getUserDuration,
 
     // CHRISTINE exports
     getEventRoles: getEventRoles,
