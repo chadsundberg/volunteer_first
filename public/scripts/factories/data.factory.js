@@ -12,8 +12,9 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     console.log('state changed');
     getUsers();
     getEvents();
-    getCurrentDuration();
+
     getUserData(firebaseUser);
+    getCurrentDuration();
   });
 
   function getUsers() {
@@ -435,7 +436,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
-    getUserDuration = getUserDuration,
+    // getUserDuration = getUserDuration,
 
     // CHRISTINE exports
     getEventRoles: getEventRoles,
