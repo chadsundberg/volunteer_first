@@ -100,16 +100,16 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           for (i = 0; i < eventRoles.list.length; i++) {
             var newStartTime = eventRoles.list[i].start_time.split(':', 3);
             var newEndTime = eventRoles.list[i].end_time.split(':', 3);
-            
-          
+
+
             var newStartHours = newStartTime[0];
             var newStartMinutes = newStartTime[1];
             var newStartSeconds = newStartTime[2];
             var newEndHours = newEndTime[0];
             var newEndMinutes = newEndTime[1];
             var newEndSeconds = newEndTime[2];
-            
-           
+
+
             eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
             eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
           }
@@ -238,8 +238,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       if (newRole.duration < 30) {
          newRole.duration = 30;
       }
-      
-      
+
+
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -352,6 +352,19 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       // auth.$onAuthStateChanged(function(firebaseUser){
       // firebaseUser will be null if not logged in
       if(firebaseUser) {
+        var editedRole = Object.assign({}, role);
+
+        var startTime = moment(editedRole.start_time);
+        var endTime = moment(editedRole.end_time);
+
+        editedRole.start_time = moment(startTime).format('HH:mm:00');
+        editedRole.end_time = moment(endTime).format('HH:mm:00');
+        editedRole.duration = endTime.diff(startTime, 'minutes');
+
+        //// duration to be at least 30 min per client request - JONNY \\\\
+        if (editedRole.duration < 30) {
+           editedRole.duration = 30;
+        }
         // This is where we make our call to our server
         firebaseUser.getToken().then(function(idToken){
           $http({
@@ -360,7 +373,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             headers: {
               id_token: idToken
             },
-            data: role
+            data: editedRole
           }).then(function(response) {
             console.log(response.data);
             getEvents();
