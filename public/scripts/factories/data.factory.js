@@ -14,7 +14,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getEvents();
     getCurrentDuration();
     getUserData(firebaseUser);
-    
   });
 
   function getUsers() {
@@ -114,6 +113,15 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
             eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
             eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+
+
+            if (eventRoles.list[i].userid) {
+              eventRoles.list[i].userObject = {
+                id: eventRoles.list[i].userid,
+                first_name: eventRoles.list[i].first_name,
+                last_name: eventRoles.list[i].last_name
+              };
+            }
           }
         });
       });
@@ -226,6 +234,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
+
       //// ngmodel bound to role, we are changing Date to string so making a copy for database --JONNY
       var newRole = Object.assign({}, role);
 
@@ -240,7 +249,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       if (newRole.duration < 30) {
         newRole.duration = 30;
       }
-
 
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
@@ -258,9 +266,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       console.log('no firebase user');
     }
   }
-
-
-
 
   function signOut() {
     auth.$signOut().then(function () {
@@ -354,6 +359,19 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     // auth.$onAuthStateChanged(function(firebaseUser){
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
+      var editedRole = Object.assign({}, role);
+
+      var startTime = moment(editedRole.start_time);
+      var endTime = moment(editedRole.end_time);
+
+      editedRole.start_time = moment(startTime).format('HH:mm:00');
+      editedRole.end_time = moment(endTime).format('HH:mm:00');
+      editedRole.duration = endTime.diff(startTime, 'minutes');
+
+      //// duration to be at least 30 min per client request - JONNY \\\\
+      if (editedRole.duration < 30) {
+        editedRole.duration = 30;
+      }
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -362,7 +380,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           headers: {
             id_token: idToken
           },
-          data: role
+          data: editedRole
         }).then(function (response) {
           console.log(response.data);
           getEvents();

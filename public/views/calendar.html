@@ -2,8 +2,10 @@
   <div class="center-block">
     <img src="../assets/betshalomlogo.png">
 
-    <div class = "col-sm-offset-8 col-sm-2"><uib-progressbar class="progress" max="150" value="cc.currentUser.info.signed_up_duration || 0"></uib-progressbar>
-      <input type="button" class="btn btn-default" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';" value="Thanks for volunteering!" />
+    <div class="col-sm-offset-8 col-sm-2">
+      <uib-progressbar class="progress" max="150" value="cc.currentUser.info.signed_up_duration || 0"></uib-progressbar>
+      <input type="button" class="btn btn-default" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+        value="Thanks for volunteering!" />
     </div>
 
   </div>
@@ -28,19 +30,15 @@
           </li>
           <li>
             <div class="alert alert-danger">
-            <i class="fa fa-handshake-o" aria-hidden="true"></i>
-              <b> Lobby Greeter</b><br>
-              (Wednesday) = 135 Minutes<br>
-              (Sunday) = 170 Minutes
+              <i class="fa fa-handshake-o" aria-hidden="true"></i>
+              <b> Lobby Greeter</b><br> (Wednesday) = 135 Minutes<br> (Sunday) = 170 Minutes
             </div>
           </li>
           <li>
 
             <div class="alert alert-warning">
               <i class="fa fa-phone-square" aria-hidden="true"></i>
-              <b> Front Desk</b><br>
-              (Wednesday) = 135 Minutes <br>
-              (Sunday) = 170 Minutes
+              <b> Front Desk</b><br> (Wednesday) = 135 Minutes <br> (Sunday) = 170 Minutes
             </div>
           </li>
         </ul>
@@ -56,31 +54,32 @@
           <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">AgendaWeek</button>
           <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
         </div> -->
+        </div>
+
+        <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
+        <div id="modalId"></div>
+
+
+
+        <div ng-repeat="event in cc.eventList.list">
+          <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
+        </div>
+
+        <p>{{cc.eventList}}</p>
+        <p> {{cc.currentUser.info.is_admin}} </p>
+
+
+
+
+
       </div>
-
-      <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
-      <div id="modalId" ></div>
-
-
-
-      <div ng-repeat="event in cc.eventList.list">
-        <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
+      <div ng-if="cc.currentUser.info.is_admin">
+        <button class="btn btn-info" ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}"
+          decimal-separator="{{decimalSeparator}}" ng-click="cc.clickFn(click)">Export CSV</button>
       </div>
-
-      <p>{{cc.eventList}}</p>
-      <p> {{cc.currentUser}} </p>
-
-
-
-
     </div>
-    <button class="btn btn-info"
-    ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
-    ng-click="cc.clickFn(click)">Export CSV</button>
   </div>
 </div>
-
-
 <!-- <div class="well">
 <div class="row-fluid">
 <div class="span4">
