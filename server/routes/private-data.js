@@ -77,12 +77,7 @@ router.get('/users', function (req, res) {
 router.get('/getUser', function (req, res) {
   pool.connect()
     .then(function (client) {
-      client.query(`SELECT users.id, users.first_name, users.last_name, users.email, users.is_admin, SUM(roles.duration) AS signed_up_duration
-        FROM role_user
-        LEFT OUTER JOIN users ON users.id=role_user.user_id
-        RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
-        WHERE role_user.user_id = $1
-        GROUP BY users.id;`,
+      client.query('SELECT * FROM users WHERE id = $1',
         [req.decodedToken.userSQLId],
         function (err, result) {
           res.send(result.rows[0]);
@@ -260,7 +255,7 @@ router.get('/users/duration', function (req, res) {
         .then(function (result) {
           client.release();
 
-          console.log('getting user: ', result.rows);
+          console.log('getting userduration: ', result.rows);
 
           res.send(result.rows);
         })
