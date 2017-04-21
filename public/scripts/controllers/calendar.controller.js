@@ -1,4 +1,4 @@
-app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", "$scope", function(DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location, $scope) {
+app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", "$scope", function (DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location, $scope) {
   console.log('Calendar Controller was loaded');
   var auth = $firebaseAuth();
   var self = this;
@@ -6,17 +6,57 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   var d = date.getDate();
   var m = date.getMonth();
   var y = date.getFullYear();
+  self.users = { list: [] };
+  self.eventList = { list: [[]] };
+  self.eventRoles = { list: [[]] };
+  self.currentUser = {};
+
+  auth.$onAuthStateChanged(function (firebaseUser) {
+    console.log('cal controller state changed');
+    DataFactory.getUsers().then(function (response) {
+      console.log('ccGetUsers response:', response);
+      
+      self.users.list = response.data;
+    });
+    DataFactory.getEvents().then(function (response) {
+      console.log(response.data);
+      self.eventList.list[0] = [];
+      response.data.forEach(function (event) {
+        self.eventList.list[0].push({
+          title: event.role_title,
+          start: new Date(event.date),
+          role_id: event.role_id,
+          event_id: event.event_id,
+
+          // end: new Date(y, m, 29),
+        });
+      });
+      console.log('events?: ', eventList);
+    });
+    DataFactory.getUserData(firebaseUser).then(function (response) {
+      console.log('getuser ajax response:', response.data);
+      self.currentUser.info = response.data;
+      console.log('currentuser get user', currentUser);
+    }, function (err) {
+      console.log('datafactory addUser error', err);
+    });
+    // DataFactory.getUserDuration(firebaseUser);
+  });
+  self.kitten = 10;
   self.selectedDay = "testing";
 
-  self.eventList = DataFactory.eventList;
-  self.eventId = DataFactory.eventId;
+  self.currentUser = DataFactory.currentUser;
+  // self.eventList = DataFactory.eventList;
   self.eventRoles = DataFactory.eventRoles;
+  self.eventId = DataFactory.eventId;
+  // self.users = DataFactory.users;
+
   self.getEvents = DataFactory.getEvents;
-  self.users = DataFactory.users;
+
   self.getUsers = DataFactory.getUsers;
   self.getUserData = DataFactory.getUserData;
   self.volunteerSignUp = DataFactory.volunteerSignUp;
-  self.currentUser = DataFactory.currentUser;
+
   self.getEventRoles = DataFactory.getEventRoles;
 
 
@@ -30,40 +70,40 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   // });
 
   //export to CSV
-self.filename = "test";
-  self.getArray = [{a: 1, b:2}, {a:3, b:4}];
+  self.filename = "test";
+  self.getArray = [{ a: 1, b: 2 }, { a: 3, b: 4 }];
 
-  self.clickFn = function(click) {
-  console.log("click click click");
-};
+  self.clickFn = function (click) {
+    console.log("click click click");
+  };
 
 
-//Day click for Admin
-self.alertDayClick = function( date, jsEvent, view){
-  // self.addModal = (date.title + ' was clicked ');
-  console.log("day click works ", date);
-  self.selectedDay = "Open Day!";
-  ModalDataFactory.currentEventClicked = date;
-  self.open();
+  //Day click for Admin
+  self.alertDayClick = function (date, jsEvent, view) {
+    // self.addModal = (date.title + ' was clicked ');
+    console.log("day click works ", date);
+    self.selectedDay = "Open Day!";
+    ModalDataFactory.currentEventClicked = date;
+    self.open();
 
-};
+  };
 
-//Event click for User
-self.eventOnClick = function( date, jsEvent, view){
-  console.log(date.title + ' was clicked ');
-  console.log(jsEvent);
-  console.log('view, date, jsEvent:', view, date, jsEvent);
-  self.selectedDay = "Event!";
-  ModalDataFactory.currentEventClicked = date;
-  self.open();
-};
+  //Event click for User
+  self.eventOnClick = function (date, jsEvent, view) {
+    console.log(date.title + ' was clicked ');
+    console.log(jsEvent);
+    console.log('view, date, jsEvent:', view, date, jsEvent);
+    self.selectedDay = "Event!";
+    ModalDataFactory.currentEventClicked = date;
+    self.open();
+  };
 
   //Modal
   self.open = function (size, parentSelector) {
     console.log('opening modal');
     var parentElem =
-    parentSelector ?
-    angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
+      parentSelector ?
+        angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: self.animationsEnabled,
       ariaLabelledBy: 'modal-title',
@@ -92,10 +132,10 @@ self.eventOnClick = function( date, jsEvent, view){
 
   /* config object for Calendar */
   self.uiConfig = {
-    calendar:{
+    calendar: {
       height: 850,
       editable: true,
-      header:{
+      header: {
         left: 'month basicWeek basicDay agendaWeek agendaDay',
         center: 'title',
         right: 'today prev,next'
@@ -108,15 +148,15 @@ self.eventOnClick = function( date, jsEvent, view){
     }
   };
 
-    // self.eventRender = function(event, element, view) {
-    //   self.currentEvent = event;
-    // };
+  // self.eventRender = function(event, element, view) {
+  //   self.currentEvent = event;
+  // };
 
 
 
   // };
 
-self.eventSources = self.eventList.list;
+  self.eventSources = self.eventList.list;
 
 
 }]);
