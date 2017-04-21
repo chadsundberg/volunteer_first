@@ -229,22 +229,34 @@ router.delete('/eventRoles/:id', function(req, res) {
 });
 
 router.put('/editRole/:id', function(req, res) {
-  var roleId = req.params.id;
-  var role = req.body;
-  console.log('Updating role: ', roleId, role);
-  pool.connect()
-  .then(function (client) {
-    client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
-    [role.role_title, role.start_time, role.end_time, roleId])
-    .then(function (result) {
-      client.release();
-      res.sendStatus(200);
-    })
-    .catch(function (err) {
-      console.log('error on UPDATE', err);
-      res.sendStatus(500);
-    });
-  });
+ var roleId = req.params.id;
+ var role = req.body;
+ console.log('Updating role: ', roleId, role);
+ pool.connect()
+ .then(function (client) {
+   client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
+   [role.role_title, role.start_time, role.end_time, roleId])
+   .then(function (result) {
+     client.release();
+     pool.connect()
+     .then(function (client) {
+       client.query('UPDATE role_user SET user_id = $1 WHERE role_id = $2',
+       [role.userObject.id, roleId])
+       .then(function (result) {
+         client.release();
+         res.sendStatus(200);
+       })
+       .catch(function (err) {
+         console.log('error on UPDATE', err);
+         res.sendStatus(500);
+       });
+     });
+   })
+   .catch(function (err) {
+     console.log('error on UPDATE', err);
+     res.sendStatus(500);
+   });
+ });
 });
 
 router.get('/users/duration', function (req, res) {

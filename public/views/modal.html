@@ -66,7 +66,7 @@
           <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
         </td>
         <td>
-          {{$ctrl}}
+        
           <!-- (user.first_name + ' ' + user.last_name) -->
             <input type="text" ng-model="role.userObject" uib-typeahead="user as (user.first_name + ' ' + user.last_name) for user in $ctrl.users | filter:$viewValue | limitTo:8">
         </td>
