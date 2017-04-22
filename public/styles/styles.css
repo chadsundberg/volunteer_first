@@ -47,15 +47,48 @@ body {
   height: 280px;
 }*/
 
+tr:first-child > td > .fc-day-grid-event{
+  margin-top: 0px;
+}
+tr:first-child > td > .fc-day-grid-event:before{
+  margin-top: 0px;
+  content: "hello";
+}
+
+.fc-day-grid-event{
+  margin: 0px;
+}
+
 .fc-event, .fc-event-dot{
   background-color: transparent;
 }
+
 .fc-event, .fc-event:hover, .ui-widget .fc-event{
-  color:navy;
+  background-color: navy;
 }
+
 .fc-event{
-  border: 1px solid transparent;
+  border: 3px solid navy;
+  border-radius: 0px;
 }
+
+
+/*.fc-event, .fc-event-dot{
+  background-color: transparent;
+}
+
+.fc-event, .fc-event:hover, .ui-widget .fc-event{
+  background-color: transparent;
+}
+
+.fc-event{
+  border: 3px solid transparent;
+  color:grey;
+  font-style: italic;
+}*/
+
+
+
 .fc-unthemed td.fc-today {
   background: LightCyan ;
   border: -3px solid transparent;
