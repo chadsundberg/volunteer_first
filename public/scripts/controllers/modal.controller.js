@@ -44,7 +44,6 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.cancel = function () {
     $ctrl.getUsers();
     $ctrl.getEvents();
-    $ctrl.getCurrentDuration();
     $uibModalInstance.dismiss('cancel');
   };
 
