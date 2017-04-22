@@ -47,15 +47,42 @@ body {
   height: 280px;
 }*/
 
+tr:first-child > td > .fc-day-grid-event{
+  margin-top: 0px;
+}
+/*tr:first-child > td > .fc-day-grid-event:before{
+  margin-top: 0px;
+  content: "hello";
+}*/
+
+.fc-time{
+  display:none;
+}
+
+.fc-day-grid-event{
+  margin: 0px;
+}
+
 .fc-event, .fc-event-dot{
   background-color: transparent;
 }
+
 .fc-event, .fc-event:hover, .ui-widget .fc-event{
-  color:navy;
+  background-color: navy;
 }
+
 .fc-event{
-  border: 1px solid transparent;
+  border: 3px solid navy;
+  border-radius: 0px;
 }
+
+
+.fc-day-grid-container.fc-scroller {
+    height: auto!important;
+    overflow-y: auto;
+}
+
+
 .fc-unthemed td.fc-today {
   background: LightCyan ;
   border: -3px solid transparent;
