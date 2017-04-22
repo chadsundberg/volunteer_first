@@ -414,6 +414,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
           console.log('hihihi currentUser:', currentUser.info);
           return currentUser.info.signed_up_duration
+          } else {
+            return currentUser.info.signed_up_duration = 0;
           }
         }, function (response) {
           console.log('dataFactory getCurrentDuration error:', response);
@@ -439,7 +441,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
-    // getUserDuration = getUserDuration,
+    getCurrentDuration: getCurrentDuration,
 
     // CHRISTINE exports
     getEventRoles: getEventRoles,

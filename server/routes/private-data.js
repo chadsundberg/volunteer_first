@@ -61,8 +61,6 @@ router.get('/users', function (req, res) {
         .then(function (result) {
           client.release();
 
-          console.log('getting user: ', result.rows);
-
           res.send(result.rows);
         })
         .catch(function (err) {
