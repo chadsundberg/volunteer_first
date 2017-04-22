@@ -5,15 +5,16 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   var auth = $firebaseAuth();
   var eventList = { list: [[]] };
   var users = { list: [] };
-  var currentUser = {};
+  var currentUser = { info: {} };
   var eventRoles = { list: [] };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
-    console.log('cal controller state changed');
+    console.log('state changed');
     getUsers();
     getEvents();
     getUserData(firebaseUser);
- });
+    getCurrentDuration();
+  });
 
   function getUsers() {
     var firebaseUser = auth.$getAuth();
@@ -64,7 +65,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
               title: event.role_title,
               start: new Date(event.date),
               role_id: event.role_id,
-              event_id:event.event_id,
+              event_id: event.event_id,
 
               // end: new Date(y, m, 29),
             });
@@ -96,22 +97,31 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           }
         }).then(function (response) {
           eventRoles.list = response.data;
-         //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
+          //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
           for (i = 0; i < eventRoles.list.length; i++) {
             var newStartTime = eventRoles.list[i].start_time.split(':', 3);
             var newEndTime = eventRoles.list[i].end_time.split(':', 3);
-            
-          
+
+
             var newStartHours = newStartTime[0];
             var newStartMinutes = newStartTime[1];
             var newStartSeconds = newStartTime[2];
             var newEndHours = newEndTime[0];
             var newEndMinutes = newEndTime[1];
             var newEndSeconds = newEndTime[2];
-            
-           
+
+
             eventRoles.list[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
             eventRoles.list[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+
+
+            if (eventRoles.list[i].userid) {
+              eventRoles.list[i].userObject = {
+                id: eventRoles.list[i].userid,
+                first_name: eventRoles.list[i].first_name,
+                last_name: eventRoles.list[i].last_name
+              };
+            }
           }
         });
       });
@@ -122,7 +132,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   }//end Get events
 
 
-//add role to user  -- CHRISTINE -- update this
+  //add role to user  -- CHRISTINE -- update this
   function volunteerSignUp(eventId, roleClickedId) {
     console.log('factory userRoleId', roleClickedId);
     var firebaseUser = auth.$getAuth();
@@ -148,7 +158,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     }
   }//End volunteerSignUp(userRoleId)
 
-//remove user from role  -- Melissa
+  //remove user from role  -- Melissa
   function volunteerRemove(eventId, roleClickedId) {
     console.log('factory userRoleId', roleClickedId);
     var firebaseUser = auth.$getAuth();
@@ -159,8 +169,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           method: 'DELETE',
           url: '/privateData/volunteerRemove',
           headers: { id_token: idToken },
-          data: {
-            role_id: roleClickedId,
+          params: {
+            role_id: roleClickedId
           }
         }).then(function (response) {
           getEventRoles(eventId);
@@ -219,11 +229,27 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
 
   //Admin add role to event -CHRISTINE
-  function adminAddRole(newRole, eventId) {
+  function adminAddRole(role, eventId) {
     console.log(eventId);
     var firebaseUser = auth.$getAuth();
     // firebaseUser will be null if not logged in
     if (firebaseUser) {
+
+      //// ngmodel bound to role, we are changing Date to string so making a copy for database --JONNY
+      var newRole = Object.assign({}, role);
+
+      var startTime = moment(newRole.start_time);
+      var endTime = moment(newRole.end_time);
+
+      newRole.start_time = moment(startTime).format('HH:mm:00');
+      newRole.end_time = moment(endTime).format('HH:mm:00');
+      newRole.duration = endTime.diff(startTime, 'minutes');
+
+      //// duration to be at least 30 min per client request - JONNY \\\\
+      if (newRole.duration < 30) {
+        newRole.duration = 30;
+      }
+
       // This is where we make our call to our server
       firebaseUser.getToken().then(function (idToken) {
         $http({
@@ -240,9 +266,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
       console.log('no firebase user');
     }
   }
-
-
-
 
   function signOut() {
     auth.$signOut().then(function () {
@@ -301,34 +324,108 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
         console.log('getuserdata error:', error);
       });
     } else {
-      currentUser.info = null;
+      currentUser.info = {};
     }
   }
 
   function deleteRole(roleId, eventId) {
-      console.log('delete role function getting place:', roleId);
-      // var firebaseUser = auth.$getAuth();
-      var firebaseUser = auth.$getAuth();
-      // firebaseUser will be null if not logged in
-      if(firebaseUser) {
-        // This is where we make our call to our server
-        firebaseUser.getToken().then(function(idToken){
-          $http({
-            method: 'DELETE',
-            url: '/privateData/eventRoles/' + roleId,
-            headers: {
-              id_token: idToken
-            },
-            params: {roleId: roleId}
-          }).then(function(response) {
-            // console.log(response.data);
-            getEventRoles(eventId);
-          });
+    console.log('delete role function getting place:', roleId);
+    // var firebaseUser = auth.$getAuth();
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'DELETE',
+          url: '/privateData/eventRoles/' + roleId,
+          headers: {
+            id_token: idToken
+          },
+          params: { roleId: roleId }
+        }).then(function (response) {
+          // console.log(response.data);
+          getEventRoles(eventId);
         });
-      } else {
-        console.log('Not logged in or not authorized.');
-      }
+      });
+    } else {
+      console.log('Not logged in or not authorized.');
     }
+  }
+
+  function editRole(role, eventId) {
+    console.log('factory getting place:', role);
+    var firebaseUser = auth.$getAuth();
+    // auth.$onAuthStateChanged(function(firebaseUser){
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      var editedRole = Object.assign({}, role);
+
+      var startTime = moment(editedRole.start_time);
+      var endTime = moment(editedRole.end_time);
+
+      editedRole.start_time = moment(startTime).format('HH:mm:00');
+      editedRole.end_time = moment(endTime).format('HH:mm:00');
+      editedRole.duration = endTime.diff(startTime, 'minutes');
+
+      //// duration to be at least 30 min per client request - JONNY \\\\
+      if (editedRole.duration < 30) {
+        editedRole.duration = 30;
+      }
+      // This is where we make our call to our server
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'PUT',
+          url: '/privateData/editRole/' + role.id,
+          headers: {
+            id_token: idToken
+          },
+          data: editedRole
+        }).then(function (response) {
+          console.log(response.data);
+          getEvents();
+          getEventRoles(eventId);
+          // reviewUpdateDetails.list = response.data;
+        });
+      });
+    } else {
+      console.log('Not logged in or not authorized.');
+      self.secretData = "Log in to search for date activities.";
+    }
+  }
+
+  function getCurrentDuration() {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/users/duration',
+          headers: {
+            id_token: idToken
+          }
+        }).then(function (response) {
+          if (response.data[0] && response.data[0].signed_up_duration) {
+
+          
+          console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
+          currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
+          console.log('hihihi currentUser:', currentUser.info);
+          return currentUser.info.signed_up_duration
+          } else {
+            return currentUser.info.signed_up_duration = 0;
+          }
+        }, function (response) {
+          console.log('dataFactory getCurrentDuration error:', response);
+        });
+      });
+    } else {
+      console.log('get users no firebase user');
+
+    }
+  }// end getUsers()
 
   return {
     eventList: eventList,
@@ -344,12 +441,16 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
+    getCurrentDuration: getCurrentDuration,
 
     // CHRISTINE exports
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
-    deleteRole: deleteRole
+    deleteRole: deleteRole,
+
+    // Chad exports
+    editRole: editRole
   };
 
 }]);

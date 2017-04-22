@@ -37,7 +37,7 @@
 
       </tbody>
     </table>
-    <button class="btn" ng-click="$ctrl.clickSaveSignUp()">Save </button>
+    <button class="btn" ng-click="$ctrl.exitModal()">Save </button>
   </div>
   </div><!-- END USER MODAL -->
 
@@ -58,17 +58,19 @@
     </thead>
     <tbody>
       <tr ng-repeat="role in $ctrl.eventRoles.list">
-        <td scope="row">
+        <td>
           <input ng-model="role.role_title" type="text">
         </td>
-        <td scope="row">
+        <td>
           <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
         </td>
-        <td scope="row">
-          <input ng-model="role.first_name" type="text"><input type="text"  ng-model="role.last_name" >
+        <td>
+
+          <!-- (user.first_name + ' ' + user.last_name) -->
+            <input type="text" ng-model="role.userObject" uib-typeahead="user as (user.first_name + ' ' + user.last_name) for user in $ctrl.users | filter:$viewValue | limitTo:8">
         </td>
         <td>
-          <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Save</button>
+          <button class="btn btn-success" type="button" ng-click="$ctrl.editRole(role, $ctrl.eventId)">Save</button>
         </td>
         <td>
           <div class="btn-group" role="group" aria-label="Basic example">
@@ -93,6 +95,13 @@
         </tr>
       </tbody>
     </table>
+
+
+
+
+
+
+
   </div>
 </div><!-- END ADMIN MODAL -->
 
