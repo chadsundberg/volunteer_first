@@ -1,4 +1,4 @@
-app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", function(DataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document) {
+app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$location", "$firebaseAuth", "$http", "$uibModal", "$log", "$document", "$location", "$scope", function (DataFactory, ModalDataFactory, $location, $firebaseAuth, $http, $uibModal, $log, $document, $location, $scope) {
   console.log('Calendar Controller was loaded');
   var auth = $firebaseAuth();
   var self = this;
@@ -8,40 +8,62 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
   var y = date.getFullYear();
   self.selectedDay = "testing";
 
-  //Example events for calendar
-  self.eventSources = [[
-    {title: 'All Day Event',start: new Date(y, m, 1)},
-    {title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-    {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-    {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-    {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-    {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-  ]];
+  self.eventList = DataFactory.eventList;
+  self.eventId = DataFactory.eventId;
+  self.eventRoles = DataFactory.eventRoles;
+  self.getEvents = DataFactory.getEvents;
+  self.users = DataFactory.users;
+  self.getUsers = DataFactory.getUsers;
+  self.getUserData = DataFactory.getUserData;
+  self.volunteerSignUp = DataFactory.volunteerSignUp;
+  self.currentUser = DataFactory.currentUser;
+  self.getEventRoles = DataFactory.getEventRoles;
+
+
+
+  // state change / refresh
+  //  auth.$onAuthStateChanged(function (firebaseUser) {
+  //    console.log('cal controller state changed');
+  //   DataFactory.getUsers();
+  //   DataFactory.getEvents();
+  //   DataFactory.getUserData(firebaseUser);
+  // });
+
+  //export to CSV
+  self.filename = "test";
+  self.getArray = [{ a: 1, b: 2 }, { a: 3, b: 4 }];
+
+  self.clickFn = function (click) {
+    console.log("click click click");
+  };
+
 
   //Day click for Admin
-  self.alertDayClick = function( date, jsEvent, view){
-    self.addModal = (date.title + ' was clicked ');
+  self.alertDayClick = function (date, jsEvent, view) {
+    // self.addModal = (date.title + ' was clicked ');
     console.log("day click works ", date);
     self.selectedDay = "Open Day!";
+    ModalDataFactory.currentEventClicked = date;
     self.open();
+
   };
 
   //Event click for User
-  self.eventOnClick = function( date, jsEvent, view){
+  self.eventOnClick = function (date, jsEvent, view) {
     console.log(date.title + ' was clicked ');
     console.log(jsEvent);
-    console.log(view);
+    console.log('view, date, jsEvent:', view, date, jsEvent);
     self.selectedDay = "Event!";
+    ModalDataFactory.currentEventClicked = date;
     self.open();
   };
-
 
   //Modal
   self.open = function (size, parentSelector) {
     console.log('opening modal');
     var parentElem =
-    parentSelector ?
-    angular.element($document[0].querySelector('.thing ' + parentSelector)) : undefined;
+      parentSelector ?
+        angular.element($document[0].querySelector('.modalId ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: self.animationsEnabled,
       ariaLabelledBy: 'modal-title',
@@ -49,15 +71,15 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
       templateUrl: 'views/modal.html',
       controller: 'ModalInstanceCtrl',
       controllerAs: '$ctrl',
-      size: size,
+      size: 'lg',
       appendTo: parentElem,
-      // replace this with event data
       resolve: {
         title: function () {
-          return self.selectedDay;
+          return self.events;
         }
       }
     });
+
 
     modalInstance.result.then(function (selectedItem) {
       $ctrl.selected = selectedItem;
@@ -67,12 +89,13 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
   };
   //End Modal
 
+
   /* config object for Calendar */
   self.uiConfig = {
-    calendar:{
-      height: 450,
+    calendar: {
+      height: 850,
       editable: true,
-      header:{
+      header: {
         left: 'month basicWeek basicDay agendaWeek agendaDay',
         center: 'title',
         right: 'today prev,next'
@@ -85,6 +108,15 @@ app.controller("CalendarController", ["DataFactory", "$location", "$firebaseAuth
     }
   };
 
+  // self.eventRender = function(event, element, view) {
+  //   self.currentEvent = event;
+  // };
 
-  // self.eventList = DataFactory.allEvents;
+
+
+  // };
+
+  self.eventSources = self.eventList.list;
+
+
 }]);

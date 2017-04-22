@@ -4,60 +4,45 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.user = {};
   self.newUser = {};
   self.forgetfulUser = {};
+  self.currentUser = DataFactory.currentUser;
+  self.firebaseUser = {};
+
+  auth.$onAuthStateChanged(function (firebaseUser) {
+    console.log('resetting user login controller');
+
+    self.userIsLoggedIn = firebaseUser !== null;
+    self.userIsLoggedOut = firebaseUser === null;
+  });
 
 
-  // This code runs whenever the user logs in
   self.createUser = function () {
-    console.log('self.newUser:', self.newUser);
-
-    auth.$createUserWithEmailAndPassword(self.newUser.email, self.newUser.password)
-      .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        // todo: SQL add user with self.names
-        DataFactory.addUser(self.newUser);
-        self.newUser = {};
-
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.newUser.email);
-        $location.path('/home');
-      }).catch(function (error) {
-        self.error = error;
-      });
+    var inpObj = document.getElementById("newUserEmail");
+    if (inpObj.checkValidity() === false) {
+      document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
+    } else {
+      DataFactory.createUser(self.newUser);
+    }
   };
 
   self.signIn = function () {
     console.log('self.user:', self.user);
-
-    auth.$signInWithEmailAndPassword(self.user.email, self.user.password)
-      .then(function (firebaseUser) {
-        console.log('firebaseUser:', firebaseUser);
-        // todo: SQL add user with self.names
-        self.message = "User created with uid: " + firebaseUser.uid;
-        console.log("Firebase Authenticated as: ", firebaseUser.email);
-        $location.path('/home');
-      }).catch(function (error) {
-        self.error = error;
-      });
+    DataFactory.signIn(self.user.email, self.user.password);
   };
 
+
   self.resetPassword = function () {
-    auth.$sendPasswordResetEmail(self.forgetfulUser.email).then(function () {
-      console.log("Password reset email sent successfully!");
-    }).catch(function (error) {
-      console.error("Error: ", error);
-    });
+    DataFactory.resetPassword(self.forgetfulUser.email);
   };
 
   // This code runs when the user logs out
   self.signOut = function () {
-    auth.$signOut().then(function () {
-      console.log('Logging the user out!');
-      $location.path('/');
-    });
+    DataFactory.signOut();
   };
 
-  auth.$onAuthStateChanged(function (firebaseUser) {
-    self.userIsLoggedIn = firebaseUser !== null;
-    self.userIsLoggedOut = firebaseUser === null;
-  });
+
+
 }]);
+
+
+////// TODO: handle self.userIsLoggedIn/Out for nav bar hide ////// --from: jonny--
+

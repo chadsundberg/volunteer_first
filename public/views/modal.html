@@ -1,1 +1,109 @@
-{{$ctrl.message}}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>hh</title>
+</head>
+<body>
+
+  <!-- USER MODAL -->
+<div ng-if="!$ctrl.currentUser.info.is_admin">
+  <div class="modal-container" id="signupModal">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Volunteer Opportunity</th>
+          <th>Time</th>
+          <th>Sign Up</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{role}}
+        <tr ng-repeat="role in $ctrl.eventRoles.list">
+          <td scope="row">{{role.role_title}}</td>
+          <td scope="row">{{role.start_time | date:'h:mm a'}} - {{role.end_time | date:'h:mm a'}}</td>
+          <td>
+            <div ng-if="role.userid">
+              <button class="btn btn-warning" type="button" ng-if="$ctrl.currentUser.info.id==role.userid"  ng-click="$ctrl.clickRemove(role.id)">Remove Me</button>
+            </div>
+            {{role.first_name}} {{role.last_name}}
+            <div ng-if="!role.userid">
+              <button class="btn btn-success" type="button" ng-click="$ctrl.clickSaveSignUp(role.id)">Sign Up</button>
+            </div>
+            <div>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <button class="btn" ng-click="$ctrl.exitModal()">Save </button>
+  </div>
+  </div><!-- END USER MODAL -->
+
+
+
+<!-- ADMIN MODAL  -->
+<div ng-if="$ctrl.currentUser.info.is_admin">
+<div class="modal-container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Volunteer Opportunity</th>
+        <th>Start Time - End Time</th>
+        <th>Name</th>
+        <th>Save Role</th>
+        <th>Delete Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="role in $ctrl.eventRoles.list">
+        <td>
+          <input ng-model="role.role_title" type="text">
+        </td>
+        <td>
+          <input type="time" ng-model="role.start_time" >-<input type="time"  ng-model="role.end_time" >
+        </td>
+        <td>
+
+          <!-- (user.first_name + ' ' + user.last_name) -->
+            <input type="text" ng-model="role.userObject" uib-typeahead="user as (user.first_name + ' ' + user.last_name) for user in $ctrl.users | filter:$viewValue | limitTo:8">
+        </td>
+        <td>
+          <button class="btn btn-success" type="button" ng-click="$ctrl.editRole(role, $ctrl.eventId)">Save</button>
+        </td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button class="btn btn-danger" type="button" ng-click="$ctrl.deleteRole(role.id, $ctrl.eventId)">Delete</button>
+          </div>
+        </td>
+      </tr>
+      <!-- Add new role row  -->
+      <tr>
+        <td scope="row">
+          <input ng-model="$ctrl.newRole.role_title" type="text">
+        </td>
+        <td scope="row">
+          <input ng-model="$ctrl.newRole.start_time" type="time">-<input ng-model="$ctrl.newRole.end_time" type="time"></td>
+          <td>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button class="btn btn-primary" ng-click="$ctrl.adminAddRole($ctrl.newRole, $ctrl.eventId)">Add Role </button>
+            </div>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+  </div>
+</div><!-- END ADMIN MODAL -->
+
+</body>
+</html>
