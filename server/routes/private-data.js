@@ -43,7 +43,6 @@ router.get('/eventRoles/:id', function (req, res) {
         [eventId,])
         .then(function (result) {
           client.release();
-          console.log(result.rows);
           res.send(result.rows);
         })
         .catch(function (err) {
