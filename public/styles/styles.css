@@ -50,9 +50,13 @@ body {
 tr:first-child > td > .fc-day-grid-event{
   margin-top: 0px;
 }
-tr:first-child > td > .fc-day-grid-event:before{
+/*tr:first-child > td > .fc-day-grid-event:before{
   margin-top: 0px;
   content: "hello";
+}*/
+
+.fc-time{
+  display:none;
 }
 
 .fc-day-grid-event{
@@ -73,20 +77,10 @@ tr:first-child > td > .fc-day-grid-event:before{
 }
 
 
-/*.fc-event, .fc-event-dot{
-  background-color: transparent;
+.fc-day-grid-container.fc-scroller {
+    height: auto!important;
+    overflow-y: auto;
 }
-
-.fc-event, .fc-event:hover, .ui-widget .fc-event{
-  background-color: transparent;
-}
-
-.fc-event{
-  border: 3px solid transparent;
-  color:grey;
-  font-style: italic;
-}*/
-
 
 
 .fc-unthemed td.fc-today {
