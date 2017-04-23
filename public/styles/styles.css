@@ -1,3 +1,31 @@
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+/*progress bar*/
+.progress{
+  background-color: white;
+  margin: 0 auto;
+  text-align: center;
+  border:2px solid rgb(0, 122, 255);
+}
+
+.progress-bar {
+  background-color: #62aeff;
+  font-size: 14px;
+  line-height: 23px;
+}
+
+#track{
+
+    /*clear: both;*/
+    margin: 10px 0 15px 445px;
+    text-align: center;
+}
+
+
+
+
 /*navbar*/
 .navbar-brand {
   padding: 20px 20px 0px 0px;
@@ -24,9 +52,6 @@ li {
 .modal-container {
   padding: 20px;
 }
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-}
 
 .portfolio-item {
     margin-bottom: 25px;
@@ -43,9 +68,14 @@ body {
 
 /*CALENDAR STYLING*/
 
-/*.fc-row .fc-week .fc-widget-content{
-  height: 280px;
-}*/
+div .calendar{
+  margin-top: 40px;
+  clear: both;
+}
+
+.fc .fc-toolbar > * > * {
+  margin-left: 0px;
+}
 
 tr:first-child > td > .fc-day-grid-event{
   margin-top: 0px;
@@ -84,7 +114,7 @@ tr:first-child > td > .fc-day-grid-event{
 
 
 .fc-unthemed td.fc-today {
-  background: LightCyan ;
+  background: #62aeff ;
   border: -3px solid transparent;
 }
 
@@ -94,19 +124,7 @@ tr:first-child > td > .fc-day-grid-event{
   margin-top: 20px;
   clear:both;
 }
-.row-fluid [class*="span"]:first-child {
-  margin-left: 0px;
-}
-.row-fluid .span4{
-  float: left;
-  clear: both;
-}
 
-alert{
-	width: 595px;
-  float: right;
-  margin-bottom: 5px;
-}
 
 /*END CALENDAR STYLING*/
 
@@ -143,6 +161,7 @@ alert{
     background-color: rgba(255, 255, 255, 0.75);
     border: 1px solid transparent;
     border-radius: 4px;
+    margin-bottom: 0px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 

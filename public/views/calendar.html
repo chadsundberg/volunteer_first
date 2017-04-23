@@ -2,18 +2,21 @@
   <div class="center-block">
     <img src="../assets/betshalomlogo.png">
 
-    <div class="col-sm-offset-8 col-sm-2" ng-if="cc.currentUser.info.is_admin === false">
-      <uib-progressbar class="progress" max="150" value="cc.currentUser.info.signed_up_duration || 0"></uib-progressbar>
-      <input type="button" class="btn btn-default" ng-if="cc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
-        value="Thanks for volunteering!" />
-    </div>
+
 
   </div>
-  <div class="well">
 
+<div class="well">
 
+    <div  ng-if="cc.currentUser.info.is_admin === false">
+      <uib-progressbar class="progress" max="150" style="width: 70%; height: 30px;"   value="cc.currentUser.info.signed_up_duration || 0">{{cc.currentUser.info.signed_up_duration}} min. of 150 min.</uib-progressbar>
+      <p class="lead pull-right" style="width: 85%;"><em>* Welcome {{cc.currentUser.info.first_name}} {{cc.currentUser.info.last_name}}, here's your sign up progress!</em></p>
+      <input type="button" class="btn btn-success" id="track" ng-if="cc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+        value="Click here to continue!" />
 
-    <div class="row-fluid">
+    </div>
+
+    <div class="calendar">
 
         <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
         <div id="modalId"></div>
