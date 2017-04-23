@@ -217,6 +217,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
             self.newUser = {};
             $location.path('/home');
+            getUsers();
+            getEvents();
+            getUserData(firebaseUser);
+            getCurrentDuration();
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
