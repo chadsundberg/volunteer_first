@@ -140,7 +140,6 @@ router.delete('/volunteerRemove', function (req, res) {
     } else {
       client.query('DELETE FROM role_user WHERE user_id=$1 AND role_id=$2;',
         [removeEntry.user_id, removeEntry.role_id], function (err, result) {
-
           if (err) {
             console.log(err);
             res.sendStatus(500); // the world exploded

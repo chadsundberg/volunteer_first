@@ -10,103 +10,24 @@
 
   </div>
   <div class="well">
+
+
+
     <div class="row-fluid">
-      <div class="col-sm-4 ">
-
-        <p class="pull-left lead">Please Sign Up for 2.5 hours <br> of Volunteer Time<br>2.5 hours = 150 min</p>
-        <ul class="unstyled">
-          <li>
-            <div class="alert alert-info">
-              <i class="fa fa-car" aria-hidden="true"></i>
-              <b>Pick-Up = 60 Minutes </b>
-
-            </div>
-          </li>
-          <li>
-            <div class="alert alert-success">
-              <i class="fa fa-cutlery" aria-hidden="true"></i>
-              <b>Snack Bar = 30 Minutes</b>
-            </div>
-          </li>
-          <li>
-            <div class="alert alert-danger">
-              <i class="fa fa-handshake-o" aria-hidden="true"></i>
-              <b> Lobby Greeter</b><br> (Wednesday) = 135 Minutes<br> (Sunday) = 170 Minutes
-            </div>
-          </li>
-          <li>
-
-            <div class="alert alert-warning">
-              <i class="fa fa-phone-square" aria-hidden="true"></i>
-              <b> Front Desk</b><br> (Wednesday) = 135 Minutes <br> (Sunday) = 170 Minutes
-            </div>
-          </li>
-        </ul>
-
-      </div>
-    </div>
-    <div class="row-fluid">
-      <div class="col-sm-8">
-        <div class="btn-toolbar">
-          <p class="pull-right lead"></p>
-          <!-- <div class="btn-group">
-          <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar')">AgendaDay</button>
-          <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar')">AgendaWeek</button>
-          <button class="btn btn-success" ng-click="changeView('month', 'myCalendar')">Month</button>
-        </div> -->
-        </div>
 
         <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
         <div id="modalId"></div>
-
-
-
         <div ng-repeat="event in cc.eventList.list">
           <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
         </div>
+        <!-- <p>{{cc.eventList}}</p>
+        <p> {{cc.currentUser}} </p> -->
 
-        <p>{{cc.eventList}}</p>
-        <p> {{cc.currentUser.info}} </p>
-
-
-
-
-
-      </div>
       <div ng-if="cc.currentUser.info.is_admin">
-        <button class="btn btn-info" ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}"
-          decimal-separator="{{decimalSeparator}}" ng-click="cc.clickFn(click)">Export CSV</button>
+        <button class="btn btn-info"
+        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
+        ng-click="cc.clickFn(click)">Export CSV</button>
       </div>
+
     </div>
   </div>
-</div>
-<!-- <div class="well">
-<div class="row-fluid">
-<div class="span4">
-<h3> This is the calendar </h3>
-<ul>
-<li>stuff</li>
-<li>stuff</li>
-<li>stuff</li><li>stuff</li>
-</ul>
-</div>
-
-
-
-<div class="span8">
-<div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
-<div id="modalId" ></div>
-
-<button class="btn btn-info"
-ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
-ng-click="cc.clickFn(click)">Export CSV</button>
-
-<div ng-repeat="event in cc.eventList.list">
-<p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
-</div>
-
-<p>{{cc.eventList}}</p>
-<p> {{cc.currentUser}} </p>
-</div>
-</div>
-</div> -->
