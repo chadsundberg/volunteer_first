@@ -18,7 +18,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.volunteerSignUp = DataFactory.volunteerSignUp;
   self.currentUser = DataFactory.currentUser;
   self.getEventRoles = DataFactory.getEventRoles;
-
+  self.adminAddEvent = DataFactory.adminAddEvent;
 
 
   // state change / refresh
@@ -42,8 +42,11 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.alertDayClick = function (date, jsEvent, view) {
     // self.addModal = (date.title + ' was clicked ');
     console.log("day click works ", date);
+
     self.selectedDay = "Open Day!";
     ModalDataFactory.currentEventClicked = date;
+
+console.log('moment:', moment(ModalDataFactory.currentEventClicked).format("YYYY-MM-DD"));
     self.open();
 
   };
