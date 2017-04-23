@@ -16,6 +16,7 @@ body {
   line-height: 23px;
 }
 
+/*buttons and text*/
 #track{
     margin: 10px 0 15px 460px;
     text-align: center;
@@ -24,13 +25,9 @@ body {
   margin-bottom: 20px;
 }
 
-/*.btn-primary{
-  background-color: rgb(0, 122, 255);
+.title {
+  text-align: center;
 }
-
-a {
-  color:rgb(0, 122, 255);
-}*/
 
 /*navbar*/
 .navbar-brand {
@@ -45,6 +42,13 @@ li {
 	display: block;
 	padding: 5px 8px;
 	line-height: 1;
+}
+a::selection{
+  background: inherit;
+}
+
+a:focus, a:active {
+   outline: none !important;
 }
 
 .center-block img{
