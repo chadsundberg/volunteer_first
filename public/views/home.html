@@ -5,9 +5,11 @@
     <div class="center-block">
       <img src="../assets/betshalomlogo.png">
 
-      <div class = "col-sm-offset-8 col-sm-2"><uib-progressbar class="progress" max="150" value="hc.currentUser.info.signed_up_duration || 0"></uib-progressbar>
-        <input type="button" class="btn btn-default" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';" value="Thanks for volunteering!" />
-      </div>
+      <!-- <div class="col-sm-offset-8 col-sm-2" ng-if="hc.currentUser.info.is_admin === false">
+        <uib-progressbar class="progress" max="150" value="hc.currentUser.info.signed_up_duration || 0"></uib-progressbar>
+        <input type="button" class="btn btn-default" ng-if="hc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+          value="Thanks for volunteering!" />
+      </div> -->
 
     </div>
 
@@ -16,7 +18,11 @@
       <div class="col-lg-12">
         <div class="jumbotron">
           <h1>✔ Volunteer Opportunities</h1><br>
-            <div><uib-progressbar class="progress" max="100" value="67"></uib-progressbar></div>
+          <div>
+            <uib-progressbar class="progress" style="width: 100%; height: 30px" max="100" value="67"></uib-progressbar>
+            <p class="lead"><em>* Watch the progress bar increase as you sign up!</em></p>
+            <!-- <h5>* Watch the progress bar increase as you sign up!</h5> -->
+          </div>
         </div>
 
         <h1 class="page-header">

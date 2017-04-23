@@ -41,11 +41,16 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   //Day click for Admin
   self.alertDayClick = function (date, jsEvent, view) {
     // self.addModal = (date.title + ' was clicked ');
-    console.log("day click works ", date);
-    self.selectedDay = "Open Day!";
-    ModalDataFactory.currentEventClicked = date;
-    self.open();
 
+    if (self.currentUser.info.is_admin) {
+      console.log("day click works ", date);
+      self.selectedDay = "Open Day!";
+      ModalDataFactory.currentEventClicked = date;
+      self.open();
+    } else {
+      console.log('user not authorized for dayClick');
+
+    }
   };
 
   //Event click for User
@@ -96,7 +101,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
       height: 850,
       editable: true,
       header: {
-        left: 'month basicWeek basicDay agendaWeek agendaDay',
+        left: 'month basicWeek basicDay',
         center: 'title',
         right: 'today prev,next'
       },

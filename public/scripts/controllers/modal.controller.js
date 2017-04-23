@@ -33,18 +33,17 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $ctrl.getEventRoles($ctrl.eventId);
   }
 
-  if ($ctrl.eventId === undefined) {
-    $ctrl.eventRoles.list = {};
-  } else {
-    $ctrl.getEventRoles($ctrl.eventId);
-  }
-
-
   //Modal
   $ctrl.ok = function () {
+    $ctrl.getUsers();
+    $ctrl.getEvents();
+    $ctrl.getCurrentDuration();
     $uibModalInstance.close($ctrl.selected.item);
   };
+
   $ctrl.cancel = function () {
+    $ctrl.getUsers();
+    $ctrl.getEvents();
     $uibModalInstance.dismiss('cancel');
   };
 
@@ -60,8 +59,6 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.exitModal = function (roleClickedId) {
     $ctrl.getUsers();
     $ctrl.getEvents();
-
-    // $ctrl.getUserData();
     $ctrl.getCurrentDuration();
     $uibModalInstance.dismiss('cancel');
   };
@@ -110,10 +107,16 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
         };
       };
       $ctrl.ok = function () {
-        $ctrl.close({ $value: $ctrl.selected.item });
+    $ctrl.getUsers();
+    $ctrl.getEvents();
+    $ctrl.getCurrentDuration();
+        // $ctrl.close({ $value: $ctrl.selected.item });
       };
       $ctrl.cancel = function () {
-        $ctrl.dismiss({ $value: 'cancel' });
+    $ctrl.getUsers();
+    $ctrl.getEvents();
+    $ctrl.getCurrentDuration();
+        // $ctrl.dismiss({ $value: 'cancel' });
       };
     }
   });
