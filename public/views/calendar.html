@@ -1,8 +1,9 @@
 <div class="container">
   <div class="center-block">
-    <img src="../assets/betshalomlogo.png">
-
-
+    <!-- <img src="../assets/betshalomlogo.png"> -->
+    <div class="title">
+      <h1>✔ Volunteer First</h1><br>
+    </div>
 
   </div>
 
@@ -10,7 +11,7 @@
 
     <div  ng-if="cc.currentUser.info.is_admin === false">
       <uib-progressbar class="progress" max="150" style="width: 70%; height: 30px;"   value="cc.currentUser.info.signed_up_duration || 0">{{cc.currentUser.info.signed_up_duration}} min. out of 150 min.</uib-progressbar>
-      <p class="lead pull-right" style="width: 85%;"><em>* Welcome {{cc.currentUser.info.first_name}} {{cc.currentUser.info.last_name}}, here's your sign up progress!</em></p>
+      <p class="lead pull-right" style="width: 85%;"><em>* Hi {{cc.currentUser.info.first_name}}, here's your sign up progress!</em></p>
       <input type="button" class="btn btn-success" id="track" ng-if="cc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
         value="Click here to continue!" />
 
@@ -28,9 +29,19 @@
 
       <div ng-if="cc.currentUser.info.is_admin">
         <button class="btn btn-info"
-        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
+        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}" onclick="location.href='https://docs.google.com/spreadsheets/d/1JvqSktAtJOGN-dywwoRllHesP-cCKxN9wQ6ynuOGew4/edit?usp=sharing';"
         ng-click="cc.clickFn(click)">Export CSV</button>
       </div>
 
     </div>
   </div>
+  <!-- Footer -->
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Copyright &copy; Volunteer First 2017</p>
+      </div>
+    </div>
+    <!-- /.row -->
+  </footer>
+</div>
