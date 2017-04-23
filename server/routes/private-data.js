@@ -283,7 +283,39 @@ router.delete('/eventRoles/:id', function(req, res) {
 });
 // });
 
-module.exports = router;
+router.get('/users/duration', function (req, res) {
+  pool.connect()
+    .then(function (client) {
+      client.query(`SELECT users.id, users.has_met_requirement, SUM(roles.duration) AS signed_up_duration
+        FROM role_user
+        LEFT OUTER JOIN users ON users.id=role_user.user_id
+        RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+        WHERE role_user.user_id = $1
+        GROUP BY users.id;`,
+        [req.decodedToken.userSQLId])
+        .then(function (result) {
+          client.release();
+
+          console.log('getting userduration: ', result.rows);
+
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          client.release();
+
+          res.sendStatus(500);
+        });
+    });
+});
+
+
+
+
+
+
+
+
 // router.put('/editRole/:id', function(req, res) {
 //  var roleId = req.params.id;
 //  var role = req.body;
@@ -292,18 +324,14 @@ module.exports = router;
 //  .then(function(client) {
 //  client.query('SELECT id from role_user WHERE role_id = $1', [roleId]) //this select the particular role that will be edidted
 //  .then(function(result) {
-//  if (user_id == null) { // I am somewhat perplexed about this one. I was trying to follow what Luke was telling me
-//    client.query('DELETE FROM role_user WHERE role_id=$1 && user_id=$2', [roleId, role.userObject.id])
-//    .then(function(result) {
-//      client.release();
-//    });
-//  }
-//   else if (result.rows.length == 1) { // This is when we want to add a user to a role that doesn't currently have a user assigned to it
-//     client.query('INSERT INTO role_user (role_id, user_id) VALUES ($1, $2);', [roleId, role.userObject.id])
-//     .then(function(result) {
-//       client.release();
-// });
-//  } else if {// this is when we want to update the user and/or role name and/or time
+// pool.connect()
+//  .then(function(client) {
+//  if (user_id === null) { // I am somewhat perplexed about this one. I was trying to follow what Luke was telling me
+//    client.query('DELETE FROM role_user WHERE role_id=$1 && user_id=$2', [roleId, role.userObject.id]);
+//   }
+// else if (result.rows.length == 1) { // This is when we want to add a user to a role that doesn't currently have a user assigned to it
+//     client.query('INSERT INTO role_user (role_id, user_id) VALUES ($1, $2);', [roleId, role.userObject.id]);
+//  } else  {// this is when we want to update the user and/or role name and/or time
 //
 //    client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
 //    [role.role_title, role.start_time, role.end_time, roleId])
@@ -318,48 +346,39 @@ module.exports = router;
 //          res.sendStatus(200);
 //        });
 //        });
-//      });
-//    });
-
-      //  .catch(function (err) {
-      //    console.log('error on UPDATE', err);
-      //    res.sendStatus(500);
-      //  }
-
-
-  //  .catch(function (err) {
-  //    console.log('error on UPDATE', err);
-  //    res.sendStatus(500);
- //   });
- // });
-// });
+// })
+//
+//
+//
+//        .catch(function (err) {
+//          console.log('error on UPDATE', err);
+//          res.sendStatus(500);
+//        });
+//
 // });
 
-// router.get('/users/duration', function (req, res) {
-//   pool.connect()
-//     .then(function (client) {
-//       client.query(`SELECT users.id, users.has_met_requirement, SUM(roles.duration) AS signed_up_duration
-//         FROM role_user
-//         LEFT OUTER JOIN users ON users.id=role_user.user_id
-//         RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
-//         WHERE role_user.user_id = $1
-//         GROUP BY users.id;`,
-//         [req.decodedToken.userSQLId])
-//         .then(function (result) {
-//           client.release();
-//
-//           console.log('getting userduration: ', result.rows);
-//
-//           res.send(result.rows);
-//         })
-//         .catch(function (err) {
-//           console.log('error on SELECT', err);
-//           client.release();
-//
-//           res.sendStatus(500);
-//         });
-//     });
-// // });
+ //   .catch(function (err) {
+ //     console.log('error on UPDATE', err);
+ //     res.sendStatus(500);
+ //
+ // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+module.exports = router;
+
+
+
 // router.post('/adminAddEvent', function (req, res) {
 //   var newEvent = req.body;
 //   console.log('New Hero: ', newSave);
