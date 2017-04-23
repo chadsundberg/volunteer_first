@@ -16,28 +16,30 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
   self.createUser = function () {
     self.createUserError = null;
-      DataFactory.createUser(self.newUser).then(function(response) {
-        console.log('createUser res:', response);
-        self.createUserError = response.message;
-      });
-      self.newUser = {};
+    DataFactory.createUser(self.newUser).then(function (response) {
+      console.log('createUser res:', response);
+      self.createUserError = response.message;
+    });
+    self.newUser = {};
   }
 
   self.signIn = function () {
     self.signInError = null;
-    DataFactory.signIn(self.user.email, self.user.password).then(function(response) {
-      console.log('createUser res:', response);
-      self.signInError = response.message;
+    DataFactory.signIn(self.user.email, self.user.password).then(function (response) {
+      if (response) {
+        self.signInError = response.message;
+        self.user = {};
+      } else {
+        self.user = {};
+      }
     });
-    self.user = {};
   }
 
 
   self.resetPassword = function () {
     self.resetError = null;
     self.resetSuccess = null;
-    DataFactory.resetPassword(self.forgetfulUser.email).then(function(response) {
-      console.log('resetpw response:', response);
+    DataFactory.resetPassword(self.forgetfulUser.email).then(function (response) {
       if (response.error) {
         self.resetError = response.message;
       }
@@ -45,7 +47,7 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
         self.resetSuccess = response.message;
         self.forgetfulUser = null;
       }
-      
+
     });
   }
 
