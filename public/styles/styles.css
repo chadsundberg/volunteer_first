@@ -148,6 +148,10 @@ alert{
 
   }
 
+  .firebaseErr {
+    margin-top: 20px;
+  }
+
 /*img {
   display: inline-block;
   float: right;

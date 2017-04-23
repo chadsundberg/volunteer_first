@@ -6,7 +6,6 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
   self.forgetfulUser = {};
   self.currentUser = DataFactory.currentUser;
   self.firebaseUser = {};
-
   auth.$onAuthStateChanged(function (firebaseUser) {
     console.log('resetting user login controller');
 
@@ -16,28 +15,44 @@ app.controller("LoginController", ["DataFactory", "$location", "$firebaseAuth", 
 
 
   self.createUser = function () {
-    var inpObj = document.getElementById("newUserEmail");
-    if (inpObj.checkValidity() === false) {
-      document.getElementById("errorElement").innerHTML = inpObj.validationMessage;
-    } else {
-      DataFactory.createUser(self.newUser);
-    }
-  };
+    self.createUserError = null;
+      DataFactory.createUser(self.newUser).then(function(response) {
+        console.log('createUser res:', response);
+        self.createUserError = response.message;
+      });
+      self.newUser = {};
+  }
 
   self.signIn = function () {
-    console.log('self.user:', self.user);
-    DataFactory.signIn(self.user.email, self.user.password);
-  };
+    self.signInError = null;
+    DataFactory.signIn(self.user.email, self.user.password).then(function(response) {
+      console.log('createUser res:', response);
+      self.signInError = response.message;
+    });
+    self.user = {};
+  }
 
 
   self.resetPassword = function () {
-    DataFactory.resetPassword(self.forgetfulUser.email);
-  };
+    self.resetError = null;
+    self.resetSuccess = null;
+    DataFactory.resetPassword(self.forgetfulUser.email).then(function(response) {
+      console.log('resetpw response:', response);
+      if (response.error) {
+        self.resetError = response.message;
+      }
+      else if (response.success) {
+        self.resetSuccess = response.message;
+        self.forgetfulUser = null;
+      }
+      
+    });
+  }
 
   // This code runs when the user logs out
   self.signOut = function () {
     DataFactory.signOut();
-  };
+  }
 
 
 
