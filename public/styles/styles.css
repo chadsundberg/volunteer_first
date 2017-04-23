@@ -190,6 +190,10 @@ tr:first-child > td > .fc-day-grid-event{
 
   }
 
+  .firebaseErr {
+    margin-top: 20px;
+  }
+
 /*img {
   display: inline-block;
   float: right;
