@@ -278,12 +278,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
   }
 
   function resetPassword(forgetfulUserEmail) {
-    return auth.$sendPasswordResetEmail(forgetfulUserEmail).then(function () {
-      console.log("Password reset email sent successfully!", forgetfulUserEmail);
-      return { success: true, message: 'Link for password reset sent to ' + forgetfulUserEmail + '!'};
-    }).catch(function (error) {
-      return { error: true, message: 'There is no user record corresponding to this email. The user may have been deleted.'};
-    });
+    return auth.$sendPasswordResetEmail(forgetfulUserEmail)
+      .then(function () {
+        console.log("Password reset email sent successfully!", forgetfulUserEmail);
+        return { success: true, message: 'Link for password reset sent to ' + forgetfulUserEmail + '!' };
+      }).catch(function (error) {
+        return { error: true, message: 'There is no user record corresponding to this email. The user may have been deleted.' };
+      });
   }
 
   function signIn(email, password) {
@@ -300,6 +301,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             currentUser.info = response.data;
             console.log('currentuser get user', currentUser);
             $location.path('/home');
+            return currentUser.info;
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
