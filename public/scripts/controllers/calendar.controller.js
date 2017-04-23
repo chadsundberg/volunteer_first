@@ -19,7 +19,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.currentUser = DataFactory.currentUser;
   self.getEventRoles = DataFactory.getEventRoles;
   self.getCurrentDuration = DataFactory.getCurrentDuration;
-  self.getCurrentDuration();
+
 
   // state change / refresh
   //  auth.$onAuthStateChanged(function (firebaseUser) {
