@@ -20,6 +20,9 @@ body {
     margin: 10px 0 15px 460px;
     text-align: center;
 }
+#close {
+  margin-bottom: 20px;
+}
 
 /*.btn-primary{
   background-color: rgb(0, 122, 255);
