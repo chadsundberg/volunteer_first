@@ -96,7 +96,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
       height: 850,
       editable: true,
       header: {
-        left: 'month basicWeek basicDay agendaWeek agendaDay',
+        left: 'month basicWeek basicDay',
         center: 'title',
         right: 'today prev,next'
       },
