@@ -18,16 +18,18 @@ var pool = new pg.Pool(config);
 //get all events for calendar display
 router.get('/events', function (req, res) {
   pool.connect()
-  .then(function (client) {
-    client.query('SELECT roles.id as role_id, roles.role_title, roles.num_users, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
-    .then(function (result) {
-      client.release();
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      client.release();
-      console.log('error on SELECT', err);
-      res.sendStatus(500);
+.then(function (client) {
+      client.query('SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+        .then(function (result) {
+          client.release();
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          client.release();
+          console.log('error on SELECT', err);
+          res.sendStatus(500);
+        });
+
     });
 });
 });
@@ -39,8 +41,9 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.role_title, roles.start_time, roles.end_time, roles.num_users, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, users.first_name, users.last_name, users.id;',
-        [eventId, ])
+  client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;',
+        [eventId,])
+
         .then(function (result) {
           client.release();
           res.send(result.rows);
