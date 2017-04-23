@@ -7,6 +7,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
   var users = { list: [] };
   var currentUser = { info: {} };
   var eventRoles = { list: [] };
+  var error = { info: {} };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
     console.log('state changed');
@@ -204,7 +205,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
 
   function createUser(newUser) {
     // add user to firebase
-    auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
+    return auth.$createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(function (firebaseUser) {
         firebaseUser.getToken().then(function (idToken) {
           $http({
@@ -225,9 +226,11 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
         });
 
       }).catch(function (error) {
-        self.error = error;
         console.log('addUser catch:', error);
+        return error;
       });
+    console.log('error.info:', error.info);
+
   } // ends createUser function
 
 
@@ -308,15 +311,17 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
   }
 
   function resetPassword(forgetfulUserEmail) {
-    auth.$sendPasswordResetEmail(forgetfulUserEmail).then(function () {
-      console.log("Password reset email sent successfully!");
-    }).catch(function (error) {
-      console.error("Error: ", error);
-    });
+    return auth.$sendPasswordResetEmail(forgetfulUserEmail)
+      .then(function () {
+        console.log("Password reset email sent successfully!", forgetfulUserEmail);
+        return { success: true, message: 'Link for password reset sent to ' + forgetfulUserEmail + '!' };
+      }).catch(function (error) {
+        return { error: true, message: 'There is no user record corresponding to this email. The user may have been deleted.' };
+      });
   }
 
   function signIn(email, password) {
-    auth.$signInWithEmailAndPassword(email, password)
+    return auth.$signInWithEmailAndPassword(email, password)
       .then(function (firebaseUser) {
         firebaseUser.getToken().then(function (idToken) {
           console.log('get user infoz');
@@ -329,13 +334,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
             currentUser.info = response.data;
             console.log('currentuser get user', currentUser);
             $location.path('/home');
+            return currentUser.info;
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
         });
 
       }).catch(function (error) {
-        console.log('signin with email error', error);
+        return error;
       });
   }
 
@@ -443,10 +449,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
           if (response.data[0] && response.data[0].signed_up_duration) {
 
 
-          console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
-          currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
-          console.log('hihihi currentUser:', currentUser.info);
-          return currentUser.info.signed_up_duration
+
+            console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
+            currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
+            console.log('hihihi currentUser:', currentUser.info);
+            return currentUser.info.signed_up_duration
+          } else {
+            return currentUser.info.signed_up_duration = 0;
+
           }
         }, function (response) {
           console.log('dataFactory getCurrentDuration error:', response);
@@ -472,7 +482,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
     signIn: signIn,
     resetPassword: resetPassword,
     getUserData: getUserData,
-    // getUserDuration = getUserDuration,
+    getCurrentDuration: getCurrentDuration,
+    error: error,
 
     // CHRISTINE exports
     getEventRoles: getEventRoles,

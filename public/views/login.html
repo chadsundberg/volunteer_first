@@ -1,9 +1,10 @@
 <style >
 body {
-			background-image: url(" ../assets/IMG_6108.jpg");
-			background-repeat: no-repeat;
-			background-position: 30% 20%;
-			background-size: 2200px 2400px;
+			background: url(" ../assets/IMG_6108.jpg") no-repeat center center fixed;
+			  -webkit-background-size: cover;
+			  -moz-background-size: cover;
+			  -o-background-size: cover;
+			  background-size: cover;
 }
 
 </style>
@@ -35,8 +36,10 @@ body {
 						<br><br>
 						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()" value="Register »">
 					</fieldset>
+					
 				</form>
-				{{lc.error}}
+				<div uib-alert class="alert-danger firebaseErr" ng-if="lc.createUserError">{{lc.createUserError}}</div>
+				
 			</div>
 		</div>
 	</div>
@@ -62,6 +65,9 @@ body {
 							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.resetPassword()" type="submit" value="Send New Password »">
 						</fieldset>
 					</form>
+					<div uib-alert class="firebaseErr alert-danger" ng-if="lc.signInError">{{lc.signInError}}</div>
+					<div uib-alert class="firebaseErr alert-danger" ng-if="lc.resetError">{{lc.resetError}}</div>
+					<div uib-alert class="firebaseErr alert-success" ng-if="lc.resetSuccess">{{lc.resetSuccess}}</div>
 				</div>
 			</div>
 		</div>
