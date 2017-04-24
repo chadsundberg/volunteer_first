@@ -233,7 +233,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
         console.log('addUser catch:', error);
         return error;
       });
-    console.log('error.info:', error.info);
+    // console.log('error.info:', error.info);
 
   } // ends createUser function
 
@@ -250,10 +250,12 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
       var date = moment(newRole.date);
       var startTime = moment(newRole.start_time);
       var endTime = moment(newRole.end_time);
+      var event_id = eventId;
       newRole.date = moment(ModalDataFactory.currentEventClicked).format("YYYY-MM-DD");
       newRole.start_time = moment(startTime).format('HH:mm:00');
       newRole.end_time = moment(endTime).format('HH:mm:00');
       newRole.duration = endTime.diff(startTime, 'minutes');
+      newRole.event_id = eventId;
       console.log('New Role:', newRole);
       //// duration to be at least 30 min per client request - JONNY \\\\
       if (newRole.duration < 30) {
@@ -266,10 +268,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
           method: 'POST',
           url: '/privateData/addRole/' + eventId,
           headers: { id_token: idToken },
-          data: newRole, date,
+          data: newRole, date, eventId
         }).then(function (response) {
-          console.log(response.event.id);
-          getEventRoles(response.id);
+console.log(response);
+          getEventRoles(eventId);
         });
       });
     } else {
