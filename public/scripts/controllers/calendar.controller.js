@@ -22,6 +22,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.adminAddEvent = DataFactory.adminAddEvent;
 
   self.getCurrentDuration = DataFactory.getCurrentDuration;
+  self.getCurrentDuration();
 
 
 
