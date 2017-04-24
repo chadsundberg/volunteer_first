@@ -163,29 +163,87 @@ router.delete('/volunteerRemove', function (req, res) {
   });
 });//end post
 
-
-
-
-//ADMIN ADD ROLE TO EVENT
+///ADMIN ADD ROLE TO EVENT
 router.post('/addRole/:id', function (req, res) {
   var newRole = req.body;
   console.log("req.params", req.params);
   console.log('new Role: ', newRole);
+  console.log('date:', newRole.date);
   pool.connect()
     .then(function (client) {
-      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
-        [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id, newRole.duration])
+      client.query('SELECT * FROM events WHERE id=$1',
+        [req.params.id])
         .then(function (result) {
-          client.release();
-          res.sendStatus(201);
-        })
-        .catch(function (err) {
-          console.log('error on INSERT', err);
-          client.release();
-          res.sendStatus(500);
+          pool.connect()
+            .then(function (client) {
+              client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
+                [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id, newRole.duration])
+                .then(function (result) {
+                  client.release();
+                  res.sendStatus(201);
+                }).catch(function (err) {
+                  console.log('error on INSERT', err);
+                  client.release();
+                  res.sendStatus(500);
+                });
+            });
+        }).catch(function (err) {
+          pool.connect()
+            .then(function (client) {
+              client.query('INSERT INTO events (date) VALUES ($1) RETURNING id;',
+                [newRole.date])
+                .then(function (result) {
+                  console.log('CAN WE SEE THIS RESULT:', result);
+                  var newEventID = result.rows[0].id;
+                  console.log('newEventID:', newEventID);
+                  pool.connect()
+                    .then(function (client) {
+                      client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
+                        [newRole.role_title, newRole.start_time, newRole.end_time, newEventID, newRole.duration])
+                        .then(function (result) {
+                          console.log('new event result:', result);
+                          client.release();
+                          res.sendStatus(201);
+
+                        })
+                        .catch(function (err) {
+                          console.log('error on INSERT', err);
+                          client.release();
+                          res.sendStatus(500);
+                        });
+                    });
+                })
+                .catch(function (err) {
+                  console.log('err inserting new event:', err);
+                  client.release();
+                  res.sendStatus(500);
+                });
+            });
         });
     });
 });
+
+
+// //ADMIN ADD ROLE TO EVENT
+// router.post('/addRole/:id', function (req, res) {
+//   var newRole = req.body;
+//   console.log("req.params", req.params);
+//   console.log('new Role: ', newRole);
+//   pool.connect()
+//     .then(function (client) {
+//       client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
+//         [newRole.role_title, newRole.start_time, newRole.end_time, req.params.id, newRole.duration])
+//         .then(function (result) {
+//           client.release();
+//           res.sendStatus(201);
+//         })
+//         .catch(function (err) {
+//           console.log('error on INSERT', err);
+//           client.release();
+//           res.sendStatus(500);
+//         });
+//     });
+// });
 
 //Add user route - firebase
 // this is pretty useless now - add ajax req from decoder? *jonny* //
@@ -230,35 +288,35 @@ router.delete('/eventRoles/:id', function (req, res) {
     });
 });
 
-router.put('/editRole/:id', function(req, res) {
- var roleId = req.params.id;
- var role = req.body;
- console.log('Updating role: ', roleId, role);
- pool.connect()
- .then(function (client) {
-   client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
-   [role.role_title, role.start_time, role.end_time, roleId])
-   .then(function (result) {
-     client.release();
-     pool.connect()
-     .then(function (client) {
-       client.query('UPDATE role_user SET user_id = $1 WHERE role_id = $2',
-       [role.userObject.id, roleId])
-       .then(function (result) {
-         client.release();
-         res.sendStatus(200);
-       })
-       .catch(function (err) {
-         console.log('error on UPDATE', err);
-         res.sendStatus(500);
-       });
-     });
-   })
-   .catch(function (err) {
-     console.log('error on UPDATE', err);
-     res.sendStatus(500);
-   });
- });
+router.put('/editRole/:id', function (req, res) {
+  var roleId = req.params.id;
+  var role = req.body;
+  console.log('Updating role: ', roleId, role);
+  pool.connect()
+    .then(function (client) {
+      client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
+        [role.role_title, role.start_time, role.end_time, roleId])
+        .then(function (result) {
+          client.release();
+          pool.connect()
+            .then(function (client) {
+              client.query('UPDATE role_user SET user_id = $1 WHERE role_id = $2',
+                [role.userObject.id, roleId])
+                .then(function (result) {
+                  client.release();
+                  res.sendStatus(200);
+                })
+                .catch(function (err) {
+                  console.log('error on UPDATE', err);
+                  res.sendStatus(500);
+                });
+            });
+        })
+        .catch(function (err) {
+          console.log('error on UPDATE', err);
+          res.sendStatus(500);
+        });
+    });
 
 });
 
@@ -266,11 +324,11 @@ router.get('/users/duration', function (req, res) {
   pool.connect()
     .then(function (client) {
       client.query(`SELECT users.id, users.has_met_requirement, SUM(roles.duration) AS signed_up_duration
-        FROM role_user
-        LEFT OUTER JOIN users ON users.id=role_user.user_id
-        RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
-        WHERE role_user.user_id = $1
-        GROUP BY users.id;`,
+    FROM role_user
+    LEFT OUTER JOIN users ON users.id=role_user.user_id
+    RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+    WHERE role_user.user_id = $1
+    GROUP BY users.id;`,
         [req.decodedToken.userSQLId])
         .then(function (result) {
           client.release();
@@ -283,6 +341,47 @@ router.get('/users/duration', function (req, res) {
           console.log('error on SELECT', err);
           client.release();
 
+          res.sendStatus(500);
+        });
+    });
+});
+
+
+router.get('/users/roles', function (req, res) {
+  pool.connect()
+    .then(function (client) {
+      client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, event_id, events.date
+    FROM role_user
+    LEFT OUTER JOIN users ON users.id=role_user.user_id
+    RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+    RIGHT OUTER JOIN events ON events.id=roles.event_id
+    WHERE role_user.user_id = $1;`,
+        [req.decodedToken.userSQLId])
+        .then(function (result) {
+          client.release();
+
+          console.log('getting userroles: ', result.rows);
+
+          for (i = 0; i < result.rows.length; i++) {
+
+            var newStartTime = result.rows[i].start_time.split(':', 3);
+            var newEndTime = result.rows[i].end_time.split(':', 3);
+
+            var newStartHours = newStartTime[0];
+            var newStartMinutes = newStartTime[1];
+            var newStartSeconds = newStartTime[2];
+            var newEndHours = newEndTime[0];
+            var newEndMinutes = newEndTime[1];
+            var newEndSeconds = newEndTime[2];
+
+            result.rows[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
+            result.rows[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+          };
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          client.release();
           res.sendStatus(500);
         });
     });
