@@ -300,8 +300,13 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
             console.log('getuser ajax response:', response);
             currentUser.info = response.data;
             console.log('currentuser get user', currentUser);
-            $location.path('/home');
-            return currentUser.info;
+            if (currentUser.info.is_admin === true) {
+              $location.path('/calendar');
+              return currentUser.info;
+            } else {
+              $location.path('/home');
+              return currentUser.info;
+            }
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
