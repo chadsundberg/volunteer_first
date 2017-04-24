@@ -336,5 +336,32 @@ router.get('/users/duration', function (req, res) {
 });
 
 
+router.get('/users/roles', function (req, res) {
+  pool.connect()
+  .then(function (client) {
+    client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, event_id, events.date
+    FROM role_user
+    LEFT OUTER JOIN users ON users.id=role_user.user_id
+    RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+    RIGHT OUTER JOIN events ON events.id=roles.event_id
+    WHERE role_user.user_id = $1;`,
+    [req.decodedToken.userSQLId])
+    .then(function (result) {
+      client.release();
+
+      console.log('getting userroles: ', result.rows);
+
+      res.send(result.rows);
+    })
+    .catch(function (err) {
+      console.log('error on SELECT', err);
+      client.release();
+
+      res.sendStatus(500);
+    });
+  });
+});
+
+
 
 module.exports = router;

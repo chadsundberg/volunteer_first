@@ -1,0 +1,39 @@
+<div class="container">
+
+    <!-- <img src="../assets/betshalomlogo.png"> -->
+    <div class="title">
+      <h1>✔ Volunteer First</h1><br>
+    </div>
+
+
+
+
+
+    <div  ng-if="sc.currentUser.info.is_admin === false">
+      <uib-progressbar class="progress" max="150" style="width: 70%; height: 30px;"   value="sc.currentUser.info.signed_up_duration || 0">{{sc.currentUser.info.signed_up_duration}} min. out of 150 min.</uib-progressbar>
+      <p class="lead pull-right" style="width: 85%;"><em>* My Progress</em></p>
+      <input type="button" class="btn btn-success" id="track" ng-if="sc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+        value="Click here to continue!" />
+
+    </div>
+    <div class="well">
+<h3>My Schedule</h3>
+
+    <table class="table ">
+      <thead class="thead-default">
+        <tr>
+          <th>Location</th>
+          <th>Time</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="role in sc.userRoles.list">
+          <td>{{role.role_title}}</td>
+          <td>{{role.start_time | date:'h:mm a'}} - {{role.end_time | date:'h:mm a'}}</td>
+          <td>{{role.date | date:'shortDate'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>

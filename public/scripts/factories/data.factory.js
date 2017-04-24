@@ -8,6 +8,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
   var currentUser = { info: {} };
   var eventRoles = { list: [] };
   var error = { info: {} };
+  var userRoles = { list: [] };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
     console.log('state changed');
@@ -15,6 +16,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
     getEvents();
     getUserData(firebaseUser);
     getCurrentDuration();
+    getCurrentUsersRoles();
   });
 
 
@@ -475,7 +477,34 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
       console.log('get users no firebase user');
 
     }
-  }// end getUsers()
+  }// end getCurrentDuration()
+
+
+  //getting roles user has signed up for
+  function getCurrentUsersRoles() {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/users/roles',
+          headers: {
+            id_token: idToken
+          }
+        }).then(function (response) {
+          userRoles.list = response.data;
+          return userRoles.list;
+        }, function (response) {
+          console.log('dataFactory getUsers error:', response);
+        });
+      });
+    } else {
+      console.log('get users no firebase user');
+
+    }
+  }// end getCurrentUsersRoles
 
   return {
     eventList: eventList,
@@ -494,12 +523,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
     getCurrentDuration: getCurrentDuration,
     error: error,
 
-    // CHRISTINE exports
+
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
     deleteRole: deleteRole,
     adminAddEvent: adminAddEvent,
+    getCurrentUsersRoles: getCurrentUsersRoles,
+    userRoles: userRoles,
 
     // Chad exports
     editRole: editRole
