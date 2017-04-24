@@ -19,6 +19,11 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'CalendarController',
     controllerAs: 'cc'
   })
+  .when ('/mySchedule', {
+    templateUrl: '/views/my-schedule.html',
+    controller: 'MyScheduleController',
+    controllerAs: 'sc'
+  })
   .otherwise ({
     redirectTo: '/'
   });

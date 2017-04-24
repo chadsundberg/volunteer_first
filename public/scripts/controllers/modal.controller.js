@@ -26,7 +26,8 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getEvents = DataFactory.getEvents;
   $ctrl.getCurrentDuration = DataFactory.getCurrentDuration;
   $ctrl.getUserData = DataFactory.getUserData;
-
+  $ctrl.getCurrentUsersRoles = DataFactory.getCurrentUsersRoles;
+  
   if ($ctrl.eventId === undefined) {
     $ctrl.eventRoles.list = {};
   } else {
@@ -38,6 +39,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $ctrl.getUsers();
     $ctrl.getEvents();
     $ctrl.getCurrentDuration();
+    $ctrl.getCurrentUsersRoles();
     $uibModalInstance.close($ctrl.selected.item);
   };
 
