@@ -30,7 +30,7 @@
       <tbody>
         <tr ng-repeat="role in sc.userRoles.list">
           <td>{{role.role_title}}</td>
-          <td>{{role.start_time | date:'h:mm a'}} - {{role.end_time | date:'h:mm a'}}</td>
+          <td>{{role.start_time | date: "h:mm a"}} - {{role.end_time | date:'h:mm a'}}</td>
           <td>{{role.date | date:'shortDate'}}</td>
         </tr>
       </tbody>
