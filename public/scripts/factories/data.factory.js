@@ -1,4 +1,4 @@
-app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', function ($firebaseAuth, $http, $location, $window) {
+app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'ModalDataFactory', function ($firebaseAuth, $http, $location, $window, ModalDataFactory) {
   console.log('data factory loaded');
 
   // var currentEvent = { id: [] };
@@ -16,6 +16,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     getUserData(firebaseUser);
     getCurrentDuration();
   });
+
+
 
   function getUsers() {
     var firebaseUser = auth.$getAuth();
@@ -100,6 +102,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           eventRoles.list = response.data;
           //// Turning xx:xx:xx string into Date object for moment.js / input jonny \\\\
           for (i = 0; i < eventRoles.list.length; i++) {
+
             var newStartTime = eventRoles.list[i].start_time.split(':', 3);
             var newEndTime = eventRoles.list[i].end_time.split(':', 3);
 
@@ -217,6 +220,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
             self.newUser = {};
             $location.path('/home');
+            getUsers();
+            getEvents();
+            getUserData(firebaseUser);
+            getCurrentDuration();
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
@@ -240,14 +247,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
 
       //// ngmodel bound to role, we are changing Date to string so making a copy for database --JONNY
       var newRole = Object.assign({}, role);
-
+      var date = moment(newRole.date);
       var startTime = moment(newRole.start_time);
       var endTime = moment(newRole.end_time);
-
+      newRole.date = moment(ModalDataFactory.currentEventClicked).format("YYYY-MM-DD");
       newRole.start_time = moment(startTime).format('HH:mm:00');
       newRole.end_time = moment(endTime).format('HH:mm:00');
       newRole.duration = endTime.diff(startTime, 'minutes');
-
+      console.log('New Role:', newRole);
       //// duration to be at least 30 min per client request - JONNY \\\\
       if (newRole.duration < 30) {
         newRole.duration = 30;
@@ -259,16 +266,46 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           method: 'POST',
           url: '/privateData/addRole/' + eventId,
           headers: { id_token: idToken },
-          data: newRole,
+          data: newRole, date,
         }).then(function (response) {
-          console.log(response);
-          getEventRoles(eventId);
+          console.log(response.event.id);
+          getEventRoles(response.id);
         });
       });
     } else {
       console.log('no firebase user');
     }
   }
+
+
+  function adminAddEvent(newEvent) {
+    // console.log(eventId);
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+
+      //// ngmodel bound to role, we are changing Date to string so making a copy for database --JONNY
+      // var newEvent = Object.assign({}, role);
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'POST',
+          url: '/privateData/addEvent/' ,
+          headers: { id_token: idToken },
+          data: newEvent,
+        }).then(function (response) {
+          console.log(response);
+          getEvents();
+        });
+      });
+    } else {
+      console.log('no firebase user');
+    }
+  }
+
+
+
+
+
 
   function signOut() {
     auth.$signOut().then(function () {
@@ -421,12 +458,14 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
           if (response.data[0] && response.data[0].signed_up_duration) {
 
 
+
             console.log('getCurrentDuration response:', Number(response.data[0].signed_up_duration));
             currentUser.info.signed_up_duration = Number(response.data[0].signed_up_duration);
             console.log('hihihi currentUser:', currentUser.info);
             return currentUser.info.signed_up_duration
           } else {
             return currentUser.info.signed_up_duration = 0;
+
           }
         }, function (response) {
           console.log('dataFactory getCurrentDuration error:', response);
@@ -460,6 +499,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', fu
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
     deleteRole: deleteRole,
+    adminAddEvent: adminAddEvent,
 
     // Chad exports
     editRole: editRole
