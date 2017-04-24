@@ -28,9 +28,11 @@
         <p> {{cc.currentUser}} </p> -->
 
       <div ng-if="cc.currentUser.info.is_admin">
-        <button class="btn btn-info btn-lg"
-        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}" target="_blank" onclick="location.href='https://docs.google.com/spreadsheets/d/1JvqSktAtJOGN-dywwoRllHesP-cCKxN9wQ6ynuOGew4/edit?usp=sharing';"
-        ng-click="cc.clickFn(click)">Export to Google Sheets</button>
+        <button class="btn btn-info btn-lg" ng-click="cc.download()">Export to Google Sheets</button>
+        <!-- <button class="btn btn-info btn-lg"
+        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}" target="_blank"
+        onclick="location.href='https://docs.google.com/spreadsheets/d/1JvqSktAtJOGN-dywwoRllHesP-cCKxN9wQ6ynuOGew4/edit?usp=sharing';"
+        ng-click="cc.download()">Export to Google Sheets</button> -->
       </div>
 
     </div>

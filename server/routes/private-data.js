@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
-var json2csv = require('json2csv');
+var csv = require('express-csv');
 // var fields = ['events.date', 'role.title', 'role.start_time', 'role.end_time' 'users.first_name', 'users.last_name', 'users.email'];
 
 // var connectionString = require('../modules/database-config');
@@ -17,14 +17,39 @@ var config = {
 };
 var pool = new pg.Pool(config);
 
-// try {
-//   var result = json2csv({ data: myData, fields: fields });
-//   console.log(result);
-// } catch (err) {
-//   // Errors are thrown for bad options, or if the data is empty and no fields are provided.
-//   // Be sure to provide fields if it is possible that your data array will be empty.
-//   console.error(err);
-// }
+// csv from Kris
+router.get('/getcsv', function(req, res) {
+  // this would be your returned find() object
+
+  pool.connect()
+    .then(function (client) {
+      client.query('SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+        .then(function (result) {
+          client.release();
+          // console.log('result: ', result.rows);
+
+          // create an array from the mongo object so we can use .unshift() later
+          var data = result.rows;
+
+          // create a header row from the object's keys/properties
+          var headers = Object.keys(result.rows[0]);
+
+          // push keys array to the beginning of data array
+          data.unshift(headers);
+
+          console.log('data: --------------------------------', data.length);
+
+          res.attachment('testing.csv');   // not really used
+          res.csv(data);
+        })
+        .catch(function (err) {
+          client.release();
+          console.log('error on stuff', err);
+          res.sendStatus(500);
+        });
+      }); // end then/query
+
+    });
 
 //get all events for calendar display
 router.get('/events', function (req, res) {
