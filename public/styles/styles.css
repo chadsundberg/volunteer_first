@@ -164,13 +164,19 @@ tr:first-child > td > .fc-day-grid-event{
   border: -3px solid transparent;
 }
 
-.well{
+/*.well{
 	float: right;
   margin-bottom: 40px;
   margin-top: 20px;
   clear:both;
+}*/
+.well {
+	float: right;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  clear:both;
+  width: 100%;
 }
-
 
 /*END CALENDAR STYLING*/
 

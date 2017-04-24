@@ -27,7 +27,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
   $ctrl.getCurrentDuration = DataFactory.getCurrentDuration;
   $ctrl.getUserData = DataFactory.getUserData;
   $ctrl.getCurrentUsersRoles = DataFactory.getCurrentUsersRoles;
-  
+
   if ($ctrl.eventId === undefined) {
     $ctrl.eventRoles.list = {};
   } else {
@@ -62,6 +62,7 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $ctrl.getUsers();
     $ctrl.getEvents();
     $ctrl.getCurrentDuration();
+    $ctrl.getCurrentUsersRoles();
     $uibModalInstance.dismiss('cancel');
   };
 
@@ -112,12 +113,15 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $ctrl.getUsers();
     $ctrl.getEvents();
     $ctrl.getCurrentDuration();
+    $ctrl.getCurrentUsersRoles();
+
         // $ctrl.close({ $value: $ctrl.selected.item });
       };
       $ctrl.cancel = function () {
     $ctrl.getUsers();
     $ctrl.getEvents();
     $ctrl.getCurrentDuration();
+    $ctrl.getCurrentUsersRoles();
         // $ctrl.dismiss({ $value: 'cancel' });
       };
     }
