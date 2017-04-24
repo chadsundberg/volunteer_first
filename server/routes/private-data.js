@@ -338,28 +338,42 @@ router.get('/users/duration', function (req, res) {
 
 router.get('/users/roles', function (req, res) {
   pool.connect()
-  .then(function (client) {
-    client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, event_id, events.date
+    .then(function (client) {
+      client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, event_id, events.date
     FROM role_user
     LEFT OUTER JOIN users ON users.id=role_user.user_id
     RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
     RIGHT OUTER JOIN events ON events.id=roles.event_id
     WHERE role_user.user_id = $1;`,
-    [req.decodedToken.userSQLId])
-    .then(function (result) {
-      client.release();
+        [req.decodedToken.userSQLId])
+        .then(function (result) {
+          client.release();
 
-      console.log('getting userroles: ', result.rows);
+          console.log('getting userroles: ', result.rows);
 
-      res.send(result.rows);
-    })
-    .catch(function (err) {
-      console.log('error on SELECT', err);
-      client.release();
+          for (i = 0; i < result.rows.length; i++) {
 
-      res.sendStatus(500);
+            var newStartTime = result.rows[i].start_time.split(':', 3);
+            var newEndTime = result.rows[i].end_time.split(':', 3);
+
+            var newStartHours = newStartTime[0];
+            var newStartMinutes = newStartTime[1];
+            var newStartSeconds = newStartTime[2];
+            var newEndHours = newEndTime[0];
+            var newEndMinutes = newEndTime[1];
+            var newEndSeconds = newEndTime[2];
+
+            result.rows[i].start_time = new Date(1970, 0, 0, newStartHours, newStartMinutes, newStartSeconds, 0);
+            result.rows[i].end_time = new Date(1970, 0, 0, newEndHours, newEndMinutes, newEndSeconds, 0);
+          };
+          res.send(result.rows);
+        })
+        .catch(function (err) {
+          console.log('error on SELECT', err);
+          client.release();
+          res.sendStatus(500);
+        });
     });
-  });
 });
 
 
