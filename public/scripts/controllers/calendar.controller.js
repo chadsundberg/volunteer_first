@@ -18,20 +18,10 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.volunteerSignUp = DataFactory.volunteerSignUp;
   self.currentUser = DataFactory.currentUser;
   self.getEventRoles = DataFactory.getEventRoles;
-
   self.adminAddEvent = DataFactory.adminAddEvent;
-
   self.getCurrentDuration = DataFactory.getCurrentDuration;
+  self.getCurrentDuration();
 
-
-
-  // state change / refresh
-  //  auth.$onAuthStateChanged(function (firebaseUser) {
-  //    console.log('cal controller state changed');
-  //   DataFactory.getUsers();
-  //   DataFactory.getEvents();
-  //   DataFactory.getUserData(firebaseUser);
-  // });
 
   //export to CSV
   self.filename = "test";

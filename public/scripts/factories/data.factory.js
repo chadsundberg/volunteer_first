@@ -8,6 +8,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
   var currentUser = { info: {} };
   var eventRoles = { list: [] };
   var error = { info: {} };
+  var userRoles = { list: [] };
 
   auth.$onAuthStateChanged(function (firebaseUser) {
     console.log('state changed');
@@ -15,6 +16,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
     getEvents();
     getUserData(firebaseUser);
     getCurrentDuration();
+    getCurrentUsersRoles();
   });
 
 
@@ -339,8 +341,13 @@ console.log(response);
             console.log('getuser ajax response:', response);
             currentUser.info = response.data;
             console.log('currentuser get user', currentUser);
-            $location.path('/home');
-            return currentUser.info;
+            if (currentUser.info.is_admin === true) {
+              $location.path('/calendar');
+              return currentUser.info;
+            } else {
+              $location.path('/home');
+              return currentUser.info;
+            }
           }, function (err) {
             console.log('datafactory addUser error', err);
           });
@@ -472,7 +479,34 @@ console.log(response);
       console.log('get users no firebase user');
 
     }
-  }// end getUsers()
+  }// end getCurrentDuration()
+
+
+  //getting roles user has signed up for
+  function getCurrentUsersRoles() {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      // This is where we make our call to our server
+      return firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/users/roles',
+          headers: {
+            id_token: idToken
+          }
+        }).then(function (response) {
+          userRoles.list = response.data;
+          return userRoles.list;
+        }, function (response) {
+          console.log('dataFactory getUsers error:', response);
+        });
+      });
+    } else {
+      console.log('get users no firebase user');
+
+    }
+  }// end getCurrentUsersRoles
 
   return {
     eventList: eventList,
@@ -491,12 +525,14 @@ console.log(response);
     getCurrentDuration: getCurrentDuration,
     error: error,
 
-    // CHRISTINE exports
+
     getEventRoles: getEventRoles,
     eventRoles: eventRoles,
     adminAddRole: adminAddRole,
     deleteRole: deleteRole,
     adminAddEvent: adminAddEvent,
+    getCurrentUsersRoles: getCurrentUsersRoles,
+    userRoles: userRoles,
 
     // Chad exports
     editRole: editRole

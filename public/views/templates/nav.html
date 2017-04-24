@@ -19,6 +19,9 @@
         <li>
           <a href="#!calendar">Calendar</a>
         </li>
+        <li ng-if="!lc.currentUser.info.is_admin">
+          <a href="#!mySchedule">My Schedule</a>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="pull-right">
