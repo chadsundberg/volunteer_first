@@ -26,6 +26,7 @@
     "fullcalendar": "^3.3.1",
     "global": "^4.3.2",
     "jquery": "^3.2.1",
+    "json2csv": "^3.7.3",
     "logger": "^0.0.1",
     "moment": "^2.18.1",
     "pg": "^6.1.0",

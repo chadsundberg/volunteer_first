@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
+var json2csv = require('json2csv');
+// var fields = ['events.date', 'role.title', 'role.start_time', 'role.end_time' 'users.first_name', 'users.last_name', 'users.email'];
 
 // var connectionString = require('../modules/database-config');
 
@@ -14,6 +16,15 @@ var config = {
   idleTimeMillis: 5000
 };
 var pool = new pg.Pool(config);
+
+// try {
+//   var result = json2csv({ data: myData, fields: fields });
+//   console.log(result);
+// } catch (err) {
+//   // Errors are thrown for bad options, or if the data is empty and no fields are provided.
+//   // Be sure to provide fields if it is possible that your data array will be empty.
+//   console.error(err);
+// }
 
 //get all events for calendar display
 router.get('/events', function (req, res) {
