@@ -23,7 +23,7 @@ router.get('/getcsv', function(req, res) {
 
   pool.connect()
     .then(function (client) {
-      client.query('SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+      client.query('SELECT users.first_name, users.last_name, users.email, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL GROUP BY roles.id, events.id, users.first_name, users.last_name, users.email, users.id ORDER BY date ASC;')
         .then(function (result) {
           client.release();
           // console.log('result: ', result.rows);
