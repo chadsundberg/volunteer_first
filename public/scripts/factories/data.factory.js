@@ -272,7 +272,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
           headers: { id_token: idToken },
           data: newRole, date, eventId
         }).then(function (response) {
-console.log(response);
+          console.log(response);
           getEventRoles(eventId);
         });
       });
