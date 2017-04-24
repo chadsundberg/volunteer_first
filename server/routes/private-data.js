@@ -166,6 +166,7 @@ router.delete('/volunteerRemove', function (req, res) {
 ///ADMIN ADD ROLE TO EVENT
 router.post('/addRole/:id', function (req, res) {
   var newRole = req.body;
+  var eventId = req.params;
   console.log("req.params", req.params);
   console.log('new Role: ', newRole);
   console.log('date:', newRole.date);
@@ -174,6 +175,7 @@ router.post('/addRole/:id', function (req, res) {
       client.query('SELECT * FROM events WHERE id=$1',
         [req.params.id])
         .then(function (result) {
+
           pool.connect()
             .then(function (client) {
               client.query('INSERT INTO roles (role_title , start_time, end_time, event_id, duration) VALUES ($1, $2, $3, $4, $5);',
@@ -186,6 +188,7 @@ router.post('/addRole/:id', function (req, res) {
                   client.release();
                   res.sendStatus(500);
                 });
+
             });
         }).catch(function (err) {
           pool.connect()
