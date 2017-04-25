@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var pg = require('pg');
+var csv = require('express-csv');
+// var fields = ['events.date', 'role.title', 'role.start_time', 'role.end_time' 'users.first_name', 'users.last_name', 'users.email'];
 
 // var connectionString = require('../modules/database-config');
 
@@ -14,6 +16,40 @@ var config = {
   idleTimeMillis: 5000
 };
 var pool = new pg.Pool(config);
+
+// csv from Kris
+router.get('/getcsv', function(req, res) {
+  // this would be your returned find() object
+
+  pool.connect()
+    .then(function (client) {
+      client.query('SELECT users.first_name, users.last_name, users.email, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL GROUP BY roles.id, events.id, users.first_name, users.last_name, users.email, users.id ORDER BY date ASC;')
+        .then(function (result) {
+          client.release();
+          // console.log('result: ', result.rows);
+
+          // create an array from the mongo object so we can use .unshift() later
+          var data = result.rows;
+
+          // create a header row from the object's keys/properties
+          var headers = Object.keys(result.rows[0]);
+
+          // push keys array to the beginning of data array
+          data.unshift(headers);
+
+          console.log('data: --------------------------------', data.length);
+
+          res.attachment('testing.csv');   // not really used
+          res.csv(data);
+        })
+        .catch(function (err) {
+          client.release();
+          console.log('error on stuff', err);
+          res.sendStatus(500);
+        });
+      }); // end then/query
+
+    });
 
 //get all events for calendar display
 router.get('/events', function (req, res) {
