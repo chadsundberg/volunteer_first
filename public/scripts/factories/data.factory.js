@@ -297,6 +297,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
         }).then(function (response) {
           console.log(response);
           getEvents();
+
         });
       });
     } else {
@@ -337,6 +338,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
             headers: { id_token: idToken }
           }).then(function (response) {
             console.log('getuser ajax response:', response);
+
             currentUser.info = response.data;
             console.log('currentuser get user', currentUser);
             if (currentUser.info.is_admin === true) {
@@ -394,8 +396,10 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window', 'M
           },
           params: { roleId: roleId }
         }).then(function (response) {
+          swal("Deleted!");
           // console.log(response.data);
           getEventRoles(eventId);
+
         });
       });
     } else {
