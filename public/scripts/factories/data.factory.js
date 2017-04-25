@@ -274,7 +274,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
         }).then(function (response) {
           console.log(response, eventId);
           getEventRoles(eventId || response.data.event_id);
-          self.newRole = {};
         });
       });
     } else {
