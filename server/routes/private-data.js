@@ -12,7 +12,7 @@ var config = {
   database: 'phi',
   host: 'localhost',
   port: 5432,
-  max: 10,
+  max: 10000,
   idleTimeMillis: 5000
 };
 var pool = new pg.Pool(config);
