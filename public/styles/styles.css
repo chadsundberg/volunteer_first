@@ -16,6 +16,12 @@ body {
   line-height: 23px;
 }
 
+#progBar{
+  
+  font-size: 22px !important;
+  line-height: 32px !important;
+}
+
 /*buttons and text*/
 #track{
     margin: 10px 0 15px 460px;
