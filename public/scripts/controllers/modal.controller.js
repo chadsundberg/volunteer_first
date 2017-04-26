@@ -48,7 +48,11 @@ app.controller("ModalInstanceCtrl", ["DataFactory", "ModalDataFactory", "$locati
     $ctrl.getEvents();
     $uibModalInstance.dismiss('cancel');
   };
-
+// WIP
+  $ctrl.adminAddRole = function (role, eventId) {
+    console.log('DO WE SEE THIS?!?:', role, eventId);
+    DataFactory.adminAddRole(role, eventId);
+    };
 
   //USER SIGN UP FUNCTIONS
   //Role on click to database
