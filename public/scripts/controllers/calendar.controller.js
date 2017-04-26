@@ -23,13 +23,47 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
   self.getCurrentDuration();
 
 
-  //export to CSV
-  self.filename = "test";
-  self.getArray = [{ a: 1, b: 2 }, { a: 3, b: 4 }];
+  //export to CSV client side
+  self.download = function() {
+    var firebaseUser = auth.$getAuth();
+    // firebaseUser will be null if not logged in
+    if (firebaseUser) {
+      firebaseUser.getToken().then(function (idToken) {
+        $http({
+          method: 'GET',
+          url: '/privateData/getcsv',
+          headers: { id_token: idToken }
+        }).then(function(result) {
+          // create an object and a new DOM element and then make the browser 'click' on it
+          // https://developer.mozilla.org/en-US/docs/Web/API/Blob
+          var blob = new Blob([result.data], { type: result.config.dataType });
+          var windowUrl = (window.URL || window.webkitURL);
+          var downloadUrl = windowUrl.createObjectURL(blob);
 
-  self.clickFn = function (click) {
-    console.log("click click click");
-  };
+          // create new <a> tag
+          var anchor = document.createElement("a");
+          // URL is just our object from above
+          anchor.href = downloadUrl;
+          // name the file to download
+          anchor.download = "bet_shalom_event_data.csv";
+
+          document.body.appendChild(anchor);
+
+          // simulate a click event on this a tag
+          anchor.click();
+
+          // destroy the created URL Object from above to clean up
+          windowUrl.revokeObjectURL(blob);
+      }); // end ajax stuff
+    }); // end get token
+  } else {
+    console.log('no auth for download');
+  }
+}
+
+  // self.clickFn = function (click) {
+  //   console.log("click click click");
+  // };
 
 
   //Day click for Admin

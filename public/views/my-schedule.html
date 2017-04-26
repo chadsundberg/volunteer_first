@@ -1,17 +1,23 @@
 <div class="container">
+  <div class="center-block">
+    <img src="../assets/betshalomlogo.png"></div>
+    <div class="jumbotron">
+      <h1 style="text-align: center">✔ My Schedule</h1><hr><br><br>
 
-  <div class="title">
-    <h1>✔ My Schedule</h1><br>
-  </div>
-
-    <div class="well">
       <div  ng-if="sc.currentUser.info.is_admin === false">
         <uib-progressbar class="progress" max="150" style="width: 70%; height: 30px;"   value="sc.currentUser.info.signed_up_duration || 0">{{sc.currentUser.info.signed_up_duration}} min. out of 150 min.</uib-progressbar>
         <p class="lead pull-right" style="width: 85%;"><em>* My Progress</em></p>
-        <input type="button" class="btn btn-success" id="track" ng-if="sc.currentUser.info.signed_up_duration >= 150" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
-          value="Step Two of registration: Continue to fill out student information forms." />
+    </div><br>
 
-      </div>
+    <div class="well">
+
+
+          <div ng-if="sc.currentUser.info.signed_up_duration >= 150">
+            <h3 style="text-align:center">Registration Step 2:</h3>
+            <input type="button" class="btn btn-success" style="margin: 0 0 0 43%;" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+                  value="Student Registration"/>
+          </div>
+
 <br>
 
     <table class="table table-bordered">
@@ -32,3 +38,4 @@
     </table>
     </div>
   </div>
+</div>

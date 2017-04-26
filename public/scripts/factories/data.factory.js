@@ -153,6 +153,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
             role_id: roleClickedId,
           }
         }).then(function (response) {
+          swal("Thanks For Signing Up!");
           getEventRoles(eventId);
           console.log(response);
           console.log('firebase', firebaseUser);
@@ -179,6 +180,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
             role_id: roleClickedId
           }
         }).then(function (response) {
+          swal("Removed!");
           getEventRoles(eventId);
           console.log(response);
           console.log('firebase', firebaseUser);
@@ -274,6 +276,8 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
           data: newRole, date
         }).then(function (response) {
           console.log(response);
+          swal("Role Added!");
+          console.log(response, eventId);
           getEventRoles(eventId || response.data.event_id);
 
         });
@@ -398,6 +402,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
           },
           params: { roleId: roleId }
         }).then(function (response) {
+          swal("Deleted!");
           // console.log(response.data);
           getEventRoles(eventId);
         });
@@ -436,6 +441,7 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
           },
           data: editedRole
         }).then(function (response) {
+          swal("Saved!");
           console.log(response.data);
           getEvents();
           getEventRoles(eventId);
