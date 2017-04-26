@@ -22,19 +22,12 @@ CREATE TABLE roles (
     start_time time NOT NULL,
     end_time time NOT NULL,
     event_id INT REFERENCES events,-- Not null?
-    duration INT NOT NULL
+    duration INT NOT NULL,
+    user_id INT REFERENCES users
 );
 
 ALTER TABLE roles
 ADD CHECK (duration >= 30);
-
-
--- Role_User table
-CREATE TABLE role_user (
- id SERIAL PRIMARY KEY,
- role_id INT REFERENCES roles,
- user_id INT REFERENCES users
-);
 
 
 --
