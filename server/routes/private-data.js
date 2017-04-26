@@ -55,7 +55,9 @@ router.get('/getcsv', function(req, res) {
 router.get('/events', function (req, res) {
   pool.connect()
   .then(function (client) {
-    client.query('SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;')
+    client.query(`SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users 
+    RIGHT OUTER JOIN roles ON users.id=roles.user_id
+    FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;`)
     .then(function (result) {
       client.release();
       res.send(result.rows);
@@ -75,7 +77,13 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
   .then(function (client) {
-    client.query('SELECT users.first_name, users.last_name, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users FULL OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;',
+    client.query(`SELECT users.first_name, users.last_name, users.id 
+    AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id 
+    AS eventsid, COUNT(roles.id) 
+    AS signed_up FROM users 
+    FULL OUTER JOIN roles ON users.id=roles.user_id  
+    FULL OUTER JOIN events ON roles.event_id=events.id 
+    WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;`,
     [eventId,])
     .then(function (result) {
       client.release();
@@ -132,11 +140,10 @@ router.get('/getUser', function (req, res) {
 });
 
 
-//Add entry to role_user table, update users.has_met_requirement -CHRISTINE
 router.post('/volunteerSignUp', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var signUpEntry = req.body;
-  console.log("req.body:", req.body);
+  console.log("147signUpEntry:", signUpEntry);
   if (!req.decodedToken.currentUser.is_admin || !signUpEntry.user_id) {
     signUpEntry.user_id = req.decodedToken.userSQLId;
   }
@@ -145,8 +152,8 @@ router.post('/volunteerSignUp', function (req, res) {
       console.log(err);
       res.sendStatus(500);
     } else {
-      client.query('INSERT INTO role_user (role_id, user_id) VALUES ($1, $2);',
-      [signUpEntry.role_id, signUpEntry.user_id], function (err, result) {
+      client.query('UPDATE roles SET user_id=$1 WHERE id=$2',
+      [signUpEntry.user_id, signUpEntry.role_id], function (err, result) {
 
         if (err) {
           console.log(err);
@@ -156,12 +163,11 @@ router.post('/volunteerSignUp', function (req, res) {
         }
       });
     }
-    done();
+    done(); //done vs client.release()?
   });
 });//end post
 
 
-//Add entry to role_user table, update users.has_met_requirement -CHRISTINE
 router.delete('/volunteerRemove', function (req, res) {
   console.log('hit volunteerSignUp post route');
   var removeEntry = req.query;
@@ -174,7 +180,7 @@ router.delete('/volunteerRemove', function (req, res) {
       console.log(err);
       res.sendStatus(500);
     } else {
-      client.query('DELETE FROM role_user WHERE user_id=$1 AND role_id=$2;',
+      client.query('UPDATE roles SET user_id=NULL WHERE user_id=$1 AND id=$2;',
       [removeEntry.user_id, removeEntry.role_id], function (err, result) {
         if (err) {
           console.log(err);
@@ -184,7 +190,7 @@ router.delete('/volunteerRemove', function (req, res) {
         }
       });
     }
-    done();
+    done(); //done vs client.release()?
   });
 });//end post
 
@@ -319,30 +325,32 @@ router.delete('/eventRoles/:id', function (req, res) {
 router.put('/editRole/:id', function (req, res) {
   var roleId = req.params.id;
   var role = req.body;
-  console.log('Updating role: ', roleId, role);
+  // console.log('Updating role: ', roleId, role);
   pool.connect()
   .then(function (client) {
-    client.query('SELECT * FROM role_user WHERE id=$1',
+    client.query('SELECT * FROM roles WHERE id=$1',
     [req.params.id])
     .then(function (result) {
+      client.release();
       pool.connect()
       .then(function (client) {
         if (result.rows[0] && result.rows[0].id) {
-          client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3 WHERE id = $4',
-          [role.role_title, role.start_time, role.end_time, roleId])
+          var userId = result.rows[0].user_id;
+          client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3, user_id=$4 WHERE id = $5', // Last thing Jonny and Chad did - untested before end of day 4-26
+          [role.role_title, role.start_time, role.end_time, userId, roleId])
           .then(function (result) {
             client.release();
             pool.connect()
             .then(function (client) {
               client.query('UPDATE role_user SET user_id = $1 WHERE role_id = $2',
-              [role.userObject.id, roleId]);
-              console.log('userObject.id:',role.userObject.id)
+              [role.userObject.id, roleId])
               .then(function (result) {
                 console.log('RESULT:', result);
                 client.release();
                 res.sendStatus(200);
               })
               .catch(function (err) {
+                client.release();
                 console.log('error on UPDATE', err);
                 res.sendStatus(500);
               });
@@ -365,6 +373,7 @@ router.put('/editRole/:id', function (req, res) {
                   res.sendStatus(200);
                 })
                 .catch(function (err) {
+                  client.release();
                   console.log('error on 333', err);
                   res.sendStatus(500);
                 });
@@ -415,7 +424,7 @@ router.get('/users/roles', function (req, res) {
       LEFT OUTER JOIN users ON users.id=role_user.user_id
       RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
       RIGHT OUTER JOIN events ON events.id=roles.event_id
-      WHERE role_user.user_id = $1;`,
+      WHERE users.id = $1;`,
       [req.decodedToken.userSQLId])
       .then(function (result) {
         client.release();
