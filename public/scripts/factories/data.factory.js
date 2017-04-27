@@ -63,7 +63,6 @@ app.factory('DataFactory', ['$firebaseAuth', '$http', '$location', '$window',  '
             id_token: idToken
           }
         }).then(function (response) {
-          console.log(response.data);
           eventList.list[0] = [];
           response.data.forEach(function (event) {
             eventList.list[0].push({
