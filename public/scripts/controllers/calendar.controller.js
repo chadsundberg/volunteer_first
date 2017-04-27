@@ -130,7 +130,7 @@ app.controller("CalendarController", ["DataFactory", "ModalDataFactory", "$locat
       header: {
         left: 'month basicWeek basicDay',
         center: 'title',
-        right: 'today prev,next'
+        right: 'today, prev next'
       },
       eventClick: self.eventOnClick,
       eventDrop: self.alertOnDrop,
