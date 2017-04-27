@@ -23,7 +23,13 @@ router.get('/getcsv', function(req, res) {
 
   pool.connect()
     .then(function (client) {
-      client.query('SELECT users.first_name, users.last_name, users.email, users.id AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id AS eventsid, COUNT(roles.id) AS signed_up FROM users RIGHT OUTER JOIN role_user ON users.id=role_user.user_id FULL OUTER JOIN roles ON roles.id=role_user.role_id FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL GROUP BY roles.id, events.id, users.first_name, users.last_name, users.email, users.id ORDER BY date ASC;')
+      client.query(`SELECT users.first_name, users.last_name, users.email, users.id 
+      AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id 
+      AS eventsid, COUNT(roles.id) AS signed_up 
+      FROM users 
+      JOIN roles ON roles.user_id=users.id
+      FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL 
+      GROUP BY roles.id, events.id, users.first_name, users.last_name, users.email, users.id ORDER BY date ASC;`)
         .then(function (result) {
           client.release();
           // console.log('result: ', result.rows);
@@ -419,10 +425,9 @@ router.get('/users/duration', function (req, res) {
 router.get('/users/roles', function (req, res) {
   pool.connect()
   .then(function (client) {
-    client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, event_id, events.date
-      FROM role_user
-      LEFT OUTER JOIN users ON users.id=role_user.user_id
-      RIGHT OUTER JOIN roles ON roles.id=role_user.role_id
+    client.query(`SELECT users.id, roles.role_title, roles.start_time, roles.end_time, roles.event_id, events.date
+      FROM roles
+      LEFT OUTER JOIN users ON users.id=roles.user_id
       RIGHT OUTER JOIN events ON events.id=roles.event_id
       WHERE users.id = $1;`,
       [req.decodedToken.userSQLId])
