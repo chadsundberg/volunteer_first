@@ -15,6 +15,8 @@ admin.initializeApp({
   databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
 });
 
+
+
 var tokenDecoder = function (req, res, next) {
 
   if (req.headers.id_token) {
