@@ -10,10 +10,29 @@ var config = {
 };
 var pool = new pg.Pool(config);
 
-admin.initializeApp({
-  credential: admin.credential.cert("./server/firebase-service-account.json"),
-  databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
-});
+//env variables for heroku deploy
+if(process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      "type": process.env.FIREBASE_SERVICE_ACCOUNT_TYPE,
+      "project_id": process.env.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID,
+      "private_key_id": process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+      "private_key": process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY,
+      "client_email": process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+      "client_id": process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID,
+      "auth_uri": process.env.FIREBASE_SERVICE_ACCOUNT_AUTH_URI,
+      "token_uri": process.env.FIREBASE_SERVICE_ACCOUNT_TOKEN_URI,
+      "auth_provider_x509_cert_url": process.env.FIREBASE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL,
+      "client_x509_cert_url": process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL
+    }),
+    databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com"
+  });
+} else {
+  admin.initializeApp({
+    credential: admin.credential.cert("./server/firebase-service-account.json"),
+    databaseURL: "https://bet-shalom-volunteer-first.firebaseio.com" // replace this line with your URL
+  });
+}//end env variables
 
 var tokenDecoder = function (req, res, next) {
 
@@ -74,10 +93,10 @@ var tokenDecoder = function (req, res, next) {
         });
       });
     })
-      .catch(function (error) {
-        console.error('User token could not be verified:', error);
-        res.sendStatus(403);
-      });
+    .catch(function (error) {
+      console.error('User token could not be verified:', error);
+      res.sendStatus(403);
+    });
   } else {
     // Seems to be hit when chrome makes request for map files
     // Will also be hit when user does not send back an idToken in the header
