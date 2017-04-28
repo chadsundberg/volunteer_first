@@ -4423,8 +4423,8 @@ angular.module('ui.bootstrap.modal', ['ui.bootstrap.multiMap', 'ui.bootstrap.sta
     var $modalProvider = {
       options: {
         animation: true,
-        backdrop: true, //can also be false or 'static'
-        keyboard: true
+        backdrop: 'static', //can also be false or 'static'
+        keyboard: false
       },
       $get: ['$rootScope', '$q', '$document', '$templateRequest', '$controller', '$uibResolve', '$uibModalStack',
         function ($rootScope, $q, $document, $templateRequest, $controller, $uibResolve, $modalStack) {

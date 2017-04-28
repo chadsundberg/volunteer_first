@@ -13,9 +13,12 @@
   <script src="/vendor/ui-bootstrap.js"></script>
   <script src="/vendor/ui-bootstrap-tpls.js"></script>
   <script src="/vendor/bootstrap.min.js"></script>
+  <script src="/vendor/sweetalert.min.js"></script>
+  <script src="https://use.fontawesome.com/7e415927e4.js"></script>
   <link rel="stylesheet" href="/vendor/bootstrap.min.css" />
   <link rel="stylesheet" href="/vendor/fullcalendar.css" />
   <link rel="stylesheet" href="/styles/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/vendor/sweetalert.css">
   <script src="/vendor/calendar.js"></script>
   <script src="/vendor/fullcalendar.min.js"></script>
   <script src="/vendor/firebase.js"></script>
@@ -27,6 +30,7 @@
   <script type="text/javascript" src="/scripts/controllers/login.controller.js"></script>
   <script type="text/javascript" src="/scripts/controllers/home.controller.js"></script>
   <script type="text/javascript" src="/scripts/controllers/calendar.controller.js"></script>
+  <script type="text/javascript" src="/scripts/controllers/schedule.controller.js"></script>
   <script src="/scripts/controllers/modal.controller.js" charset="utf-8"></script>
 </head>
 
@@ -34,7 +38,17 @@
   <div ng-controller="LoginController as lc">
     <nav ng-if="lc.userIsLoggedIn" ng-include="'/views/templates/nav.html'"></nav>
   </div>
-  <main ng-view></main>
+
+
+  <main ng-view autoscroll="true"></main>
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Copyright &copy; Volunteer First 2017</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 
 </html>

@@ -1,23 +1,191 @@
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
 
+/*progress bar*/
+.progress{
+  background-color: white;
+  margin: 0 auto;
+  text-align: center;
+  border:2px solid rgb(0, 122, 255);
+}
+
+.progress-bar {
+  background-color: #62aeff;
+  font-size: 14px;
+  line-height: 23px;
+}
+
+#progBar{
+  
+  font-size: 22px !important;
+  line-height: 32px !important;
+}
+
+/*buttons and text*/
+#track{
+    margin: 10px 0 15px 460px;
+    text-align: center;
+}
+#close {
+  margin-bottom: 20px;
+}
+
+.title {
+  text-align: center;
+}
+
+/*navbar*/
+.navbar-brand {
+  padding: 20px 20px 0px 0px;
+}
+
+.navbar{
+  width: 100%;
+}
+
+li {
+	display: block;
+	padding: 5px 8px;
+	line-height: 1;
+}
+a::selection{
+  background: inherit;
+}
+
+a:focus, a:active {
+   outline: none !important;
+}
+
+.center-block img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 200px;
+  clear: both;
+}
+
+.modal-container {
+  padding: 20px;
+}
+
+.portfolio-item {
+    margin-bottom: 25px;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.unstyled {
+  margin-top: 60px;
+  clear: both;
+}
 
 /*CALENDAR STYLING*/
-.fc-row .fc-week .fc-widget-content{
-  height: 280px;
+
+div .calendar{
+  margin-top: 40px;
+  clear: both;
 }
+
+.fc .fc-toolbar > * > * {
+  margin-left: 0px;
+}
+
+tr:first-child > td > .fc-day-grid-event{
+  margin-top: 0px;
+}
+/*tr:first-child > td > .fc-day-grid-event:before{
+  margin-top: 0px;
+  content: "hello";
+}*/
+
+.fc-time{
+  display:none;
+}
+
+/****hover*/
+.fc-day:hover{
+    background:ghostwhite;
+}
+
+/*.fc-day:hover, .fc-event:hover{
+    background:lightBlue;
+}*/
+
+/*.fc-event:hover, .fc-event-dot:hover{
+  background-color: black;
+}
+
+.fc-event:hover, .ui-widget:hover .fc-event:hover{
+  background-color: black;
+}
+
+.fc-event:hover{
+  border: 3px solid black;
+  border-radius: 0px;
+}*/
+
+
+/*Allow pointer-events through*/
+.fc-slats, /*horizontals*/
+.fc-content-skeleton, /*day numbers*/
+.fc-bgevent-skeleton /*events container*/{
+    pointer-events:none
+}
+
+/*Turn pointer events back on*/
+.fc-bgevent,
+.fc-event-container{
+    pointer-events:auto; /*events*/
+}
+
+.fc-day-grid-event{
+  margin: 0px;
+}
+
 .fc-event, .fc-event-dot{
   background-color: transparent;
 }
-.fc-event, .fc-event:hover, .ui-widget .fc-event{
-  color:navy;
+
+.fc-event, .ui-widget .fc-event{
+  background-color: rgb(0, 122, 255);
 }
+
 .fc-event{
-  border: 1px solid transparent;
+  border: 3px solid rgb(0, 122, 255);
+  border-radius: 0px;
 }
+
+
+.fc-day-grid-container.fc-scroller {
+    height: auto!important;
+    overflow-y: auto;
+}
+
+
 .fc-unthemed td.fc-today {
-  background: LightCyan ;
+  background: #62aeff ;
   border: -3px solid transparent;
 }
+
+/*.well{
+	float: right;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  clear:both;
+}*/
+.well {
+	float: right;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  clear:both;
+  width: 100%;
+}
+
 /*END CALENDAR STYLING*/
+
 .form-signin .form-control {
         position: relative;
         font-size: 16px;
@@ -31,12 +199,13 @@
 .vertical-offset-100 {
         padding-top: 100px;
     }
-.img-responsive {
+/*.img-responsive {
     display: block;
     max-width: 100%;
     height: auto;
     margin: auto;
-    }
+    }*/
+
 .panel {
     margin-bottom: 20px;
     background-color: rgba(255, 255, 255, 0.75);
@@ -50,31 +219,27 @@
     background-color: rgba(255, 255, 255, 0.75);
     border: 1px solid transparent;
     border-radius: 4px;
+    margin-bottom: 0px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 
   }
 
-img {
+  .firebaseErr {
+    margin-top: 20px;
+  }
+
+/*img {
   display: inline-block;
   float: right;
   transform: translate(-25px, 35px);
   border-radius: 25px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
+}*/
 
 
-.modal-container {
-  padding: 20px;
-}
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-}
 
-.portfolio-item {
-    margin-bottom: 25px;
-}
 
 footer {
     margin: 50px 0;

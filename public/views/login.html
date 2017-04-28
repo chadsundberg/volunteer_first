@@ -1,9 +1,20 @@
+
 <body>
+<style >
+body {
+			background: url(" ../assets/IMG_6108.jpg") no-repeat center center fixed;
+			  -webkit-background-size: cover;
+			  -moz-background-size: cover;
+			  -o-background-size: cover;
+			  background-size: cover;
+}
 
+</style>
 	<div class="container">
-		<img src="../assets/starofdavid.jpg">
-		<div class="jumbotron">
 
+		<div class="jumbotron">
+			<div class="center-block">
+				<img src="../assets/betshalomlogo.png"></div>
 			<h1>Welcome to Registration</h1>
 			<p>Create an account and sign up for volunteer hours</p>
 		</div>
@@ -24,8 +35,10 @@
 						<br><br>
 						<input class="btn btn-lg btn-primary btn-block" type="submit" ng-click="lc.createUser()" value="Register »">
 					</fieldset>
+
 				</form>
-				{{lc.error}}
+				<div uib-alert class="alert-danger firebaseErr" ng-if="lc.createUserError">{{lc.createUserError}}</div>
+
 			</div>
 		</div>
 	</div>
@@ -51,6 +64,9 @@
 							<input class="btn btn-lg btn-primary btn-block" ng-click="lc.resetPassword()" type="submit" value="Send New Password »">
 						</fieldset>
 					</form>
+					<div uib-alert class="firebaseErr alert-danger" ng-if="lc.signInError">{{lc.signInError}}</div>
+					<div uib-alert class="firebaseErr alert-danger" ng-if="lc.resetError">{{lc.resetError}}</div>
+					<div uib-alert class="firebaseErr alert-success" ng-if="lc.resetSuccess">{{lc.resetSuccess}}</div>
 				</div>
 			</div>
 		</div>

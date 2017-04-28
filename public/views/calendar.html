@@ -1,20 +1,50 @@
 <div class="container">
-<h3> This is the calendar </h3>
+  <div class="center-block">
+    <!-- <img src="../assets/betshalomlogo.png"> -->
+    <div class="title">
+      <h1 style="text-align: center">✔ Volunteer Calendar</h1>
+      <p ng-if="!cc.currentUser.info.is_admin" class="lead"style="width: 100%;"><em>Click on a Day to Sign Up</em></p>
 
-  <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
+    </div>
 
-
-
-  <div id="modalId" ></div>
-
-  <button class="btn btn-info"
-  ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}"
-  ng-click="cc.clickFn(click)">Export CSV</button>
-
-  <div ng-repeat="event in cc.eventList.list">
-    <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
   </div>
 
-<p>{{cc.eventList}}</p>
-  <p> {{cc.currentUser}} </p>
+  <div class="well">
+
+    <div  ng-if="cc.currentUser.info.is_admin === false">
+      <p class="lead pull-right" style="width: 85%;"><em>* Hi {{cc.currentUser.info.first_name}}, here's your sign up progress!</em></p><br><br>
+      <uib-progressbar class="progress" max="150" style="width: 70%; height: 30px;"   value="cc.currentUser.info.signed_up_duration || 0">{{cc.currentUser.info.signed_up_duration}} min. out of 150 min.</uib-progressbar>
+
+
+
+
+      <div ng-if="cc.currentUser.info.signed_up_duration >= 150">
+        <h3 style="text-align:center;">Registration Step 2:</h3>
+        <input type="button" class="btn btn-success" id="track" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';"
+        value="Student Registration"/>
+      </div>
+
+    </div>
+
+    <div class="calendar">
+
+      <div calendar="myCalendar" ui-calendar="cc.uiConfig.calendar" ng-model="cc.eventSources"></div>
+      <div id="modalId"></div>
+      <div ng-repeat="event in cc.eventList.list">
+        <p>{{event.date}} {{event.num_users}} {{event.role_title}} {{event.first_name}} {{event.last_name}}</p>
+      </div>
+      <!-- <p>{{cc.eventList}}</p>
+      <p> {{cc.currentUser}} </p> -->
+
+      <div ng-if="cc.currentUser.info.is_admin">
+        <button class="btn btn-info btn-lg" ng-click="cc.download()">Export to Google Sheets</button>
+        <!-- <button class="btn btn-info btn-lg"
+        ng-csv="getArray" csv-header="getHeader()" filename="{{ filename }}" field-separator="{{separator}}" decimal-separator="{{decimalSeparator}}" target="_blank"
+        onclick="location.href='https://docs.google.com/spreadsheets/d/1JvqSktAtJOGN-dywwoRllHesP-cCKxN9wQ6ynuOGew4/edit?usp=sharing';"
+        ng-click="cc.download()">Export to Google Sheets</button> -->
+      </div>
+
+    </div>
+  </div>
+
 </div>

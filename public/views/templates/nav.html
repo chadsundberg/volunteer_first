@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Volunteer First</a>
+      <a class="navbar-brand" href="#">✔ Volunteer First</a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
@@ -19,13 +19,15 @@
         <li>
           <a href="#!calendar">Calendar</a>
         </li>
-        <li>
-          <button class="btn btn-danger navbar-btn" ng-click="lc.signOut()">Sign Out</button>
+        <li ng-if="!lc.currentUser.info.is_admin">
+          <a href="#!mySchedule">My Schedule</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="pull-right">
+          <button class="btn btn-danger navbar-btn pull-right" ng-click="lc.signOut()">Sign Out</button>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-<div class = "col-sm-offset-8 col-sm-2"><uib-progressbar class="progress" max="100" value="67"></uib-progressbar>
-  <input type="button" onclick="location.href='https://docs.google.com/forms/d/100wByegI2XZ8zghQx9apNwJUdelmoL-trFnCvNAvhnY/viewform?edit_requested=true&fbzx=8775102327509708000';" value="Thanks for volunteering!" />
-</div>
