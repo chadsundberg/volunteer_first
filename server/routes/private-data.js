@@ -8,27 +8,18 @@ var csv = require('express-csv');
 
 var pool = require('../modules/pool-connection');
 
-var config = {
-  database: 'phi',
-  host: 'localhost',
-  port: 5432,
-  max: 10000,
-  idleTimeMillis: 5000
-};
-var pool = new pg.Pool(config);
-
 // csv from Kris
 router.get('/getcsv', function (req, res) {
   // this would be your returned find() object
 
   pool.connect()
     .then(function (client) {
-      client.query(`SELECT users.first_name, users.last_name, users.email, users.id 
-      AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id 
-      AS eventsid, COUNT(roles.id) AS signed_up 
-      FROM users 
+      client.query(`SELECT users.first_name, users.last_name, users.email, users.id
+      AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id
+      AS eventsid, COUNT(roles.id) AS signed_up
+      FROM users
       JOIN roles ON roles.user_id=users.id
-      FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL 
+      FULL OUTER JOIN events ON roles.event_id=events.id WHERE users.first_name IS NOT NULL
       GROUP BY roles.id, events.id, users.first_name, users.last_name, users.email, users.id ORDER BY date ASC;`)
         .then(function (result) {
           client.release();
@@ -61,7 +52,7 @@ router.get('/getcsv', function (req, res) {
 router.get('/events', function (req, res) {
   pool.connect()
     .then(function (client) {
-      client.query(`SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users 
+      client.query(`SELECT roles.id as role_id, roles.role_title, events.date, events.id as event_id, COUNT(roles.id ) AS signed_up FROM users
     RIGHT OUTER JOIN roles ON users.id=roles.user_id
     FULL OUTER JOIN events ON roles.event_id=events.id GROUP BY roles.id, events.id;`)
         .then(function (result) {
@@ -83,12 +74,12 @@ router.get('/eventRoles/:id', function (req, res) {
   console.log('hit first', eventId);
   pool.connect()
     .then(function (client) {
-      client.query(`SELECT users.first_name, users.last_name, users.id 
-    AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id 
-    AS eventsid, COUNT(roles.id) 
-    AS signed_up FROM users 
-    FULL OUTER JOIN roles ON users.id=roles.user_id  
-    FULL OUTER JOIN events ON roles.event_id=events.id 
+      client.query(`SELECT users.first_name, users.last_name, users.id
+    AS userid, roles.id, roles.start_time, roles.end_time, roles.role_title, events.date, events.id
+    AS eventsid, COUNT(roles.id)
+    AS signed_up FROM users
+    FULL OUTER JOIN roles ON users.id=roles.user_id
+    FULL OUTER JOIN events ON roles.event_id=events.id
     WHERE events.id=$1 GROUP BY roles.id, events.id, roles.start_time, roles.end_time, users.first_name, users.last_name, users.id;`,
         [eventId,])
         .then(function (result) {
@@ -344,7 +335,7 @@ router.put('/editRole/:id', function (req, res) {
               /// if this role was associated with a user -->
               if (result.rows[0] && result.rows[0].id) {
                 console.log('userId:', userId);
-                
+
                 client.query('UPDATE roles SET role_title = $1, start_time = $2, end_time = $3, user_id = $4 WHERE id = $5', // Last thing Jonny and Chad did - untested before end of day 4-26
                   [role.role_title, role.start_time, role.end_time, userId, roleId])
                   .then(function (result) {

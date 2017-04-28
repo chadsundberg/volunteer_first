@@ -1,14 +1,6 @@
 var admin = require('firebase-admin');
 var pg = require('pg');
-var connectionString = require('../modules/database-config');
-var config = {
-  database: 'phi',
-  host: 'localhost',
-  port: 5432,
-  max: 10000,
-  idleTimeMillis: 5000
-};
-var pool = new pg.Pool(config);
+var pool = require('../modules/pool-connection');
 
 //env variables for heroku deploy
 if(process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY) {
